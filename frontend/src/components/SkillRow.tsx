@@ -20,9 +20,9 @@ export function SkillRow({ skill, mode, color, onChange }: SkillRowProps) {
       className="grid items-center gap-2 border-b border-[#f6f0f3] py-2.5"
       style={{ gridTemplateColumns: SKILL_ROW_GRID_COLUMNS }}
     >
-      <div className={`text-[13px] font-bold ${effectiveMode === "none" ? "opacity-40" : ""}`}>
-        {skill.label}
-        {skill.sublabel && <span className="ml-2 text-xs font-semibold text-[#8a8290]">{skill.sublabel}</span>}
+      <div className={effectiveMode === "none" ? "opacity-40" : ""}>
+        <div className="text-[13px] font-bold">{skill.label}</div>
+        {skill.sublabel && <div className="mt-0.5 text-xs font-semibold text-[#8a8290]">{skill.sublabel}</div>}
       </div>
       <RadioDot
         name={skill.id}
