@@ -83,7 +83,7 @@ export function GenerateModal({ open, assistant, tools, guidelines, skillSelecti
               ) : (
                 selectedGroups.map((group, index) => (
                   <div key={group.title} className={index > 0 ? "mt-3" : ""}>
-                    <div className="text-[11px] font-extrabold uppercase tracking-[0.08em] text-[#8a8290]">
+                    <div className="text-[11px] font-extrabold uppercase tracking-[0.08em] text-[#161217]">
                       {group.title}
                     </div>
                     {group.skills.map((skill) => (
