@@ -32,7 +32,7 @@ function LanguageGroup({ title, options, selected, onSelect }: LanguageGroupProp
         <label key={option.key} className="flex cursor-pointer items-center gap-2.5 text-sm font-semibold">
           <RadioDot
             name={title}
-            color="#c81c5c"
+            color="#1c8a5c"
             checked={option.archFile === selected}
             onSelect={() => onSelect(option.archFile === selected ? "" : option.archFile)}
           />
