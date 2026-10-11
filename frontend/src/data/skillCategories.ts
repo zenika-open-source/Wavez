@@ -7,9 +7,9 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
     color: "#c81c5c",
     tint: "#fbe7ee",
     skills: [
-      { id: "product-requirements", label: "Product Requirements", sublabel: "generate/update PRD documents" }, // -> product-requirements agent
-      { id: "static-prototyping", label: "Static prototyping", sublabel: "greyscale wireframes, low-fidelity" }, // -> static-prototyping agent
-      { id: "dynamic-prototyping", label: "Dynamic prototyping", sublabel: "interactive, high-fidelity, html and Javascript only" }, // -> dynamic-prototyping agent
+      { id: "product-requirements", label: "Product Requirements", sublabel: "Generate/update PRD documents" }, // -> product-requirements agent
+      { id: "static-prototyping", label: "Static prototyping", sublabel: "Greyscale wireframes, low-fidelity" }, // -> static-prototyping agent
+      { id: "dynamic-prototyping", label: "Dynamic prototyping", sublabel: "Interactive, high-fidelity, html and Javascript only" }, // -> dynamic-prototyping agent
     ],
   },
   {
@@ -21,7 +21,7 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
       { id: "backend", label: "Backend" }, // -> backend agent
       { id: "frontend", label: "Frontend" }, // -> frontend agent
       { id: "documentation", label: "Documentation" }, // -> documentation agent
-      { id: "tech-migration", label: "Tech Migration", sublabel: "plan a bounded technology migration" }, // -> tech-migration agent
+      { id: "tech-migration", label: "Tech Migration", sublabel: "Plan a bounded technology migration" }, // -> tech-migration agent
       { id: "code-review", label: "Code review" }, // -> reviewer agent
       { id: "orchestrator", label: "Full-stack orchestration" }, // -> orchestrator agent
       { id: "retrodoc-architecture", label: "Retrodoc - Architecture", sublabel: "Agent relies on goretex.ai, goretex should be installed before using this agent" }, // -> retrodoc-architecture agent
@@ -32,7 +32,6 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
     title: "QA",
     color: "#7c4fd6",
     tint: "#efe9fc",
-    disabled: true, // no backend support yet
     skills: [
       { id: "playwright-scripts", label: "Script generation with Playwright" },
       { id: "playwright-exploratory", label: "Exploratory testing with Playwright" },

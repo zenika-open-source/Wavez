@@ -1,5 +1,14 @@
-import { SkillRow } from "@/components/SkillRow";
+import { LanguageStackPicker } from "@/components/LanguageStackPicker";
+import { SkillRow, SKILL_ROW_GRID_COLUMNS } from "@/components/SkillRow";
+import { ENABLE_CUSTOM_AGENT_FILE } from "@/data/featureFlags";
 import type { SkillCategory, SkillMode } from "@/types/skills";
+import type { StackCatalog } from "@/types/zenflow";
+
+const GRID_PLACEMENT: Record<string, string> = {
+  discovery: "order-0",
+  qa: "order-1",
+  developer: "order-2 col-span-2",
+};
 
 interface CategoryCardProps {
   category: SkillCategory;
@@ -7,17 +16,34 @@ interface CategoryCardProps {
   selections: Record<string, SkillMode>;
   onToggleExpand: () => void;
   onSetMode: (skillId: string, mode: SkillMode) => void;
+  catalog?: StackCatalog | null;
+  backendArchFile?: string;
+  frontendArchFile?: string;
+  onSelectBackend?: (archFile: string) => void;
+  onSelectFrontend?: (archFile: string) => void;
 }
 
-export function CategoryCard({ category, expanded, selections, onToggleExpand, onSetMode }: CategoryCardProps) {
+export function CategoryCard({
+  category,
+  expanded,
+  selections,
+  onToggleExpand,
+  onSetMode,
+  catalog,
+  backendArchFile,
+  frontendArchFile,
+  onSelectBackend,
+  onSelectFrontend,
+}: CategoryCardProps) {
   const selectedCount = category.skills.filter((skill) => (selections[skill.id] ?? "none") !== "none").length;
   const disabled = category.disabled ?? false;
+  const showStack = category.id === "developer";
 
   return (
     <div
       className={`overflow-hidden rounded-2xl bg-white shadow-[0_12px_28px_-18px_rgba(60,20,50,0.25)] ${
-        disabled ? "opacity-50" : ""
-      }`}
+        GRID_PLACEMENT[category.id] ?? ""
+      } ${disabled ? "opacity-50" : ""}`}
     >
       <button
         type="button"
@@ -47,25 +73,38 @@ export function CategoryCard({ category, expanded, selections, onToggleExpand, o
         )}
       </button>
       {!disabled && expanded && (
-        <div className="px-5 pb-5">
-          <div
-            className="grid gap-2 border-b-[1.5px] border-[#f0e6ec] px-1 pb-2 text-[11px] font-extrabold tracking-[0.08em] text-[#8a8290] uppercase"
-            style={{ gridTemplateColumns: "1fr 56px 56px 76px" }}
-          >
-            <div>Agent</div>
-            <div className="text-center">None</div>
-            <div className="text-center">SKILL.md file</div>
-            <div className="text-center leading-tight">Custom agent file</div>
+        <div className="flex items-stretch border-t-[1.5px] border-[#f0e6ec]">
+          <div className="min-w-0 flex-1 px-5 pt-4 pb-5">
+            <div
+              className="grid gap-2 border-b-[1.5px] border-[#f0e6ec] px-1 pb-2 text-[11px] font-extrabold tracking-[0.08em] text-[#8a8290] uppercase"
+              style={{ gridTemplateColumns: SKILL_ROW_GRID_COLUMNS }}
+            >
+              <div>Agent</div>
+              <div className="text-center">None</div>
+              <div className="text-center">SKILL.md file</div>
+              {ENABLE_CUSTOM_AGENT_FILE && <div className="text-center leading-tight">Custom agent file</div>}
+            </div>
+            {category.skills.map((skill) => (
+              <SkillRow
+                key={skill.id}
+                skill={skill}
+                mode={selections[skill.id] ?? "none"}
+                color={category.color}
+                onChange={(mode) => onSetMode(skill.id, mode)}
+              />
+            ))}
           </div>
-          {category.skills.map((skill) => (
-            <SkillRow
-              key={skill.id}
-              skill={skill}
-              mode={selections[skill.id] ?? "none"}
-              color={category.color}
-              onChange={(mode) => onSetMode(skill.id, mode)}
+          {showStack && catalog && onSelectBackend && onSelectFrontend && (
+            <LanguageStackPicker
+              catalog={catalog}
+              backendArchFile={backendArchFile ?? ""}
+              frontendArchFile={frontendArchFile ?? ""}
+              onSelectBackend={onSelectBackend}
+              onSelectFrontend={onSelectFrontend}
+              backendRequired={(selections["backend"] ?? "none") !== "none"}
+              frontendRequired={(selections["frontend"] ?? "none") !== "none"}
             />
-          ))}
+          )}
         </div>
       )}
     </div>

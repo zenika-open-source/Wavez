@@ -1,24 +1,35 @@
 import { useState } from "react";
 import { downloadArchive } from "@/api/archive";
 import { Button } from "@/components/ui/Button";
+import { ASSISTANTS } from "@/data/assistants";
+import { SKILL_CATEGORIES } from "@/data/skillCategories";
 import type { SkillMode } from "@/types/skills";
-import type { GuidelineSelection, ToolSelection } from "@/types/zenflow";
+import type { AssistantId, GuidelineSelection, ToolSelection } from "@/types/zenflow";
 
 type Phase = "confirm" | "loading" | "success" | "error";
 
 interface GenerateModalProps {
   open: boolean;
+  assistant: AssistantId;
   tools: ToolSelection;
   guidelines: GuidelineSelection;
   skillSelections: Record<string, SkillMode>;
   onClose: () => void;
 }
 
-export function GenerateModal({ open, tools, guidelines, skillSelections, onClose }: GenerateModalProps) {
+export function GenerateModal({ open, assistant, tools, guidelines, skillSelections, onClose }: GenerateModalProps) {
   const [phase, setPhase] = useState<Phase>("confirm");
   const [errorMessage, setErrorMessage] = useState("");
 
   if (!open) return null;
+
+  const assistantLabel = ASSISTANTS.find((a) => a.id === assistant)?.label ?? assistant;
+  const selectedGroups = SKILL_CATEGORIES.map((category) => ({
+    title: category.title,
+    skills: category.skills.filter(
+      (skill) => skillSelections[skill.id] === "skill" || skillSelections[skill.id] === "custom",
+    ),
+  })).filter((group) => group.skills.length > 0);
 
   function handleClose() {
     setPhase("confirm");
@@ -63,8 +74,28 @@ export function GenerateModal({ open, tools, guidelines, skillSelections, onClos
           <>
             <div className="mb-2 text-xl font-extrabold text-[#161217]">Generate agent files?</div>
             <p className="mb-4 text-sm text-[#5c5560]">
-              This downloads a zip with the files your selected assistant reads on day one.
+              This will create the following for <span className="font-bold">{assistantLabel}</span> and
+              download them as a zip.
             </p>
+            <div className="mb-5 max-h-[240px] overflow-y-auto rounded-[14px] bg-[#f6f3f7] px-4 py-3.5">
+              {selectedGroups.length === 0 ? (
+                <div className="py-0.5 text-[13px] text-[#8a8290]">No skills selected yet.</div>
+              ) : (
+                selectedGroups.map((group, index) => (
+                  <div key={group.title} className={index > 0 ? "mt-3" : ""}>
+                    <div className="text-[11px] font-extrabold uppercase tracking-[0.08em] text-[#161217]">
+                      {group.title}
+                    </div>
+                    {group.skills.map((skill) => (
+                      <div key={skill.id} className="flex items-baseline gap-1.5 py-0.5 font-mono text-[13px] text-[#5c5560]">
+                        <span aria-hidden="true">•</span>
+                        {skill.label}
+                      </div>
+                    ))}
+                  </div>
+                ))
+              )}
+            </div>
             {phase === "error" && (
               <p className="mb-4 text-sm font-semibold text-[#c81c5c]">{errorMessage}</p>
             )}

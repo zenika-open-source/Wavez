@@ -1,4 +1,4 @@
-import { CheckboxRow } from "@/components/ui/CheckboxRow";
+import { RadioDot } from "@/components/ui/RadioDot";
 import type { FrameworkOption, StackCatalog } from "@/types/zenflow";
 
 interface LanguageOption {
@@ -17,12 +17,47 @@ function toLanguageOptions(stacks: Record<string, FrameworkOption[]>): LanguageO
   });
 }
 
+interface LanguageGroupProps {
+  title: string;
+  options: LanguageOption[];
+  selected: string;
+  onSelect: (archFile: string) => void;
+  required?: boolean;
+}
+
+function LanguageGroup({ title, options, selected, onSelect, required = false }: LanguageGroupProps) {
+  const missing = required && !selected;
+
+  return (
+    <div className="flex flex-col gap-2.5">
+      <div className="flex items-center gap-1.5 text-[13px] font-extrabold text-[#161217]">
+        {title}
+        {required && <span className="text-[#c81c5c]">*</span>}
+      </div>
+      {options.map((option) => (
+        <label key={option.key} className="flex cursor-pointer items-center gap-2.5 text-sm font-semibold">
+          <RadioDot
+            name={title}
+            color="#1c8a5c"
+            checked={option.archFile === selected}
+            onSelect={() => onSelect(option.archFile === selected ? "" : option.archFile)}
+          />
+          {option.label}
+        </label>
+      ))}
+      {missing && <div className="text-xs font-semibold text-[#c81c5c]">Required — select one to continue.</div>}
+    </div>
+  );
+}
+
 interface LanguageStackPickerProps {
   catalog: StackCatalog;
   backendArchFile: string;
   frontendArchFile: string;
   onSelectBackend: (archFile: string) => void;
   onSelectFrontend: (archFile: string) => void;
+  backendRequired?: boolean;
+  frontendRequired?: boolean;
 }
 
 export function LanguageStackPicker({
@@ -31,33 +66,34 @@ export function LanguageStackPicker({
   frontendArchFile,
   onSelectBackend,
   onSelectFrontend,
+  backendRequired = false,
+  frontendRequired = false,
 }: LanguageStackPickerProps) {
   const backendOptions = toLanguageOptions(catalog.backend);
   const frontendOptions = toLanguageOptions(catalog.frontend);
 
   return (
-    <div>
-      <div className="mb-2.5 text-[11px] font-extrabold uppercase tracking-[0.1em] text-[#8a8290]">
-        Language / Stack
+    <div className="flex w-[300px] flex-none flex-col gap-3 border-l-[1.5px] border-[#cfe9dc] bg-[#f3faf6] px-5 py-4">
+      <div className="text-[11px] font-extrabold uppercase tracking-[0.1em] text-[#1c8a5c]">
+        Language / stack{" "}
+        <span className="font-semibold tracking-normal text-[#5c5560] normal-case">
+          · applies to the agents
+        </span>
       </div>
-      <div className="flex flex-col gap-2.5">
-        {backendOptions.map((option) => (
-          <CheckboxRow
-            key={option.key}
-            label={option.label}
-            checked={option.archFile === backendArchFile}
-            onToggle={() => onSelectBackend(option.archFile === backendArchFile ? "" : option.archFile)}
-          />
-        ))}
-        {frontendOptions.map((option) => (
-          <CheckboxRow
-            key={option.key}
-            label={option.label}
-            checked={option.archFile === frontendArchFile}
-            onToggle={() => onSelectFrontend(option.archFile === frontendArchFile ? "" : option.archFile)}
-          />
-        ))}
-      </div>
+      <LanguageGroup
+        title="Backend"
+        options={backendOptions}
+        selected={backendArchFile}
+        onSelect={onSelectBackend}
+        required={backendRequired}
+      />
+      <LanguageGroup
+        title="Frontend"
+        options={frontendOptions}
+        selected={frontendArchFile}
+        onSelect={onSelectFrontend}
+        required={frontendRequired}
+      />
     </div>
   );
 }
