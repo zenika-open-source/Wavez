@@ -22,12 +22,18 @@ interface LanguageGroupProps {
   options: LanguageOption[];
   selected: string;
   onSelect: (archFile: string) => void;
+  required?: boolean;
 }
 
-function LanguageGroup({ title, options, selected, onSelect }: LanguageGroupProps) {
+function LanguageGroup({ title, options, selected, onSelect, required = false }: LanguageGroupProps) {
+  const missing = required && !selected;
+
   return (
     <div className="flex flex-col gap-2.5">
-      <div className="text-[13px] font-extrabold text-[#161217]">{title}</div>
+      <div className="flex items-center gap-1.5 text-[13px] font-extrabold text-[#161217]">
+        {title}
+        {required && <span className="text-[#c81c5c]">*</span>}
+      </div>
       {options.map((option) => (
         <label key={option.key} className="flex cursor-pointer items-center gap-2.5 text-sm font-semibold">
           <RadioDot
@@ -39,6 +45,7 @@ function LanguageGroup({ title, options, selected, onSelect }: LanguageGroupProp
           {option.label}
         </label>
       ))}
+      {missing && <div className="text-xs font-semibold text-[#c81c5c]">Required — select one to continue.</div>}
     </div>
   );
 }
@@ -49,6 +56,8 @@ interface LanguageStackPickerProps {
   frontendArchFile: string;
   onSelectBackend: (archFile: string) => void;
   onSelectFrontend: (archFile: string) => void;
+  backendRequired?: boolean;
+  frontendRequired?: boolean;
 }
 
 export function LanguageStackPicker({
@@ -57,6 +66,8 @@ export function LanguageStackPicker({
   frontendArchFile,
   onSelectBackend,
   onSelectFrontend,
+  backendRequired = false,
+  frontendRequired = false,
 }: LanguageStackPickerProps) {
   const backendOptions = toLanguageOptions(catalog.backend);
   const frontendOptions = toLanguageOptions(catalog.frontend);
@@ -69,8 +80,20 @@ export function LanguageStackPicker({
           · applies to the agents
         </span>
       </div>
-      <LanguageGroup title="Backend" options={backendOptions} selected={backendArchFile} onSelect={onSelectBackend} />
-      <LanguageGroup title="Frontend" options={frontendOptions} selected={frontendArchFile} onSelect={onSelectFrontend} />
+      <LanguageGroup
+        title="Backend"
+        options={backendOptions}
+        selected={backendArchFile}
+        onSelect={onSelectBackend}
+        required={backendRequired}
+      />
+      <LanguageGroup
+        title="Frontend"
+        options={frontendOptions}
+        selected={frontendArchFile}
+        onSelect={onSelectFrontend}
+        required={frontendRequired}
+      />
     </div>
   );
 }

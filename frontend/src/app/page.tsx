@@ -35,6 +35,10 @@ export default function Home() {
     include_conventions: true,
   };
 
+  const backendStackMissing = (skillSelections["backend"] ?? "none") !== "none" && !backendArchFile;
+  const frontendStackMissing = (skillSelections["frontend"] ?? "none") !== "none" && !frontendArchFile;
+  const canGenerate = !backendStackMissing && !frontendStackMissing;
+
   useEffect(() => {
     getStacks()
       .then(setCatalog)
@@ -63,6 +67,10 @@ export default function Home() {
 
   function handleSetSkillMode(skillId: string, mode: SkillMode) {
     setSkillSelections((prev) => ({ ...prev, [skillId]: mode }));
+    if (mode === "none") {
+      if (skillId === "backend") setBackendArchFile("");
+      if (skillId === "frontend") setFrontendArchFile("");
+    }
   }
 
   return (
@@ -108,10 +116,15 @@ export default function Home() {
 
       <div className="border-t-[1.5px] border-[#e9dde3]">
         <div className="mx-auto flex max-w-[1120px] items-center justify-end gap-4 px-6 py-5">
+          {!canGenerate && (
+            <span className="text-xs font-semibold text-[#c81c5c]">
+              Select a language/stack for every selected agent category to continue.
+            </span>
+          )}
           <Button variant="secondary" onClick={handleReset}>
             Reset
           </Button>
-          <Button variant="primary" onClick={() => setGenerateModalOpen(true)}>
+          <Button variant="primary" onClick={() => setGenerateModalOpen(true)} disabled={!canGenerate}>
             Generate
           </Button>
         </div>

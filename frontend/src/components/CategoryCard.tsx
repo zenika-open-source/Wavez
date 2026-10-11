@@ -101,6 +101,8 @@ export function CategoryCard({
               frontendArchFile={frontendArchFile ?? ""}
               onSelectBackend={onSelectBackend}
               onSelectFrontend={onSelectFrontend}
+              backendRequired={(selections["backend"] ?? "none") !== "none"}
+              frontendRequired={(selections["frontend"] ?? "none") !== "none"}
             />
           )}
         </div>
