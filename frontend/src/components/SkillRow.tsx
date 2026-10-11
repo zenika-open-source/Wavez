@@ -1,5 +1,8 @@
 import { RadioDot } from "@/components/ui/RadioDot";
+import { ENABLE_CUSTOM_AGENT_FILE } from "@/data/featureFlags";
 import type { Skill, SkillMode } from "@/types/skills";
+
+export const SKILL_ROW_GRID_COLUMNS = ENABLE_CUSTOM_AGENT_FILE ? "1fr 56px 56px 76px" : "1fr 56px 110px";
 
 interface SkillRowProps {
   skill: Skill;
@@ -15,7 +18,7 @@ export function SkillRow({ skill, mode, color, onChange }: SkillRowProps) {
   return (
     <div
       className="grid items-center gap-2 border-b border-[#f6f0f3] py-2.5"
-      style={{ gridTemplateColumns: "1fr 56px 56px 76px" }}
+      style={{ gridTemplateColumns: SKILL_ROW_GRID_COLUMNS }}
     >
       <div className={`text-[13px] font-bold ${effectiveMode === "none" ? "opacity-40" : ""}`}>
         {skill.label}
@@ -35,13 +38,15 @@ export function SkillRow({ skill, mode, color, onChange }: SkillRowProps) {
         onSelect={() => onChange("skill")}
         disabled={disabled}
       />
-      <RadioDot
-        name={skill.id}
-        color={color}
-        checked={effectiveMode === "custom"}
-        onSelect={() => onChange("custom")}
-        disabled={disabled}
-      />
+      {ENABLE_CUSTOM_AGENT_FILE && (
+        <RadioDot
+          name={skill.id}
+          color={color}
+          checked={effectiveMode === "custom"}
+          onSelect={() => onChange("custom")}
+          disabled={disabled}
+        />
+      )}
     </div>
   );
 }

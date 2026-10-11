@@ -1,11 +1,6 @@
+import { ASSISTANTS } from "@/data/assistants";
 import { RadioRow } from "@/components/ui/RadioRow";
 import type { AssistantId } from "@/types/zenflow";
-
-const ASSISTANTS: { id: AssistantId; label: string }[] = [
-  { id: "claude", label: "Claude Code" },
-  { id: "copilot", label: "GitHub Copilot" },
-  { id: "opencode", label: "OpenCode" },
-];
 
 interface AssistantPickerProps {
   selected: AssistantId;

@@ -32,7 +32,6 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
     title: "QA",
     color: "#7c4fd6",
     tint: "#efe9fc",
-    disabled: true, // no backend support yet
     skills: [
       { id: "playwright-scripts", label: "Script generation with Playwright" },
       { id: "playwright-exploratory", label: "Exploratory testing with Playwright" },

@@ -4,14 +4,13 @@ import { useEffect, useState } from "react";
 import { getStacks } from "@/api/stacks";
 import { AssistantPicker } from "@/components/AssistantPicker";
 import { GenerateModal } from "@/components/GenerateModal";
-import { LanguageStackPicker } from "@/components/LanguageStackPicker";
 import { SkillCategoryAccordion } from "@/components/SkillCategoryAccordion";
 import { Button } from "@/components/ui/Button";
 import { SKILL_CATEGORIES } from "@/data/skillCategories";
 import type { SkillMode } from "@/types/skills";
 import type { AssistantId, GuidelineSelection, StackCatalog, ToolSelection } from "@/types/zenflow";
 
-const DEFAULT_EXPANDED_CATEGORY = (SKILL_CATEGORIES.find((c) => !c.disabled) ?? SKILL_CATEGORIES[0]).id;
+const ALL_CATEGORY_IDS = SKILL_CATEGORIES.map((c) => c.id);
 
 export default function Home() {
   const [catalog, setCatalog] = useState<StackCatalog | null>(null);
@@ -19,7 +18,7 @@ export default function Home() {
   const [assistant, setAssistant] = useState<AssistantId>("claude");
   const [backendArchFile, setBackendArchFile] = useState("");
   const [frontendArchFile, setFrontendArchFile] = useState("");
-  const [expandedCategory, setExpandedCategory] = useState<string | null>(DEFAULT_EXPANDED_CATEGORY);
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(ALL_CATEGORY_IDS));
   const [skillSelections, setSkillSelections] = useState<Record<string, SkillMode>>({});
   const [generateModalOpen, setGenerateModalOpen] = useState(false);
 
@@ -46,12 +45,20 @@ export default function Home() {
     setAssistant("claude");
     setBackendArchFile("");
     setFrontendArchFile("");
-    setExpandedCategory(DEFAULT_EXPANDED_CATEGORY);
+    setExpandedCategories(new Set(ALL_CATEGORY_IDS));
     setSkillSelections({});
   }
 
   function handleToggleExpand(categoryId: string) {
-    setExpandedCategory((prev) => (prev === categoryId ? null : categoryId));
+    setExpandedCategories((prev) => {
+      const next = new Set(prev);
+      if (next.has(categoryId)) {
+        next.delete(categoryId);
+      } else {
+        next.add(categoryId);
+      }
+      return next;
+    });
   }
 
   function handleSetSkillMode(skillId: string, mode: SkillMode) {
@@ -61,42 +68,41 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[linear-gradient(135deg,#fdf1f4_0%,#f6eefb_55%,#eef1fb_100%)] text-[#161217]">
       <div className="mx-auto max-w-[1120px] px-6 pt-14 pb-8">
-        <div className="mb-2 text-[56px] leading-none font-extrabold tracking-[-0.01em] text-[#c81c5c]">
-          ZENFLOW
-        </div>
-        <h1 className="mb-4 max-w-[40ch] text-lg leading-snug font-bold text-[#5c5560]">
-          Generate agent skills for your AI assistant.
-        </h1>
-        <p className="mb-6 max-w-[56ch] text-base leading-relaxed text-[#5c5560]">
-          Pick an assistant, a stack, and the skills you want your agents to carry — then export the files
-          it reads on day one.
-        </p>
-
-        <div className="mt-7 grid grid-cols-2 gap-6 rounded-[24px] bg-white p-6 shadow-[0_20px_40px_-20px_rgba(120,40,80,0.25)]">
-          <AssistantPicker selected={assistant} onSelect={setAssistant} />
-          {catalog ? (
-            <LanguageStackPicker
-              catalog={catalog}
-              backendArchFile={backendArchFile}
-              frontendArchFile={frontendArchFile}
-              onSelectBackend={setBackendArchFile}
-              onSelectFrontend={setFrontendArchFile}
-            />
-          ) : (
-            <div className="text-sm text-[#8a8290]">
-              {loadError ? `Couldn't load stacks: ${loadError}` : "Loading stacks…"}
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-8">
+          <div>
+            <div className="mb-2 text-[56px] leading-none font-extrabold tracking-[-0.01em] text-[#c81c5c]">
+              ZENFLOW
             </div>
-          )}
+            <h1 className="mb-4 max-w-[40ch] text-lg leading-snug font-bold text-[#5c5560]">
+              Generate agent skills for your AI assistant.
+            </h1>
+            <p className="max-w-[56ch] text-base leading-relaxed text-[#5c5560]">
+              Pick an assistant, a stack, and the skills you want your agents to carry — then export the
+              files it reads on day one.
+            </p>
+          </div>
+
+          <div className="min-w-[240px] rounded-[24px] bg-white px-6 py-5 shadow-[0_20px_40px_-20px_rgba(120,40,80,0.25)]">
+            <AssistantPicker selected={assistant} onSelect={setAssistant} />
+          </div>
         </div>
       </div>
 
       <div className="mx-auto max-w-[1120px] px-6 pt-4 pb-10">
+        {!catalog && loadError && (
+          <div className="mb-3 text-sm text-[#8a8290]">{`Couldn't load stacks: ${loadError}`}</div>
+        )}
         <SkillCategoryAccordion
           categories={SKILL_CATEGORIES}
-          expandedCategory={expandedCategory}
+          expandedCategories={expandedCategories}
           selections={skillSelections}
           onToggleExpand={handleToggleExpand}
           onSetMode={handleSetSkillMode}
+          catalog={catalog}
+          backendArchFile={backendArchFile}
+          frontendArchFile={frontendArchFile}
+          onSelectBackend={setBackendArchFile}
+          onSelectFrontend={setFrontendArchFile}
         />
       </div>
 
@@ -113,6 +119,7 @@ export default function Home() {
 
       <GenerateModal
         open={generateModalOpen}
+        assistant={assistant}
         tools={tools}
         guidelines={guidelines}
         skillSelections={skillSelections}
