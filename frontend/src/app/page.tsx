@@ -5,6 +5,7 @@ import { getStacks } from "@/api/stacks";
 import { AssistantPicker } from "@/components/AssistantPicker";
 import { GenerateModal } from "@/components/GenerateModal";
 import { SkillCategoryAccordion } from "@/components/SkillCategoryAccordion";
+import { StepGuide } from "@/components/StepGuide";
 import { toLanguageOptions } from "@/components/LanguageStackPicker";
 import { Button } from "@/components/ui/Button";
 import { SKILL_CATEGORIES } from "@/data/skillCategories";
@@ -115,6 +116,7 @@ export default function Home() {
       </div>
 
       <div className="mx-auto max-w-[1120px] px-6 pt-2 pb-28">
+        <StepGuide />
         {!catalog && loadError && (
           <div className="mb-3 text-sm text-[#8a8290]">{`Couldn't load stacks: ${loadError}`}</div>
         )}
@@ -135,7 +137,7 @@ export default function Home() {
       <div className="fixed inset-x-0 bottom-0">
         <div className="pointer-events-none absolute inset-x-0 -top-4 h-4 bg-gradient-to-t from-[#eef1fb] to-transparent" />
         <div className="bg-[#eef1fb] shadow-[0_-12px_24px_-16px_rgba(60,20,50,0.25)]">
-          <div className="mx-auto flex max-w-[1120px] items-center justify-center gap-4 px-6 py-5">
+          <div className="mx-auto flex max-w-[1120px] items-center justify-end gap-4 px-6 py-5">
             <Button variant="secondary" onClick={handleReset}>
               Reset
             </Button>
