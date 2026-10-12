@@ -73,6 +73,20 @@ export default function Home() {
     }
   }
 
+  function handleSelectBackend(archFile: string) {
+    setBackendArchFile(archFile);
+    if (archFile) {
+      setSkillSelections((prev) => (prev["backend"] && prev["backend"] !== "none" ? prev : { ...prev, backend: "skill" }));
+    }
+  }
+
+  function handleSelectFrontend(archFile: string) {
+    setFrontendArchFile(archFile);
+    if (archFile) {
+      setSkillSelections((prev) => (prev["frontend"] && prev["frontend"] !== "none" ? prev : { ...prev, frontend: "skill" }));
+    }
+  }
+
   return (
     <div className="min-h-screen bg-[linear-gradient(135deg,#fdf1f4_0%,#f6eefb_55%,#eef1fb_100%)] text-[#161217]">
       <div className="mx-auto max-w-[1120px] px-6 pt-14 pb-8">
@@ -109,8 +123,8 @@ export default function Home() {
           catalog={catalog}
           backendArchFile={backendArchFile}
           frontendArchFile={frontendArchFile}
-          onSelectBackend={setBackendArchFile}
-          onSelectFrontend={setFrontendArchFile}
+          onSelectBackend={handleSelectBackend}
+          onSelectFrontend={handleSelectFrontend}
         />
       </div>
 
