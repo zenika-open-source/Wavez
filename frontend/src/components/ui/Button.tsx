@@ -16,7 +16,7 @@ export function Button({ children, onClick, variant = "secondary", disabled = fa
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`rounded-full px-7 py-3.5 text-[15px] font-bold disabled:cursor-not-allowed disabled:opacity-50 ${
+      className={`rounded-full px-7 py-3.5 text-[15px] font-bold uppercase tracking-wide disabled:cursor-not-allowed disabled:opacity-50 ${
         disabled ? "" : "cursor-pointer"
       } ${variantClasses}`}
     >

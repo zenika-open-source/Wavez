@@ -114,7 +114,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-[1120px] px-6 pt-2 pb-10">
+      <div className="mx-auto max-w-[1120px] px-6 pt-2 pb-28">
         {!catalog && loadError && (
           <div className="mb-3 text-sm text-[#8a8290]">{`Couldn't load stacks: ${loadError}`}</div>
         )}
@@ -132,19 +132,22 @@ export default function Home() {
         />
       </div>
 
-      <div className="border-t-[1.5px] border-[#e9dde3]">
-        <div className="mx-auto flex max-w-[1120px] items-center justify-end gap-4 px-6 py-5">
-          {!canGenerate && (
-            <span className="text-xs font-semibold text-[#c81c5c]">
-              Select a language/stack for every selected agent category to continue.
-            </span>
-          )}
-          <Button variant="secondary" onClick={handleReset}>
-            Reset
-          </Button>
-          <Button variant="primary" onClick={() => setGenerateModalOpen(true)} disabled={!canGenerate}>
-            Generate
-          </Button>
+      <div className="fixed inset-x-0 bottom-0">
+        <div className="pointer-events-none absolute inset-x-0 -top-4 h-4 bg-gradient-to-t from-[#eef1fb] to-transparent" />
+        <div className="bg-[#eef1fb] shadow-[0_-12px_24px_-16px_rgba(60,20,50,0.25)]">
+          <div className="mx-auto flex max-w-[1120px] items-center justify-center gap-4 px-6 py-5">
+            {!canGenerate && (
+              <span className="text-xs font-semibold text-[#c81c5c]">
+                Select a language/stack for every selected agent category to continue.
+              </span>
+            )}
+            <Button variant="secondary" onClick={handleReset}>
+              Reset
+            </Button>
+            <Button variant="primary" onClick={() => setGenerateModalOpen(true)} disabled={!canGenerate}>
+              Generate
+            </Button>
+          </div>
         </div>
       </div>
 
