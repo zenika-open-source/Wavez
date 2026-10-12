@@ -315,3 +315,17 @@ def test_review_backend_guideline_arch_path(base_env: Environment, tool: str, ex
     result = render_template(base_env, "guidelines/review/backend.md.j2", ctx)
     assert expected_arch in result
     assert "{{" not in result
+
+
+@pytest.mark.parametrize("skill_mode", [True, False])
+def test_product_requirements_includes_story_rules(
+    repo_root: str,
+    skill_mode: bool,
+) -> None:
+    """The PRD agent must carry the story writing rules and stories file."""
+    env = make_env(repo_root)
+    out = _render_agent(env, "product-requirements", "claude", skill_mode=skill_mode)
+    assert "## Story Writing Rules" in out
+    assert "-stories.md" in out
+    assert "Given [context], When [action], Then [result]" in out
+    assert "NEVER use \"user\"" in out
