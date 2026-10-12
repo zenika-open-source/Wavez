@@ -1,7 +1,7 @@
 import { RadioDot } from "@/components/ui/RadioDot";
 import type { FrameworkOption, StackCatalog } from "@/types/zenflow";
 
-interface LanguageOption {
+export interface LanguageOption {
   key: string;
   label: string;
   archFile: string;
@@ -9,7 +9,7 @@ interface LanguageOption {
 
 // Each language maps to a single row backed by its most specific (non-"None") framework,
 // since the real GuidelineSelection stores exactly one backend and one frontend arch file.
-function toLanguageOptions(stacks: Record<string, FrameworkOption[]>): LanguageOption[] {
+export function toLanguageOptions(stacks: Record<string, FrameworkOption[]>): LanguageOption[] {
   return Object.entries(stacks).map(([language, frameworks]) => {
     const framework = frameworks[frameworks.length - 1];
     const label = framework.label.startsWith("None") ? language : `${language} — ${framework.label}`;

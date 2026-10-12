@@ -5,6 +5,7 @@ import { getStacks } from "@/api/stacks";
 import { AssistantPicker } from "@/components/AssistantPicker";
 import { GenerateModal } from "@/components/GenerateModal";
 import { SkillCategoryAccordion } from "@/components/SkillCategoryAccordion";
+import { toLanguageOptions } from "@/components/LanguageStackPicker";
 import { Button } from "@/components/ui/Button";
 import { SKILL_CATEGORIES } from "@/data/skillCategories";
 import type { SkillMode } from "@/types/skills";
@@ -70,6 +71,9 @@ export default function Home() {
     if (mode === "none") {
       if (skillId === "backend") setBackendArchFile("");
       if (skillId === "frontend") setFrontendArchFile("");
+    } else if (skillId === "frontend" && catalog) {
+      const frontendOptions = toLanguageOptions(catalog.frontend);
+      if (frontendOptions.length === 1) setFrontendArchFile(frontendOptions[0].archFile);
     }
   }
 
