@@ -94,7 +94,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[linear-gradient(135deg,#fdf1f4_0%,#f6eefb_55%,#eef1fb_100%)] text-[#161217]">
       <div className="mx-auto max-w-[1120px] px-6 pt-6 pb-4">
-        <div className="grid grid-cols-1 items-end gap-8 lg:grid-cols-[minmax(0,1fr)_auto]">
+        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,1fr)_auto]">
           <div>
             <div className="mb-2 text-[56px] leading-none font-extrabold tracking-[-0.01em] text-[#c81c5c]">
               ZENFLOW
