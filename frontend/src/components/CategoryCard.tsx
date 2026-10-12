@@ -38,6 +38,9 @@ export function CategoryCard({
   const selectedCount = category.skills.filter((skill) => (selections[skill.id] ?? "none") !== "none").length;
   const disabled = category.disabled ?? false;
   const showStack = category.id === "developer";
+  // Collapsing leaves an unevenly-sized card next to its neighbor, so collapsing is
+  // disabled for all categories for now.
+  const collapsible = false;
 
   return (
     <div
@@ -47,10 +50,10 @@ export function CategoryCard({
     >
       <button
         type="button"
-        onClick={onToggleExpand}
+        onClick={collapsible ? onToggleExpand : undefined}
         disabled={disabled}
         className={`flex w-full items-center gap-3 px-5 py-4 text-left ${
-          disabled ? "cursor-not-allowed" : "cursor-pointer"
+          disabled || !collapsible ? "cursor-default" : "cursor-pointer"
         }`}
       >
         <div
@@ -63,7 +66,7 @@ export function CategoryCard({
           {disabled ? "Coming soon" : `${selectedCount} selected`}
         </span>
         <span className="flex-1" />
-        {!disabled && (
+        {collapsible && (
           <span
             className="inline-block text-[#8a8290] transition-transform duration-150"
             style={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)" }}
