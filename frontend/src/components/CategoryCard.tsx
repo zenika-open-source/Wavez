@@ -1,5 +1,6 @@
 import { LanguageStackPicker } from "@/components/LanguageStackPicker";
 import { SkillRow, SKILL_ROW_GRID_COLUMNS } from "@/components/SkillRow";
+import { CheckboxDot } from "@/components/ui/CheckboxDot";
 import { ENABLE_CUSTOM_AGENT_FILE } from "@/data/featureFlags";
 import type { SkillCategory, SkillMode } from "@/types/skills";
 import type { StackCatalog } from "@/types/zenflow";
@@ -35,12 +36,20 @@ export function CategoryCard({
   onSelectBackend,
   onSelectFrontend,
 }: CategoryCardProps) {
-  const selectedCount = category.skills.filter((skill) => (selections[skill.id] ?? "none") !== "none").length;
+  const selectableSkills = category.skills.filter((skill) => !skill.disabled);
+  const selectedCount = selectableSkills.filter((skill) => (selections[skill.id] ?? "none") !== "none").length;
+  const allSelected = selectableSkills.length > 0 && selectedCount === selectableSkills.length;
+  const someSelected = selectedCount > 0 && !allSelected;
   const disabled = category.disabled ?? false;
   const showStack = category.id === "developer";
   // Collapsing leaves an unevenly-sized card next to its neighbor, so collapsing is
   // disabled for all categories for now.
   const collapsible = false;
+
+  function handleToggleAll() {
+    const nextMode: SkillMode = allSelected ? "none" : "skill";
+    selectableSkills.forEach((skill) => onSetMode(skill.id, nextMode));
+  }
 
   return (
     <div
@@ -79,12 +88,20 @@ export function CategoryCard({
         <div className="flex flex-1 items-stretch border-t-[1.5px] border-[#f0e6ec]">
           <div className="min-w-0 flex-1 px-5 pt-4 pb-5">
             <div
-              className="grid gap-2 border-b-[1.5px] border-[#f0e6ec] px-1 pb-2 text-[11px] font-extrabold tracking-[0.08em] text-[#8a8290] uppercase"
+              className="grid gap-2 border-b-[1.5px] border-[#f0e6ec] pb-2 text-[11px] font-extrabold tracking-[0.08em] text-[#8a8290] uppercase"
               style={{ gridTemplateColumns: SKILL_ROW_GRID_COLUMNS }}
             >
-              <div>Agent</div>
-              <div className="text-center">None</div>
-              <div className="text-center">SKILL.md file</div>
+              <div>Agent Skills</div>
+              <div className="flex items-center justify-center">
+                <CheckboxDot
+                  name={`${category.id}-select-all`}
+                  color={category.color}
+                  checked={allSelected}
+                  indeterminate={someSelected}
+                  onSelect={handleToggleAll}
+                  disabled={selectableSkills.length === 0}
+                />
+              </div>
               {ENABLE_CUSTOM_AGENT_FILE && <div className="text-center leading-tight">Custom agent file</div>}
             </div>
             {category.skills.map((skill) => (
