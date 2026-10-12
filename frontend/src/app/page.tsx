@@ -5,6 +5,7 @@ import { getStacks } from "@/api/stacks";
 import { AssistantPicker } from "@/components/AssistantPicker";
 import { GenerateModal } from "@/components/GenerateModal";
 import { SkillCategoryAccordion } from "@/components/SkillCategoryAccordion";
+import { toLanguageOptions } from "@/components/LanguageStackPicker";
 import { Button } from "@/components/ui/Button";
 import { SKILL_CATEGORIES } from "@/data/skillCategories";
 import type { SkillMode } from "@/types/skills";
@@ -70,13 +71,30 @@ export default function Home() {
     if (mode === "none") {
       if (skillId === "backend") setBackendArchFile("");
       if (skillId === "frontend") setFrontendArchFile("");
+    } else if (skillId === "frontend" && catalog) {
+      const frontendOptions = toLanguageOptions(catalog.frontend);
+      if (frontendOptions.length === 1) setFrontendArchFile(frontendOptions[0].archFile);
+    }
+  }
+
+  function handleSelectBackend(archFile: string) {
+    setBackendArchFile(archFile);
+    if (archFile) {
+      setSkillSelections((prev) => (prev["backend"] && prev["backend"] !== "none" ? prev : { ...prev, backend: "skill" }));
+    }
+  }
+
+  function handleSelectFrontend(archFile: string) {
+    setFrontendArchFile(archFile);
+    if (archFile) {
+      setSkillSelections((prev) => (prev["frontend"] && prev["frontend"] !== "none" ? prev : { ...prev, frontend: "skill" }));
     }
   }
 
   return (
     <div className="min-h-screen bg-[linear-gradient(135deg,#fdf1f4_0%,#f6eefb_55%,#eef1fb_100%)] text-[#161217]">
-      <div className="mx-auto max-w-[1120px] px-6 pt-14 pb-8">
-        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-8">
+      <div className="mx-auto max-w-[1120px] px-6 pt-6 pb-4">
+        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,1fr)_auto]">
           <div>
             <div className="mb-2 text-[56px] leading-none font-extrabold tracking-[-0.01em] text-[#c81c5c]">
               ZENFLOW
@@ -84,8 +102,8 @@ export default function Home() {
             <h1 className="mb-4 max-w-[40ch] text-lg leading-snug font-bold text-[#5c5560]">
               Generate agent skills for your AI assistant.
             </h1>
-            <p className="max-w-[56ch] text-base leading-relaxed text-[#5c5560]">
-              Pick an assistant, a stack, and the skills you want your agents to carry — then export the
+            <p className="text-base leading-relaxed text-[#5c5560] lg:whitespace-nowrap">
+              Pick an assistant, a stack, and the skills you want your agents to carry then export the
               files it reads on day one.
             </p>
           </div>
@@ -96,7 +114,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-[1120px] px-6 pt-4 pb-10">
+      <div className="mx-auto max-w-[1120px] px-6 pt-2 pb-28">
         {!catalog && loadError && (
           <div className="mb-3 text-sm text-[#8a8290]">{`Couldn't load stacks: ${loadError}`}</div>
         )}
@@ -109,24 +127,22 @@ export default function Home() {
           catalog={catalog}
           backendArchFile={backendArchFile}
           frontendArchFile={frontendArchFile}
-          onSelectBackend={setBackendArchFile}
-          onSelectFrontend={setFrontendArchFile}
+          onSelectBackend={handleSelectBackend}
+          onSelectFrontend={handleSelectFrontend}
         />
       </div>
 
-      <div className="border-t-[1.5px] border-[#e9dde3]">
-        <div className="mx-auto flex max-w-[1120px] items-center justify-end gap-4 px-6 py-5">
-          {!canGenerate && (
-            <span className="text-xs font-semibold text-[#c81c5c]">
-              Select a language/stack for every selected agent category to continue.
-            </span>
-          )}
-          <Button variant="secondary" onClick={handleReset}>
-            Reset
-          </Button>
-          <Button variant="primary" onClick={() => setGenerateModalOpen(true)} disabled={!canGenerate}>
-            Generate
-          </Button>
+      <div className="fixed inset-x-0 bottom-0">
+        <div className="pointer-events-none absolute inset-x-0 -top-4 h-4 bg-gradient-to-t from-[#eef1fb] to-transparent" />
+        <div className="bg-[#eef1fb] shadow-[0_-12px_24px_-16px_rgba(60,20,50,0.25)]">
+          <div className="mx-auto flex max-w-[1120px] items-center justify-center gap-4 px-6 py-5">
+            <Button variant="secondary" onClick={handleReset}>
+              Reset
+            </Button>
+            <Button variant="primary" onClick={() => setGenerateModalOpen(true)} disabled={!canGenerate}>
+              Generate
+            </Button>
+          </div>
         </div>
       </div>
 

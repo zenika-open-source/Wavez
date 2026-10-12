@@ -28,7 +28,7 @@ export function SkillCategoryAccordion({
   onSelectFrontend,
 }: SkillCategoryAccordionProps) {
   return (
-    <div className="grid grid-cols-2 items-start gap-3">
+    <div className="grid grid-cols-2 items-stretch gap-3">
       {categories.map((category) => (
         <CategoryCard
           key={category.id}

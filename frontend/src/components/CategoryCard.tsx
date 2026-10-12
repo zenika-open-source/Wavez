@@ -38,19 +38,22 @@ export function CategoryCard({
   const selectedCount = category.skills.filter((skill) => (selections[skill.id] ?? "none") !== "none").length;
   const disabled = category.disabled ?? false;
   const showStack = category.id === "developer";
+  // Collapsing leaves an unevenly-sized card next to its neighbor, so collapsing is
+  // disabled for all categories for now.
+  const collapsible = false;
 
   return (
     <div
-      className={`overflow-hidden rounded-2xl bg-white shadow-[0_12px_28px_-18px_rgba(60,20,50,0.25)] ${
+      className={`flex flex-col overflow-hidden rounded-2xl bg-white shadow-[0_12px_28px_-18px_rgba(60,20,50,0.25)] ${
         GRID_PLACEMENT[category.id] ?? ""
       } ${disabled ? "opacity-50" : ""}`}
     >
       <button
         type="button"
-        onClick={onToggleExpand}
+        onClick={collapsible ? onToggleExpand : undefined}
         disabled={disabled}
         className={`flex w-full items-center gap-3 px-5 py-4 text-left ${
-          disabled ? "cursor-not-allowed" : "cursor-pointer"
+          disabled || !collapsible ? "cursor-default" : "cursor-pointer"
         }`}
       >
         <div
@@ -63,7 +66,7 @@ export function CategoryCard({
           {disabled ? "Coming soon" : `${selectedCount} selected`}
         </span>
         <span className="flex-1" />
-        {!disabled && (
+        {collapsible && (
           <span
             className="inline-block text-[#8a8290] transition-transform duration-150"
             style={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)" }}
@@ -73,7 +76,7 @@ export function CategoryCard({
         )}
       </button>
       {!disabled && expanded && (
-        <div className="flex items-stretch border-t-[1.5px] border-[#f0e6ec]">
+        <div className="flex flex-1 items-stretch border-t-[1.5px] border-[#f0e6ec]">
           <div className="min-w-0 flex-1 px-5 pt-4 pb-5">
             <div
               className="grid gap-2 border-b-[1.5px] border-[#f0e6ec] px-1 pb-2 text-[11px] font-extrabold tracking-[0.08em] text-[#8a8290] uppercase"
