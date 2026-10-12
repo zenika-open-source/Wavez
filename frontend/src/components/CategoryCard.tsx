@@ -92,7 +92,7 @@ export function CategoryCard({
               style={{ gridTemplateColumns: SKILL_ROW_GRID_COLUMNS }}
             >
               <div>Agent Skills</div>
-              <div className="flex items-center justify-center">
+              <div className="flex items-center justify-end">
                 <CheckboxDot
                   name={`${category.id}-select-all`}
                   color={category.color}

@@ -5,6 +5,7 @@ import { getStacks } from "@/api/stacks";
 import { AssistantPicker } from "@/components/AssistantPicker";
 import { GenerateModal } from "@/components/GenerateModal";
 import { SkillCategoryAccordion } from "@/components/SkillCategoryAccordion";
+import { StepGuide } from "@/components/StepGuide";
 import { toLanguageOptions } from "@/components/LanguageStackPicker";
 import { Button } from "@/components/ui/Button";
 import { SKILL_CATEGORIES } from "@/data/skillCategories";
@@ -115,6 +116,7 @@ export default function Home() {
       </div>
 
       <div className="mx-auto max-w-[1120px] px-6 pt-2 pb-28">
+        <StepGuide />
         {!catalog && loadError && (
           <div className="mb-3 text-sm text-[#8a8290]">{`Couldn't load stacks: ${loadError}`}</div>
         )}

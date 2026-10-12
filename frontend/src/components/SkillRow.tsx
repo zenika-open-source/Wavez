@@ -17,7 +17,7 @@ export function SkillRow({ skill, mode, color, onChange }: SkillRowProps) {
 
   return (
     <div
-      className="grid items-center gap-2 border-b border-[#f6f0f3] py-2.5"
+      className="ml-4 grid items-center gap-2 border-b border-[#f6f0f3] py-2.5"
       style={{ gridTemplateColumns: SKILL_ROW_GRID_COLUMNS }}
     >
       <button
@@ -31,13 +31,15 @@ export function SkillRow({ skill, mode, color, onChange }: SkillRowProps) {
         <div className="text-[13px] font-bold">{skill.label}</div>
         {skill.sublabel && <div className="mt-0.5 text-xs font-semibold text-[#8a8290]">{skill.sublabel}</div>}
       </button>
-      <CheckboxDot
-        name={skill.id}
-        color={color}
-        checked={effectiveMode === "skill"}
-        onSelect={() => onChange(effectiveMode === "skill" ? "none" : "skill")}
-        disabled={disabled}
-      />
+      <div className="flex justify-end">
+        <CheckboxDot
+          name={skill.id}
+          color={color}
+          checked={effectiveMode === "skill"}
+          onSelect={() => onChange(effectiveMode === "skill" ? "none" : "skill")}
+          disabled={disabled}
+        />
+      </div>
       {ENABLE_CUSTOM_AGENT_FILE && (
         <CheckboxDot
           name={skill.id}
