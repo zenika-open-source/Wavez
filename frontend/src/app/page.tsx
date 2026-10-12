@@ -136,11 +136,6 @@ export default function Home() {
         <div className="pointer-events-none absolute inset-x-0 -top-4 h-4 bg-gradient-to-t from-[#eef1fb] to-transparent" />
         <div className="bg-[#eef1fb] shadow-[0_-12px_24px_-16px_rgba(60,20,50,0.25)]">
           <div className="mx-auto flex max-w-[1120px] items-center justify-center gap-4 px-6 py-5">
-            {!canGenerate && (
-              <span className="text-xs font-semibold text-[#c81c5c]">
-                Select a language/stack for every selected agent category to continue.
-              </span>
-            )}
             <Button variant="secondary" onClick={handleReset}>
               Reset
             </Button>
