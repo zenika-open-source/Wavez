@@ -41,7 +41,7 @@ export function CategoryCard({
 
   return (
     <div
-      className={`overflow-hidden rounded-2xl bg-white shadow-[0_12px_28px_-18px_rgba(60,20,50,0.25)] ${
+      className={`flex flex-col overflow-hidden rounded-2xl bg-white shadow-[0_12px_28px_-18px_rgba(60,20,50,0.25)] ${
         GRID_PLACEMENT[category.id] ?? ""
       } ${disabled ? "opacity-50" : ""}`}
     >
@@ -73,7 +73,7 @@ export function CategoryCard({
         )}
       </button>
       {!disabled && expanded && (
-        <div className="flex items-stretch border-t-[1.5px] border-[#f0e6ec]">
+        <div className="flex flex-1 items-stretch border-t-[1.5px] border-[#f0e6ec]">
           <div className="min-w-0 flex-1 px-5 pt-4 pb-5">
             <div
               className="grid gap-2 border-b-[1.5px] border-[#f0e6ec] px-1 pb-2 text-[11px] font-extrabold tracking-[0.08em] text-[#8a8290] uppercase"
