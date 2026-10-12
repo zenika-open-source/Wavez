@@ -89,7 +89,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[linear-gradient(135deg,#fdf1f4_0%,#f6eefb_55%,#eef1fb_100%)] text-[#161217]">
-      <div className="mx-auto max-w-[1120px] px-6 pt-14 pb-8">
+      <div className="mx-auto max-w-[1120px] px-6 pt-6 pb-4">
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-8">
           <div>
             <div className="mb-2 text-[56px] leading-none font-extrabold tracking-[-0.01em] text-[#c81c5c]">
@@ -110,7 +110,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-[1120px] px-6 pt-4 pb-10">
+      <div className="mx-auto max-w-[1120px] px-6 pt-2 pb-10">
         {!catalog && loadError && (
           <div className="mb-3 text-sm text-[#8a8290]">{`Couldn't load stacks: ${loadError}`}</div>
         )}
