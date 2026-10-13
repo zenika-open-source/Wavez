@@ -33,8 +33,10 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
     color: "#7c4fd6",
     tint: "#efe9fc",
     skills: [
-      { id: "playwright-scripts", label: "Script generation with Playwright" },
-      { id: "playwright-exploratory", label: "Exploratory testing with Playwright" },
+      { id: "playwright-uat-planner", label: "UAT Planner with Playwright" },
+      { id: "playwright-uat-executor", label: "UAT Executor with Playwright" },
+      { id: "playwright-scripts", label: "Script generation with Playwright", disabled: true },
+      { id: "playwright-exploratory", label: "Exploratory testing with Playwright", disabled: true },
     ],
   },
 ];

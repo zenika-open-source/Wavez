@@ -35,6 +35,19 @@ structured retrodoc. If gortex is missing, it asks the user to install it
 before continuing, with an explicit option to skip and produce a
 lower-confidence, source-based retrodoc instead.
 
+`agents/playwright-uat-planner.md.j2` adapts the UAT planner workflow. It produces
+an automation-ready manual test plan (`<FEATURE>_MANUAL_TEST_PLAN.md`) with
+exact selectors, pre-conditions and expected results, ready for manual QA or
+Playwright execution. It ships a bundled output template from
+`skill-assets/playwright-uat-planner/` (see below).
+
+`agents/playwright-uat-executor.md.j2` adapts the UAT executor workflow. It
+requires an approved `<FEATURE>_MANUAL_TEST_PLAN.md` (from the Playwright UAT
+Planner), runs it with Playwright, captures clean screenshots, verifies
+backend persistence and compiles a DOCX execution report. It ships the
+Playwright runner and DOCX report generator templates from
+`skill-assets/playwright-uat-executor/`.
+
 2. Guidelines
 
 Based on the stack chosen by the user when running the init command, the relevant files will be copied to:
@@ -57,7 +70,24 @@ To configure additional languages or frameworks, similar files to the existing o
 
 This is only used by Copilot to configure how questions are asked to the user and does not need to be customised.
 
-4. Partials
+4. Skill assets
+
+`skill-assets/<agent-id>/` holds static support files for an agent (e.g. output
+templates). They are copied verbatim, keeping their folder structure, next to
+the rendered agent: into the skill folder (`<skills>/<agent-id>/`) in skill
+mode, or into a sibling `.github/agents/<agent-id>/` folder for Copilot Custom
+Agents. For example, the Playwright UAT Planner skill deploys as:
+
+```
+playwright-uat-planner/
+├── SKILL.md
+└── templates/
+    └── test-plan-template.md
+```
+
+Agents without a `skill-assets` folder deploy only their agent file.
+
+5. Partials
 
 Partial templates are shared across different stacks and involve formatting of output, checklists, and handover. You can define your own partials that can be loaded automatically by the init script into the actual agents/skills templates. See files in `guidelines/backend/` for an example at the end of each file.
 
