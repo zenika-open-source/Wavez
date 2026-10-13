@@ -29,6 +29,8 @@ ALL_AGENT_NAMES = {
     "dynamic-prototyping",
     "retrodoc-architecture",
     "tech-migration",
+    "playwright-uat-planner",
+    "playwright-uat-executor",
 }
 
 
@@ -189,6 +191,12 @@ def test_deploy_agents_none_deploys_all(repo_root: str, tmp_target: Path) -> Non
 def test_resolve_agent_ids_maps_code_review_to_reviewer() -> None:
     """The 'code-review' skill id maps to the 'reviewer' agent id."""
     assert resolve_agent_ids(["code-review", "backend"]) == frozenset({"reviewer", "backend"})
+
+
+def test_resolve_agent_ids_maps_playwright_scripts_to_uat_planner() -> None:
+    """'playwright-scripts' deploys the same agent as 'playwright-uat-planner' (deduplicated)."""
+    assert resolve_agent_ids(["playwright-scripts"]) == frozenset({"playwright-uat-planner"})
+    assert resolve_agent_ids(["playwright-uat-planner", "playwright-scripts"]) == frozenset({"playwright-uat-planner"})
 
 
 # ---------------------------------------------------------------------------
@@ -360,3 +368,100 @@ def test_deploy_guidelines_to_skills_respects_agent_ids(repo_root: str, tmp_targ
     assert not (skills_dir / "reviewer").exists()
     assert not (skills_dir / "documentation").exists()
     assert not (skills_dir / "git").exists()
+
+
+# ---------------------------------------------------------------------------
+# Skill assets — static support files copied next to the rendered agent
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("tool", ["copilot", "opencode", "claude"])
+def test_playwright_uat_planner_skill_ships_test_plan_template(repo_root: str, tmp_target: Path, tool: str) -> None:
+    """The playwright-uat-planner skill folder mirrors uat-planner: SKILL.md + templates/test-plan-template.md."""
+    agents_src = os.path.join(repo_root, "templates", "agents")
+    skills_dir = tmp_target / "skills"
+    deploy_agents(
+        agents_src,
+        str(skills_dir),
+        repo_root,
+        tool=tool,
+        skill_mode=True,
+        agent_ids=frozenset({"playwright-uat-planner"}),
+    )
+
+    skill_dir = skills_dir / "playwright-uat-planner"
+    assert (skill_dir / "SKILL.md").exists()
+    assert (skill_dir / "templates" / "test-plan-template.md").exists()
+    assert "`templates/test-plan-template.md`" in (skill_dir / "SKILL.md").read_text()
+
+
+def test_playwright_uat_planner_custom_agent_ships_test_plan_template(repo_root: str, tmp_target: Path) -> None:
+    """As a Copilot Custom Agent, assets land in a sibling folder the agent file points to."""
+    agents_src = os.path.join(repo_root, "templates", "agents")
+    agents_dir = tmp_target / ".github" / "agents"
+    deploy_agents(
+        agents_src,
+        str(agents_dir),
+        repo_root,
+        tool="copilot",
+        skill_mode=False,
+        agent_ids=frozenset({"playwright-uat-planner"}),
+    )
+
+    asset = agents_dir / "playwright-uat-planner" / "templates" / "test-plan-template.md"
+    assert asset.exists()
+    agent_text = (agents_dir / "playwright-uat-planner.agent.md").read_text()
+    assert ".github/agents/playwright-uat-planner/templates/test-plan-template.md" in agent_text
+
+
+@pytest.mark.parametrize("tool", ["copilot", "opencode", "claude"])
+def test_playwright_uat_executor_skill_ships_runner_and_report_templates(
+    repo_root: str, tmp_target: Path, tool: str
+) -> None:
+    """The playwright-uat-executor skill folder mirrors uat-executor: SKILL.md + templates/*.js."""
+    agents_src = os.path.join(repo_root, "templates", "agents")
+    skills_dir = tmp_target / "skills"
+    deploy_agents(
+        agents_src,
+        str(skills_dir),
+        repo_root,
+        tool=tool,
+        skill_mode=True,
+        agent_ids=frozenset({"playwright-uat-executor"}),
+    )
+
+    skill_dir = skills_dir / "playwright-uat-executor"
+    skill_text = (skill_dir / "SKILL.md").read_text()
+    for asset in ("uat-runner-template.js", "report-generator-template.js"):
+        assert (skill_dir / "templates" / asset).exists()
+        assert f"`templates/{asset}`" in skill_text
+
+
+def test_playwright_uat_executor_custom_agent_ships_templates(repo_root: str, tmp_target: Path) -> None:
+    """As a Copilot Custom Agent, executor assets land in a sibling folder the agent file points to."""
+    agents_src = os.path.join(repo_root, "templates", "agents")
+    agents_dir = tmp_target / ".github" / "agents"
+    deploy_agents(
+        agents_src,
+        str(agents_dir),
+        repo_root,
+        tool="copilot",
+        skill_mode=False,
+        agent_ids=frozenset({"playwright-uat-executor"}),
+    )
+
+    agent_text = (agents_dir / "playwright-uat-executor.agent.md").read_text()
+    for asset in ("uat-runner-template.js", "report-generator-template.js"):
+        assert (agents_dir / "playwright-uat-executor" / "templates" / asset).exists()
+        assert f".github/agents/playwright-uat-executor/templates/{asset}" in agent_text
+
+
+def test_agents_without_assets_get_no_extra_folder(repo_root: str, tmp_target: Path) -> None:
+    """Agents with no skill-assets folder deploy only their agent file."""
+    agents_src = os.path.join(repo_root, "templates", "agents")
+    agents_dir = tmp_target / ".github" / "agents"
+    deploy_agents(
+        agents_src, str(agents_dir), repo_root, tool="copilot", skill_mode=False, agent_ids=frozenset({"backend"})
+    )
+
+    assert [p.name for p in agents_dir.iterdir()] == ["backend.agent.md"]

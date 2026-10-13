@@ -23,6 +23,8 @@ ALL_AGENTS = [
     "dynamic-prototyping",
     "retrodoc-architecture",
     "tech-migration",
+    "playwright-uat-planner",
+    "playwright-uat-executor",
 ]
 
 ALL_TOOLS = ["copilot", "opencode", "claude"]
@@ -216,10 +218,13 @@ def test_retrodoc_prompts_for_gortex_and_uses_architect_outputs(
     assert "single source of truth" in result
     assert "Same outputs via `Glob`/`Grep`/`Read`" in result
     assert "scale. Load" not in result
-    for artifact in ("architecture.json", "architecture.html", "architecture.drawio", "architecture.mmd", "RETRODOC.md"):
+    for artifact in ("architecture.json", "architecture.html", "architecture.mmd", "RETRODOC.md"):
         assert artifact in result
-    assert "same model" in result
-    assert "## Step 6 — Fallback without gortex" in result
+    assert "drawio" not in result
+    assert "Do you want the architecture diagram as HTML or Mermaid?" in result
+    assert "Generate only the format picked" in result
+    assert "**Gortex** or **Graphify**" in result
+    assert "## Step 6 — Fallback without a code graph" in result
     if skill_mode:
         assert "handoffs:" not in result
     else:

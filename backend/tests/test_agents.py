@@ -17,6 +17,8 @@ EXPECTED_AGENT_IDS = {
     "dynamic-prototyping",
     "retrodoc-architecture",
     "tech-migration",
+    "playwright-uat-planner",
+    "playwright-uat-executor",
 }
 
 

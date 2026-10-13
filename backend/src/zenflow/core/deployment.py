@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import glob
 import os
+import shutil
 
 from zenflow.core.guidelines import guidelines_context
 from zenflow.core.rendering import assemble_agent, assemble_guideline, make_env
@@ -13,6 +14,7 @@ from zenflow.core.rendering import assemble_agent, assemble_guideline, make_env
 # agent).
 SKILL_ID_TO_AGENT_ID: dict[str, str] = {
     "code-review": "reviewer",
+    "playwright-scripts": "playwright-uat-planner",
 }
 
 
@@ -26,6 +28,25 @@ def resolve_agent_ids(skill_ids: list[str]) -> frozenset[str]:
         The corresponding agent ids (e.g. "reviewer").
     """
     return frozenset(SKILL_ID_TO_AGENT_ID.get(skill_id, skill_id) for skill_id in skill_ids)
+
+
+def copy_skill_assets(repo_root: str, agent_id: str, dst_dir: str) -> None:
+    """Copy an agent's static support files (e.g. output templates) into dst_dir.
+
+    Assets live in templates/skill-assets/<agent_id>/ and are copied verbatim,
+    preserving their folder structure, so a deployed skill looks like
+    <skill>/SKILL.md plus e.g. <skill>/templates/test-plan-template.md.
+    Agents without an assets folder are skipped.
+
+    Args:
+        repo_root: Repository root path.
+        agent_id: Agent template id (e.g. 'playwright-uat-planner').
+        dst_dir: Destination directory (the skill folder, or a per-agent
+            folder next to a Custom Agent file).
+    """
+    src_dir = os.path.join(repo_root, "templates", "skill-assets", agent_id)
+    if os.path.isdir(src_dir):
+        shutil.copytree(src_dir, dst_dir, dirs_exist_ok=True)
 
 
 def deploy_agents(
@@ -59,14 +80,16 @@ def deploy_agents(
         if agent_ids is not None and agent_name not in agent_ids:
             continue
 
+        # Skills keep their assets inside the skill folder; Custom Agent files
+        # get a sibling <agent>/ folder for them.
+        assets_dir = os.path.join(target_agents_dir, agent_name)
         if skill_mode:
-            skill_dir = os.path.join(target_agents_dir, agent_name)
-            dst = os.path.join(skill_dir, "SKILL.md")
+            dst = os.path.join(assets_dir, "SKILL.md")
         else:
-            out_name = f"{agent_name}.agent.md"
-            dst = os.path.join(target_agents_dir, out_name)
+            dst = os.path.join(target_agents_dir, f"{agent_name}.agent.md")
 
         assemble_agent(template_path, dst, env, context, skill_mode=skill_mode)
+        copy_skill_assets(repo_root, agent_name, assets_dir)
 
 
 def deploy_guidelines_to_skills(
