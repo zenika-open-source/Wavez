@@ -24,7 +24,7 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
       { id: "tech-migration", label: "Tech Migration", sublabel: "Plan a bounded technology migration" }, // -> tech-migration agent
       { id: "code-review", label: "Code review" }, // -> reviewer agent
       { id: "orchestrator", label: "Full-stack orchestration" }, // -> orchestrator agent
-      { id: "retrodoc-architecture", label: "Retrodoc - Architecture", sublabel: "Architecture diagrams and retrodocs; prompts to install gortex if missing" }, // -> retrodoc-architecture agent
+      { id: "retrodoc-architecture", label: "Architecture Document", sublabel: "Architecture diagrams and retrodocs" }, // -> retrodoc-architecture agent
     ],
   },
   {
@@ -35,8 +35,6 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
     skills: [
       { id: "playwright-uat-planner", label: "UAT Planner with Playwright" },
       { id: "playwright-uat-executor", label: "UAT Executor with Playwright" },
-      { id: "playwright-scripts", label: "Script generation with Playwright", disabled: true },
-      { id: "playwright-exploratory", label: "Exploratory testing with Playwright", disabled: true },
     ],
   },
 ];
