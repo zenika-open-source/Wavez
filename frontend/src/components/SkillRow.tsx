@@ -14,19 +14,28 @@ interface SkillRowProps {
 export function SkillRow({ skill, mode, color, onChange }: SkillRowProps) {
   const disabled = skill.disabled ?? false;
   const effectiveMode = disabled ? "none" : mode;
+  const selected = effectiveMode !== "none";
 
   return (
     <div
-      className="ml-4 grid items-center gap-2 border-b border-[#f6f0f3] py-2.5"
-      style={{ gridTemplateColumns: SKILL_ROW_GRID_COLUMNS }}
+      data-selected={selected}
+      // Mirrors prototype-A's skill rows: rounded highlight on hover/selection,
+      // and an inset divider that hides next to a highlighted row. The px-3
+      // padding matches the header's so labels and checkboxes line up with it.
+      className={`relative mb-0.5 grid items-center gap-2 rounded-[10px] px-3 py-2 transition-colors duration-150 after:absolute after:inset-x-3 after:-bottom-[1.5px] after:h-px after:bg-[#E3E6EB] after:content-[''] data-[selected=true]:after:hidden [&:has(+[data-selected=true])]:after:hidden ${
+        disabled ? "opacity-40" : "hover:bg-[#F3F4F8] hover:after:hidden [&:has(+:hover)]:after:hidden"
+      }`}
+      style={{
+        gridTemplateColumns: SKILL_ROW_GRID_COLUMNS,
+        // 8-digit hex: the category color at ~6% opacity, a faint tint like the prototype's #FFF4F8.
+        background: selected ? `${color}0f` : undefined,
+      }}
     >
       <button
         type="button"
         onClick={() => onChange(effectiveMode === "skill" ? "none" : "skill")}
         disabled={disabled}
-        className={`text-left ${effectiveMode === "none" ? "opacity-40" : ""} ${
-          disabled ? "cursor-not-allowed" : "cursor-pointer"
-        }`}
+        className={`text-left ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
       >
         <div className="text-[13px] font-bold">{skill.label}</div>
         {skill.sublabel && <div className="mt-0.5 text-xs font-semibold text-[#8a8290]">{skill.sublabel}</div>}

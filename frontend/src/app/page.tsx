@@ -72,6 +72,9 @@ export default function Home() {
     if (mode === "none") {
       if (skillId === "backend") setBackendArchFile("");
       if (skillId === "frontend") setFrontendArchFile("");
+    } else if (skillId === "backend" && catalog && !backendArchFile) {
+      const backendOptions = toLanguageOptions(catalog.backend);
+      if (backendOptions.length > 0) setBackendArchFile(backendOptions[0].archFile);
     } else if (skillId === "frontend" && catalog) {
       const frontendOptions = toLanguageOptions(catalog.frontend);
       if (frontendOptions.length === 1) setFrontendArchFile(frontendOptions[0].archFile);
