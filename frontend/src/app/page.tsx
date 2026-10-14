@@ -1,28 +1,64 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { getStacks } from "@/api/stacks";
-import { AssistantPicker } from "@/components/AssistantPicker";
-import { GenerateModal } from "@/components/GenerateModal";
-import { SkillCategoryAccordion } from "@/components/SkillCategoryAccordion";
-import { StepGuide } from "@/components/StepGuide";
-import { toLanguageOptions } from "@/components/LanguageStackPicker";
-import { Button } from "@/components/ui/Button";
+import { AssistantStep } from "@/components/wizard/AssistantStep";
+import { GenerateConfirmModal } from "@/components/wizard/GenerateConfirmModal";
+import { ReviewStep } from "@/components/wizard/ReviewStep";
+import { RoleStep } from "@/components/wizard/RoleStep";
+import { SelectionSummary } from "@/components/wizard/SelectionSummary";
+import { SkillsStep } from "@/components/wizard/SkillsStep";
+import { StepNav } from "@/components/wizard/StepNav";
+import { buildReviewGroups, stacksSummary, totalSkills } from "@/components/wizard/review";
+import { ASSISTANTS } from "@/data/assistants";
 import { SKILL_CATEGORIES } from "@/data/skillCategories";
+import { toLanguageOptions } from "@/lib/stackOptions";
 import type { SkillMode } from "@/types/skills";
 import type { AssistantId, GuidelineSelection, StackCatalog, ToolSelection } from "@/types/zenflow";
-
-const ALL_CATEGORY_IDS = SKILL_CATEGORIES.map((c) => c.id);
 
 export default function Home() {
   const [catalog, setCatalog] = useState<StackCatalog | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [assistant, setAssistant] = useState<AssistantId>("claude");
+
+  const [step, setStep] = useState(1);
+  const [roles, setRoles] = useState<string[]>([]);
+  const [skillSelections, setSkillSelections] = useState<Record<string, SkillMode>>({});
+  const [assistant, setAssistant] = useState<AssistantId | null>(null);
   const [backendArchFile, setBackendArchFile] = useState("");
   const [frontendArchFile, setFrontendArchFile] = useState("");
-  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(ALL_CATEGORY_IDS));
-  const [skillSelections, setSkillSelections] = useState<Record<string, SkillMode>>({});
-  const [generateModalOpen, setGenerateModalOpen] = useState(false);
+  const [done, setDone] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
+  useEffect(() => {
+    getStacks()
+      .then(setCatalog)
+      .catch((err) => setLoadError(err instanceof Error ? err.message : "Failed to load stacks"));
+  }, []);
+
+  const visibleCategories = SKILL_CATEGORIES.filter((category) => roles.includes(category.id));
+  const selectedSkillCount = Object.values(skillSelections).filter((mode) => mode !== "none").length;
+
+  const hasRoles = roles.length > 0;
+  const hasSkills = selectedSkillCount > 0;
+  const hasAssistant = assistant !== null;
+
+  const backendStackMissing = (skillSelections["backend"] ?? "none") !== "none" && !backendArchFile;
+  const frontendStackMissing = (skillSelections["frontend"] ?? "none") !== "none" && !frontendArchFile;
+  const canGenerate = hasSkills && hasAssistant && !backendStackMissing && !frontendStackMissing;
+
+  const reach = !hasRoles ? 1 : !hasSkills ? 2 : !hasAssistant ? 3 : done ? 4 : 3;
+  const displayStep = step === 4 && !done ? 3 : step;
+
+  const validByStep: Record<number, boolean> = {
+    1: hasRoles,
+    2: hasSkills && !backendStackMissing && !frontendStackMissing,
+    3: hasAssistant,
+    4: true,
+  };
+  const valid = validByStep[displayStep];
+
+  const reviewGroups = buildReviewGroups(roles, skillSelections, assistant ?? "claude", backendArchFile, frontendArchFile, catalog);
 
   const tools: ToolSelection = {
     claude: assistant === "claude",
@@ -37,124 +73,186 @@ export default function Home() {
     include_conventions: true,
   };
 
-  const backendStackMissing = (skillSelections["backend"] ?? "none") !== "none" && !backendArchFile;
-  const frontendStackMissing = (skillSelections["frontend"] ?? "none") !== "none" && !frontendArchFile;
-  const canGenerate = !backendStackMissing && !frontendStackMissing;
-
-  useEffect(() => {
-    getStacks()
-      .then(setCatalog)
-      .catch((err) => setLoadError(err instanceof Error ? err.message : "Failed to load stacks"));
-  }, []);
-
   function handleReset() {
-    setAssistant("claude");
+    setStep(1);
+    setRoles([]);
+    setSkillSelections({});
+    setAssistant(null);
     setBackendArchFile("");
     setFrontendArchFile("");
-    setExpandedCategories(new Set(ALL_CATEGORY_IDS));
-    setSkillSelections({});
+    setDone(false);
+    setConfirmOpen(false);
   }
 
-  function handleToggleExpand(categoryId: string) {
-    setExpandedCategories((prev) => {
-      const next = new Set(prev);
-      if (next.has(categoryId)) {
-        next.delete(categoryId);
-      } else {
-        next.add(categoryId);
+  function handleToggleRole(categoryId: string) {
+    const nextRoles = roles.includes(categoryId) ? roles.filter((id) => id !== categoryId) : [...roles, categoryId];
+    const orderedRoles = SKILL_CATEGORIES.map((c) => c.id).filter((id) => nextRoles.includes(id));
+
+    const nextSelections = { ...skillSelections };
+    SKILL_CATEGORIES.forEach((category) => {
+      if (!orderedRoles.includes(category.id)) {
+        category.skills.forEach((skill) => {
+          delete nextSelections[skill.id];
+        });
       }
-      return next;
     });
+    if (!orderedRoles.includes("developer")) {
+      setBackendArchFile("");
+      setFrontendArchFile("");
+    }
+
+    setRoles(orderedRoles);
+    setSkillSelections(nextSelections);
+    setDone(false);
   }
 
   function handleSetSkillMode(skillId: string, mode: SkillMode) {
     setSkillSelections((prev) => ({ ...prev, [skillId]: mode }));
+    setDone(false);
     if (mode === "none") {
       if (skillId === "backend") setBackendArchFile("");
       if (skillId === "frontend") setFrontendArchFile("");
-    } else if (skillId === "frontend" && catalog) {
-      const frontendOptions = toLanguageOptions(catalog.frontend);
-      if (frontendOptions.length === 1) setFrontendArchFile(frontendOptions[0].archFile);
+    } else if (catalog) {
+      if (skillId === "backend" && !backendArchFile) {
+        const options = toLanguageOptions(catalog.backend);
+        if (options.length > 0) setBackendArchFile(options[0].archFile);
+      } else if (skillId === "frontend" && !frontendArchFile) {
+        const options = toLanguageOptions(catalog.frontend);
+        if (options.length > 0) setFrontendArchFile(options[0].archFile);
+      }
     }
   }
 
   function handleSelectBackend(archFile: string) {
     setBackendArchFile(archFile);
-    if (archFile) {
-      setSkillSelections((prev) => (prev["backend"] && prev["backend"] !== "none" ? prev : { ...prev, backend: "skill" }));
-    }
+    setDone(false);
   }
 
   function handleSelectFrontend(archFile: string) {
     setFrontendArchFile(archFile);
-    if (archFile) {
-      setSkillSelections((prev) => (prev["frontend"] && prev["frontend"] !== "none" ? prev : { ...prev, frontend: "skill" }));
-    }
+    setDone(false);
   }
 
+  function handleSelectAssistant(id: AssistantId) {
+    setAssistant(id);
+    setDone(false);
+  }
+
+  function handleJumpStep(target: number) {
+    if (target > reach || done) return;
+    setStep(target);
+  }
+
+  function handleBack() {
+    setStep((s) => Math.max(1, s - 1));
+  }
+
+  function handleNext() {
+    setStep((s) => Math.min(4, s + 1));
+  }
+
+  function handleGenerated() {
+    setDone(true);
+    setStep(4);
+    setConfirmOpen(false);
+  }
+
+  const assistantLabel = assistant ? (ASSISTANTS.find((a) => a.id === assistant)?.label ?? assistant) : "Not chosen";
+
   return (
-    <div className="min-h-screen bg-[linear-gradient(135deg,#fdf1f4_0%,#f6eefb_55%,#eef1fb_100%)] text-[#161217]">
-      <div className="mx-auto max-w-[1120px] px-6 pt-6 pb-4">
-        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,1fr)_auto]">
-          <div>
-            <div className="mb-2 text-[56px] leading-none font-extrabold tracking-[-0.01em] text-[#c81c5c]">
-              ZENFLOW
+    <div className="min-h-screen bg-[#F5F5F8] text-[#020203]">
+      <header className="sticky top-0 z-10 flex h-[72px] items-center bg-white shadow-[0_1px_0_#D5D9E0]">
+        <div className="mx-auto flex w-full max-w-[992px] items-center gap-3.5 px-6">
+          <Image src="/zenika-logo.svg" alt="Zenika" width={36} height={36} />
+          <span className="block h-6 text-xl leading-6 font-bold tracking-[0.02em]">Zenflow</span>
+          <span className="h-6 w-px bg-[#B8BEC8]" />
+          <span className="block h-6 text-[15px] leading-6 text-[#3C434E]">
+            Generate agent skills for your AI assistant.
+          </span>
+        </div>
+      </header>
+
+      {!done && <StepNav step={displayStep} reach={reach} done={done} onJump={handleJumpStep} />}
+
+      <div className="mx-auto flex max-w-[992px] items-start gap-10 px-6 pt-6 pb-12">
+        <main className="min-w-0 flex-1">
+          {!catalog && loadError && (
+            <div className="mb-3 text-sm text-[#3C434E]">{`Couldn't load stacks: ${loadError}`}</div>
+          )}
+
+          {displayStep === 1 && <RoleStep roles={roles} onToggleRole={handleToggleRole} />}
+          {displayStep === 2 && (
+            <SkillsStep
+              categories={visibleCategories}
+              selections={skillSelections}
+              onSetMode={handleSetSkillMode}
+              catalog={catalog}
+              backendArchFile={backendArchFile}
+              frontendArchFile={frontendArchFile}
+              onSelectBackend={handleSelectBackend}
+              onSelectFrontend={handleSelectFrontend}
+            />
+          )}
+          {displayStep === 3 && <AssistantStep assistant={assistant} onSelect={handleSelectAssistant} />}
+          {displayStep === 4 && <ReviewStep groups={reviewGroups} onReset={handleReset} />}
+
+          {!done && (
+            <div className="sticky bottom-0 z-[5] mt-6 flex items-center border-t border-[#D5D9E0] bg-[#F5F5F8] py-5">
+              {displayStep > 1 && (
+                <button
+                  type="button"
+                  onClick={handleBack}
+                  className="min-h-[48px] cursor-pointer rounded-[10px] border-[1.5px] border-[#4B5563] bg-white px-6 font-semibold hover:bg-[#EAECF1]"
+                >
+                  Back
+                </button>
+              )}
+              <span className="flex-1" />
+              {displayStep < 3 && (
+                <button
+                  type="button"
+                  disabled={!valid}
+                  onClick={handleNext}
+                  className={`min-h-[48px] rounded-[10px] border-0 px-7 font-bold text-white disabled:cursor-not-allowed ${
+                    valid ? "cursor-pointer hover:brightness-90" : ""
+                  }`}
+                  style={valid ? { background: "linear-gradient(90deg,#D6112A,#BB0D5A)" } : { background: "#E1E4EA", color: "#566070" }}
+                >
+                  Next
+                </button>
+              )}
             </div>
-            <h1 className="mb-4 max-w-[40ch] text-lg leading-snug font-bold text-[#5c5560]">
-              Generate agent skills for your AI assistant.
-            </h1>
-            <p className="text-base leading-relaxed text-[#5c5560] lg:whitespace-nowrap">
-              Pick an assistant, a stack, and the skills you want your agents to carry then export the
-              files it reads on day one.
-            </p>
-          </div>
+          )}
+        </main>
 
-          <div className="min-w-[240px] rounded-[24px] bg-white px-6 py-5 shadow-[0_20px_40px_-20px_rgba(120,40,80,0.25)]">
-            <AssistantPicker selected={assistant} onSelect={setAssistant} />
-          </div>
-        </div>
-      </div>
-
-      <div className="mx-auto max-w-[1120px] px-6 pt-2 pb-28">
-        <StepGuide />
-        {!catalog && loadError && (
-          <div className="mb-3 text-sm text-[#8a8290]">{`Couldn't load stacks: ${loadError}`}</div>
+        {hasRoles && displayStep >= 2 && (
+          <SelectionSummary
+            rolesText={
+              SKILL_CATEGORIES.filter((c) => roles.includes(c.id))
+                .map((c) => c.title)
+                .join(", ") || "—"
+            }
+            assistantText={assistantLabel}
+            stackText={stacksSummary(reviewGroups)}
+            skillsCount={totalSkills(reviewGroups)}
+            filesCount={totalSkills(reviewGroups)}
+            done={done}
+            canGenerate={canGenerate}
+            onGenerate={() => setConfirmOpen(true)}
+            onReset={handleReset}
+          />
         )}
-        <SkillCategoryAccordion
-          categories={SKILL_CATEGORIES}
-          expandedCategories={expandedCategories}
-          selections={skillSelections}
-          onToggleExpand={handleToggleExpand}
-          onSetMode={handleSetSkillMode}
-          catalog={catalog}
-          backendArchFile={backendArchFile}
-          frontendArchFile={frontendArchFile}
-          onSelectBackend={handleSelectBackend}
-          onSelectFrontend={handleSelectFrontend}
-        />
       </div>
 
-      <div className="fixed inset-x-0 bottom-0">
-        <div className="pointer-events-none absolute inset-x-0 -top-4 h-4 bg-gradient-to-t from-[#eef1fb] to-transparent" />
-        <div className="bg-[#eef1fb] shadow-[0_-12px_24px_-16px_rgba(60,20,50,0.25)]">
-          <div className="mx-auto flex max-w-[1120px] items-center justify-end gap-4 px-6 py-5">
-            <Button variant="secondary" onClick={handleReset}>
-              Reset
-            </Button>
-            <Button variant="primary" onClick={() => setGenerateModalOpen(true)} disabled={!canGenerate}>
-              Generate
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      <GenerateModal
-        open={generateModalOpen}
-        assistant={assistant}
+      <GenerateConfirmModal
+        open={confirmOpen}
+        assistantLabel={assistantLabel}
         tools={tools}
         guidelines={guidelines}
         skillSelections={skillSelections}
-        onClose={() => setGenerateModalOpen(false)}
+        groups={reviewGroups}
+        onClose={() => setConfirmOpen(false)}
+        onGenerated={handleGenerated}
       />
     </div>
   );

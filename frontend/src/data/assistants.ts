@@ -1,7 +1,7 @@
 import type { AssistantId } from "@/types/zenflow";
 
-export const ASSISTANTS: { id: AssistantId; label: string }[] = [
-  { id: "claude", label: "Claude Code" },
-  { id: "copilot", label: "GitHub Copilot" },
-  { id: "opencode", label: "OpenCode" },
+export const ASSISTANTS: { id: AssistantId; label: string; path: string }[] = [
+  { id: "claude", label: "Claude Code", path: ".claude/skills/" },
+  { id: "copilot", label: "GitHub Copilot", path: ".github/skills/" },
+  { id: "opencode", label: "OpenCode", path: ".opencode/skills/" },
 ];
