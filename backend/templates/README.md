@@ -100,7 +100,6 @@ For agent source files, each tool gets its own `guidelines` context so file refe
 | Variable | Copilot | OpenCode | Claude Code |
 |---|---|---|---|
 | `{{ guidelines.backend_arch }}` | `.github/guidelines/architecture-backend.md` | `.opencode/skills/backend/references/architecture.md` | `.claude/skills/backend/references/architecture.md` |
-| `{{ guidelines.review_backend }}` | `.github/guidelines/review-backend.md` | `.opencode/skills/reviewer/references/review-backend.md` | `.claude/skills/reviewer/references/review-backend.md` |
 | `{{ guidelines.conventions }}` | `.github/guidelines/conventions.md` | `.opencode/skills/git/references/conventions.md` | `.claude/skills/git/references/conventions.md` |
 
 **Partials** will be included in source files using standard Jinja2 syntax:

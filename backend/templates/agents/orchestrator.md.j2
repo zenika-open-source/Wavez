@@ -198,10 +198,10 @@ Check for: security issues, Java/Spring best practices, React best practices, ac
 ```
 
 **Wait** for Reviewer to return.
-**Check overall status**:
-- `✅ APPROVED` → proceed to Step 5 (Documentation)
-- `⚠️ APPROVED WITH NOTES` → inform user, proceed to Step 5 (Documentation)
-- `❌ BLOCKED` → show critical issues to user. **Do NOT proceed to Git.**
+**Check the verdict**:
+- `🟢 APPROVE` → proceed to Step 5 (Documentation)
+- `🟡 REQUEST CHANGES (Minor)` → inform user, proceed to Step 5 (Documentation)
+- `🔴 BLOCK` or `REJECT` → show blocking issues to user. **Do NOT proceed to Git.**
 
 ---
 
@@ -268,7 +268,7 @@ Present this to the user:
 
 - Never write code yourself — always delegate to the right sub-agent
 - Always pass structured context (Feature Plan + Handover blocks) between sub-agents
-- Never call Git if Reviewer returned `❌ BLOCKED`
+- Never call Git if Reviewer returned `🔴 BLOCK` or `REJECT`
 - If any sub-agent fails twice, stop and surface the problem to the user — do not guess
 {% if skill_mode %}
 

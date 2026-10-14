@@ -50,12 +50,14 @@ def test_copilot_agents_creates_all_agent_files(repo_root: str, tmp_target: Path
 
 
 def test_copilot_agents_contain_handoffs(repo_root: str, tmp_target: Path) -> None:
-    """Copilot agent files must retain the handoffs: YAML block."""
+    """Copilot agent files must retain the handoffs: YAML block, except Reviewer which ends in a verdict, not a handoff menu."""
     agents_src = os.path.join(repo_root, "templates", "agents")
     target_dir = tmp_target / ".github" / "agents"
     deploy_agents(agents_src, str(target_dir), repo_root, tool="copilot", skill_mode=False)
 
     for agent_file in target_dir.glob("*.agent.md"):
+        if agent_file.stem == "reviewer.agent":
+            continue
         assert "handoffs:" in agent_file.read_text(), f"Missing handoffs in {agent_file.name}"
 
 
@@ -230,8 +232,6 @@ def test_deploy_guidelines_to_skills_creates_references(repo_root: str, tmp_targ
     expected = [
         skills_dir / "backend" / "references" / "architecture.md",
         skills_dir / "frontend" / "references" / "architecture.md",
-        skills_dir / "reviewer" / "references" / "review-backend.md",
-        skills_dir / "reviewer" / "references" / "review-frontend.md",
         skills_dir / "documentation" / "references" / "documentation-backend.md",
         skills_dir / "documentation" / "references" / "documentation-frontend.md",
         skills_dir / "git" / "references" / "conventions.md",
@@ -311,9 +311,7 @@ def test_deploy_guidelines_to_skills_omits_backend_when_skipped(
     )
 
     assert not (skills_dir / "backend" / "references" / "architecture.md").exists()
-    assert not (skills_dir / "reviewer" / "references" / "review-backend.md").exists()
     assert (skills_dir / "frontend" / "references" / "architecture.md").exists()
-    assert (skills_dir / "reviewer" / "references" / "review-frontend.md").exists()
 
 
 @pytest.mark.parametrize(
@@ -342,9 +340,7 @@ def test_deploy_guidelines_to_skills_omits_frontend_when_skipped(
     )
 
     assert not (skills_dir / "frontend" / "references" / "architecture.md").exists()
-    assert not (skills_dir / "reviewer" / "references" / "review-frontend.md").exists()
     assert (skills_dir / "backend" / "references" / "architecture.md").exists()
-    assert (skills_dir / "reviewer" / "references" / "review-backend.md").exists()
 
 
 def test_deploy_guidelines_to_skills_respects_agent_ids(repo_root: str, tmp_target: Path) -> None:
@@ -454,6 +450,52 @@ def test_playwright_uat_executor_custom_agent_ships_templates(repo_root: str, tm
     for asset in ("uat-runner-template.js", "report-generator-template.js"):
         assert (agents_dir / "playwright-uat-executor" / "templates" / asset).exists()
         assert f".github/agents/playwright-uat-executor/templates/{asset}" in agent_text
+
+
+REVIEWER_ASSETS = (
+    "references/architecture-and-standards.md",
+    "references/security-checklist.md",
+    "references/conventional-comments.md",
+    "scripts/review-helper.py",
+)
+
+
+@pytest.mark.parametrize("tool", ["copilot", "opencode", "claude"])
+def test_reviewer_skill_ships_checklists_and_helper_script(repo_root: str, tmp_target: Path, tool: str) -> None:
+    """The reviewer skill folder ships its reference checklists and pre-scan script."""
+    agents_src = os.path.join(repo_root, "templates", "agents")
+    skills_dir = tmp_target / "skills"
+    deploy_agents(
+        agents_src,
+        str(skills_dir),
+        repo_root,
+        tool=tool,
+        skill_mode=True,
+        agent_ids=frozenset({"reviewer"}),
+    )
+
+    skill_dir = skills_dir / "reviewer"
+    assert (skill_dir / "SKILL.md").exists()
+    for asset in REVIEWER_ASSETS:
+        assert (skill_dir / asset).exists(), f"Missing {asset}"
+
+
+def test_reviewer_custom_agent_ships_checklists_and_helper_script(repo_root: str, tmp_target: Path) -> None:
+    """As a Copilot Custom Agent, reviewer assets land in a sibling folder."""
+    agents_src = os.path.join(repo_root, "templates", "agents")
+    agents_dir = tmp_target / ".github" / "agents"
+    deploy_agents(
+        agents_src,
+        str(agents_dir),
+        repo_root,
+        tool="copilot",
+        skill_mode=False,
+        agent_ids=frozenset({"reviewer"}),
+    )
+
+    assert (agents_dir / "reviewer.agent.md").exists()
+    for asset in REVIEWER_ASSETS:
+        assert (agents_dir / "reviewer" / asset).exists(), f"Missing {asset}"
 
 
 def test_agents_without_assets_get_no_extra_folder(repo_root: str, tmp_target: Path) -> None:
