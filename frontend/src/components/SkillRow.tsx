@@ -37,7 +37,7 @@ export function SkillRow({ skill, mode, color, onChange }: SkillRowProps) {
         disabled={disabled}
         className={`text-left ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
       >
-        <div className="text-[13px] font-bold">{skill.label}</div>
+        <div className="text-[13px] font-bold text-[#5c5560]">{skill.label}</div>
         {skill.sublabel && <div className="mt-0.5 text-xs font-semibold text-[#8a8290]">{skill.sublabel}</div>}
       </button>
       <div className="flex justify-end">

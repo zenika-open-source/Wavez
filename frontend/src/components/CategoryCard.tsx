@@ -86,7 +86,7 @@ export function CategoryCard({
         <div className="flex flex-1 items-stretch border-t-[1.5px] border-[#f0e6ec]">
           <div className="min-w-0 flex-1 px-5 pt-4 pb-5">
             <div
-              className="mb-2 grid gap-2 border-b-[1.5px] border-[#f0e6ec] pb-2 text-[11px] font-extrabold tracking-[0.08em] text-[#8a8290] uppercase"
+              className="mb-2 grid gap-2 border-b-[1.5px] border-[#f0e6ec] pb-2 text-xs font-extrabold tracking-[0.08em] text-[#5c5560] uppercase"
               style={{ gridTemplateColumns: SKILL_ROW_GRID_COLUMNS }}
             >
               <div>Agent Skills</div>

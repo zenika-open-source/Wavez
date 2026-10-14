@@ -30,12 +30,12 @@ function LanguageGroup({ title, options, selected, onSelect, required = false }:
 
   return (
     <div className="flex flex-col gap-2.5">
-      <div className="flex items-center gap-1.5 text-[13px] font-extrabold text-[#161217]">
+      <div className="flex items-center gap-1.5 text-[13px] font-extrabold text-[#5c5560]">
         {title}
         {required && <span className="text-[#c81c5c]">*</span>}
       </div>
       {options.map((option) => (
-        <label key={option.key} className="flex cursor-pointer items-center gap-2.5 text-sm font-semibold">
+        <label key={option.key} className="flex cursor-pointer items-center gap-2.5 text-sm font-semibold text-[#5c5560]">
           <RadioDot
             name={title}
             color="#1c8a5c"
