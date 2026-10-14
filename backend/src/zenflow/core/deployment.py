@@ -14,7 +14,7 @@ from zenflow.core.rendering import assemble_agent, assemble_guideline, make_env
 # agent).
 SKILL_ID_TO_AGENT_ID: dict[str, str] = {
     "code-review": "reviewer",
-    "playwright-scripts": "playwright-uat-planner",
+    "playwright-scripts": "playwright-uat",
 }
 
 
@@ -40,7 +40,7 @@ def copy_skill_assets(repo_root: str, agent_id: str, dst_dir: str) -> None:
 
     Args:
         repo_root: Repository root path.
-        agent_id: Agent template id (e.g. 'playwright-uat-planner').
+        agent_id: Agent template id (e.g. 'playwright-uat').
         dst_dir: Destination directory (the skill folder, or a per-agent
             folder next to a Custom Agent file).
     """
