@@ -23,8 +23,7 @@ ALL_AGENTS = [
     "dynamic-prototyping",
     "retrodoc-architecture",
     "tech-migration",
-    "playwright-uat-planner",
-    "playwright-uat-executor",
+    "playwright-uat",
 ]
 
 ALL_TOOLS = ["copilot", "opencode", "claude"]

@@ -35,18 +35,14 @@ structured retrodoc. If gortex is missing, it asks the user to install it
 before continuing, with an explicit option to skip and produce a
 lower-confidence, source-based retrodoc instead.
 
-`agents/playwright-uat-planner.md.j2` adapts the UAT planner workflow. It produces
-an automation-ready manual test plan (`<FEATURE>_MANUAL_TEST_PLAN.md`) with
-exact selectors, pre-conditions and expected results, ready for manual QA or
-Playwright execution. It ships a bundled output template from
-`skill-assets/playwright-uat-planner/` (see below).
-
-`agents/playwright-uat-executor.md.j2` adapts the UAT executor workflow. It
-requires an approved `<FEATURE>_MANUAL_TEST_PLAN.md` (from the Playwright UAT
-Planner), runs it with Playwright, captures clean screenshots, verifies
-backend persistence and compiles a DOCX execution report. It ships the
+`agents/playwright-uat.md.j2` adapts the UAT workflow end to end. It plans an
+automation-ready manual test plan (`<FEATURE>_MANUAL_TEST_PLAN.md`) with exact
+selectors, pre-conditions and expected results, then, once the plan is
+approved, runs it with Playwright, captures clean screenshots, verifies backend
+persistence and compiles a DOCX execution report. It can plan only, execute
+only, or do the full cycle depending on the request. It ships the test plan,
 Playwright runner and DOCX report generator templates from
-`skill-assets/playwright-uat-executor/`.
+`skill-assets/playwright-uat/` (see below).
 
 2. Guidelines
 
@@ -76,13 +72,15 @@ This is only used by Copilot to configure how questions are asked to the user an
 templates). They are copied verbatim, keeping their folder structure, next to
 the rendered agent: into the skill folder (`<skills>/<agent-id>/`) in skill
 mode, or into a sibling `.github/agents/<agent-id>/` folder for Copilot Custom
-Agents. For example, the Playwright UAT Planner skill deploys as:
+Agents. For example, the Playwright UAT skill deploys as:
 
 ```
-playwright-uat-planner/
+playwright-uat/
 ├── SKILL.md
 └── templates/
-    └── test-plan-template.md
+    ├── report-generator-template.js
+    ├── test-plan-template.md
+    └── uat-runner-template.js
 ```
 
 Agents without a `skill-assets` folder deploy only their agent file.
