@@ -71,7 +71,10 @@ def test_no_unrendered_jinja(
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.parametrize("agent", ALL_AGENTS)
+AGENTS_WITH_HANDOFFS = [a for a in ALL_AGENTS if a != "reviewer"]
+
+
+@pytest.mark.parametrize("agent", AGENTS_WITH_HANDOFFS)
 def test_copilot_agent_has_handoffs(repo_root: str, agent: str) -> None:
     """Copilot agent output (skill_mode=False) must include the handoffs: block."""
     env = make_env(repo_root)
@@ -169,21 +172,6 @@ def test_frontend_agent_arch_path(repo_root: str, tool: str, expected_arch: str)
     env = make_env(repo_root)
     result = _render_agent(env, "frontend", tool, skill_mode=False)
     assert expected_arch in result
-
-
-@pytest.mark.parametrize(
-    "tool,expected_review",
-    [
-        ("copilot", ".github/skills/reviewer/references/review-backend.md"),
-        ("opencode", ".opencode/skills/reviewer/references/review-backend.md"),
-        ("claude", ".claude/skills/reviewer/references/review-backend.md"),
-    ],
-)
-def test_reviewer_agent_review_path(repo_root: str, tool: str, expected_review: str) -> None:
-    """Reviewer agent must reference the correct review guideline per tool."""
-    env = make_env(repo_root)
-    result = _render_agent(env, "reviewer", tool, skill_mode=False)
-    assert expected_review in result
 
 
 @pytest.mark.parametrize(
@@ -304,22 +292,6 @@ def test_guideline_templates_include_partials(
     result = render_template(base_env, template, ctx)
     assert expected_partial_content in result
     assert "{%" not in result
-
-
-@pytest.mark.parametrize(
-    "tool,expected_arch",
-    [
-        ("copilot", ".github/skills/backend/references/architecture.md"),
-        ("opencode", ".opencode/skills/backend/references/architecture.md"),
-        ("claude", ".claude/skills/backend/references/architecture.md"),
-    ],
-)
-def test_review_backend_guideline_arch_path(base_env: Environment, tool: str, expected_arch: str) -> None:
-    """Review backend guideline must reference the correct architecture path per tool."""
-    ctx = {"guidelines": guidelines_context(tool)}
-    result = render_template(base_env, "guidelines/review/backend.md.j2", ctx)
-    assert expected_arch in result
-    assert "{{" not in result
 
 
 @pytest.mark.parametrize("skill_mode", [True, False])

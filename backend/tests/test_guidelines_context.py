@@ -9,8 +9,6 @@ from zenflow.core.guidelines import guidelines_context
 EXPECTED_KEYS = {
     "backend_arch",
     "frontend_arch",
-    "review_backend",
-    "review_frontend",
     "documentation_backend",
     "documentation_frontend",
     "conventions",
@@ -30,8 +28,6 @@ def test_guidelines_context_returns_all_keys(tool: str) -> None:
     [
         ("backend_arch", ".github/skills/backend/references/architecture.md"),
         ("frontend_arch", ".github/skills/frontend/references/architecture.md"),
-        ("review_backend", ".github/skills/reviewer/references/review-backend.md"),
-        ("review_frontend", ".github/skills/reviewer/references/review-frontend.md"),
         ("documentation_backend", ".github/skills/documentation/references/documentation-backend.md"),
         ("documentation_frontend", ".github/skills/documentation/references/documentation-frontend.md"),
         ("conventions", ".github/skills/git/references/conventions.md"),
@@ -48,8 +44,6 @@ def test_copilot_paths(key: str, expected: str) -> None:
     [
         ("backend_arch", ".opencode/skills/backend/references/architecture.md"),
         ("frontend_arch", ".opencode/skills/frontend/references/architecture.md"),
-        ("review_backend", ".opencode/skills/reviewer/references/review-backend.md"),
-        ("review_frontend", ".opencode/skills/reviewer/references/review-frontend.md"),
         ("documentation_backend", ".opencode/skills/documentation/references/documentation-backend.md"),
         ("documentation_frontend", ".opencode/skills/documentation/references/documentation-frontend.md"),
         ("conventions", ".opencode/skills/git/references/conventions.md"),
@@ -65,8 +59,6 @@ def test_opencode_paths(key: str, expected: str) -> None:
     [
         ("backend_arch", ".claude/skills/backend/references/architecture.md"),
         ("frontend_arch", ".claude/skills/frontend/references/architecture.md"),
-        ("review_backend", ".claude/skills/reviewer/references/review-backend.md"),
-        ("review_frontend", ".claude/skills/reviewer/references/review-frontend.md"),
         ("documentation_backend", ".claude/skills/documentation/references/documentation-backend.md"),
         ("documentation_frontend", ".claude/skills/documentation/references/documentation-frontend.md"),
         ("conventions", ".claude/skills/git/references/conventions.md"),

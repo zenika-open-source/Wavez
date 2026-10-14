@@ -109,8 +109,6 @@ def deploy_guidelines_to_skills(
     Mapping:
       backend/<arch>.md.j2          -> backend/references/architecture.md
       frontend/<arch>.md.j2         -> frontend/references/architecture.md
-      review/backend.md.j2          -> reviewer/references/review-backend.md
-      review/frontend.md.j2         -> reviewer/references/review-frontend.md
       documentation/<doc>.md.j2     -> documentation/references/documentation-backend.md
       documentation/<doc>.md.j2     -> documentation/references/documentation-frontend.md
       git-conventions/default.md.j2 -> git/references/conventions.md
@@ -141,10 +139,8 @@ def deploy_guidelines_to_skills(
 
     if backend_arch_file:
         deploy("backend", backend_arch_file, "backend", "architecture.md")
-        deploy("review", "backend.md.j2", "reviewer", "review-backend.md")
     if frontend_arch_file:
         deploy("frontend", frontend_arch_file, "frontend", "architecture.md")
-        deploy("review", "frontend.md.j2", "reviewer", "review-frontend.md")
     if backend_doc_file:
         deploy(
             "documentation",

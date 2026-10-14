@@ -44,8 +44,6 @@ def guidelines_context(tool: str) -> dict[str, str]:
     return {
         "backend_arch": f"{base}/backend/references/architecture.md",
         "frontend_arch": f"{base}/frontend/references/architecture.md",
-        "review_backend": f"{base}/reviewer/references/review-backend.md",
-        "review_frontend": f"{base}/reviewer/references/review-frontend.md",
         "documentation_backend": f"{base}/documentation/references/documentation-backend.md",
         "documentation_frontend": f"{base}/documentation/references/documentation-frontend.md",
         "conventions": f"{base}/git/references/conventions.md",
