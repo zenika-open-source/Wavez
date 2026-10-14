@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import { downloadArchive } from "@/api/archive";
 import { Button } from "@/components/ui/Button";
 import { ASSISTANTS } from "@/data/assistants";
@@ -7,6 +7,8 @@ import type { SkillMode } from "@/types/skills";
 import type { AssistantId, GuidelineSelection, ToolSelection } from "@/types/zenflow";
 
 type Phase = "confirm" | "loading" | "success" | "error";
+
+const SUCCESS_AUTO_CLOSE_MS = 4000;
 
 interface GenerateModalProps {
   open: boolean;
@@ -20,6 +22,14 @@ interface GenerateModalProps {
 export function GenerateModal({ open, assistant, tools, guidelines, skillSelections, onClose }: GenerateModalProps) {
   const [phase, setPhase] = useState<Phase>("confirm");
   const [errorMessage, setErrorMessage] = useState("");
+
+  // The "Downloaded!" dialog dismisses itself after a few seconds.
+  const closeAfterSuccess = useEffectEvent(() => handleClose());
+  useEffect(() => {
+    if (phase !== "success") return;
+    const timer = setTimeout(closeAfterSuccess, SUCCESS_AUTO_CLOSE_MS);
+    return () => clearTimeout(timer);
+  }, [phase]);
 
   if (!open) return null;
 

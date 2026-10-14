@@ -22,7 +22,7 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
       { id: "frontend", label: "Frontend" }, // -> frontend agent
       { id: "tech-migration", label: "Tech Migration", sublabel: "Plan a bounded technology migration" }, // -> tech-migration agent
       { id: "code-review", label: "Code review" }, // -> reviewer agent
-      { id: "retrodoc-architecture", label: "Architecture Document", sublabel: "Architecture diagrams and retrodocs" }, // -> retrodoc-architecture agent
+      { id: "retrodoc-architecture", label: "Architecture Documentation" }, // -> retrodoc-architecture agent
       { id: "orchestrator", label: "Full-stack orchestration" }, // -> orchestrator agent
     ],
   },
