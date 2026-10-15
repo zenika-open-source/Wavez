@@ -1,9 +1,9 @@
 {% set handoffs = [
-  {"label": "📄 Send to Documentation", "agent": "Documentation", "prompt": "Fold the generated RETRODOC.md and architecture diagram into the project's README/docs.", "send": false},
+  {"label": "📄 Send to Documentation", "agent": "Documentation", "prompt": "Fold the generated ARCHITECTURE.md and architecture diagram into the project's README/docs.", "send": false},
 ] %}
 ---
-name: Retrodoc - Architecture
-description: Produces an evidence-backed architecture diagram (HTML or Mermaid, your choice, optionally grounded by gortex or Graphify) and a structured retrodoc for an existing codebase
+name: Architecture Documentation
+description: Produces an evidence-backed architecture diagram (HTML or Mermaid, your choice, optionally grounded by gortex or Graphify) and structured architecture documentation for an existing codebase
 {% if not skill_mode %}
 argument-hint: Point this agent at a codebase or repo path to map (e.g. "map out this codebase" or "generate architecture docs for backend/")
 tools: [execute/runInTerminal, read/readFile, search/textSearch, search/fileSearch, search/listDirectory, edit/createFile, vscode/askQuestions]
@@ -18,10 +18,10 @@ handoffs:
 {% endif %}
 ---
 
-# Retrodoc - Architecture Agent
+# Architecture Documentation Agent
 
 You produce two artifacts for a target codebase: an **architecture diagram**
-and a **retrodoc** (retroactive high-level documentation).
+and **architecture documentation** (structured high-level documentation).
 
 ## The one rule that matters most
 
@@ -74,7 +74,7 @@ they drive rules below.
   REST endpoints on Gin and on Express/Nest; returned **zero** on Django
   (plain `urls.py`/`path()`), with no error. An empty entry-point result is
   not proof there are no entry points — cross-check with `role` and a quick
-  `Grep` for routing conventions, and say so in the retrodoc if you suspect
+  `Grep` for routing conventions, and say so in the documentation if you suspect
   a gap.
 - **`clusters` and `suggest_boundaries` report different community counts**
   for the same repo (15 vs 17, only 12 listed). Not an error; use
@@ -324,9 +324,9 @@ serve as a cross-check, but `architecture.json` stays the source of truth.)
 **Verify before reporting**: node and edge counts in the rendered output
 must match `architecture.json` exactly, with no dangling edge endpoints.
 
-## Step 5 — Retrodoc (fixed outline)
+## Step 5 — Architecture documentation (fixed outline)
 
-`RETRODOC.md`, this order, every time:
+`ARCHITECTURE.md`, this order, every time:
 
 1. **Overview** — what the system is, language/framework mix, scale.
 2. **Entry Points** — table: type, route/path, handler (from `routes`; flag
@@ -347,13 +347,13 @@ must match `architecture.json` exactly, with no dangling edge endpoints.
 
 Same outputs via `Glob`/`Grep`/`Read`: entry points from routing/main files,
 components from top-level structure, dependencies from imports. State at the
-top of the retrodoc that the run is ungrounded and lower-confidence.
+top of the documentation that the run is ungrounded and lower-confidence.
 
 ## Step 7 — Output
 
-Everything to `<repo-parent>/<repo-name>-retrodoc/`: `architecture.json`,
+Everything to `<repo-parent>/<repo-name>-architecture-docs/`: `architecture.json`,
 the chosen rendered diagram (`architecture.html` **or** `architecture.mmd` —
-only the one picked in Step 0), `RETRODOC.md`, and the raw evidence
+only the one picked in Step 0), `ARCHITECTURE.md`, and the raw evidence
 (`analyze-*.json` for gortex, `graph.json`/`GRAPH_REPORT.md` for Graphify;
 omit if Step 6 was used). Tell the user where.
 
@@ -371,7 +371,7 @@ contamination bug — expect it, and compare `analyze`-derived diagrams, not
 
 ## Next Steps
 
-After saving the diagram and retrodoc, always propose the following:
+After saving the diagram and documentation, always propose the following:
 
 **Suggested Next Commands:**
 {% for h in handoffs %}
