@@ -21,7 +21,7 @@ ALL_AGENTS = [
     "product-requirements",
     "static-prototyping",
     "dynamic-prototyping",
-    "retrodoc-architecture",
+    "architecture-documentation",
     "tech-migration",
     "playwright-uat",
 ]
@@ -190,10 +190,10 @@ def test_documentation_agent_project_context(repo_root: str, tool: str, expected
 
 @pytest.mark.parametrize("tool", ALL_TOOLS)
 @pytest.mark.parametrize("skill_mode", [True, False])
-def test_retrodoc_prompts_for_gortex_and_uses_architect_outputs(
+def test_architecture_documentation_prompts_for_gortex_and_uses_architect_outputs(
     repo_root: str, tool: str, skill_mode: bool
 ) -> None:
-    result = _render_agent(make_env(repo_root), "retrodoc-architecture", tool, skill_mode=skill_mode)
+    result = _render_agent(make_env(repo_root), "architecture-documentation", tool, skill_mode=skill_mode)
     normalized = " ".join(result.split())
 
     assert "Install gortex (recommended)" in result
@@ -205,7 +205,7 @@ def test_retrodoc_prompts_for_gortex_and_uses_architect_outputs(
     assert "single source of truth" in result
     assert "Same outputs via `Glob`/`Grep`/`Read`" in result
     assert "scale. Load" not in result
-    for artifact in ("architecture.json", "architecture.html", "architecture.mmd", "RETRODOC.md"):
+    for artifact in ("architecture.json", "architecture.html", "architecture.mmd", "ARCHITECTURE.md"):
         assert artifact in result
     assert "drawio" not in result
     assert "Do you want the architecture diagram as HTML or Mermaid?" in result

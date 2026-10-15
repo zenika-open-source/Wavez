@@ -28,12 +28,12 @@ can use an installed Tech Migration agent/skill for migration requests and
 stops after plan review. Select Tech Migration separately when exporting only
 selected workflows.
 
-`agents/retrodoc-architecture.md.j2` adapts the Retrodoc Architect workflow
+`agents/architecture-documentation.md.j2` adapts the architecture documentation workflow
 for both custom agents and skills. It produces a single evidence-backed
 architecture model rendered as HTML, draw.io, and Mermaid alongside a
-structured retrodoc. If gortex is missing, it asks the user to install it
+structured architecture document. If gortex is missing, it asks the user to install it
 before continuing, with an explicit option to skip and produce a
-lower-confidence, source-based retrodoc instead.
+lower-confidence, source-based architecture document instead.
 
 `agents/playwright-uat.md.j2` adapts the UAT workflow end to end. It plans an
 automation-ready manual test plan (`<FEATURE>_MANUAL_TEST_PLAN.md`) with exact
