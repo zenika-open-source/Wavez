@@ -6,16 +6,16 @@ const STEPS = [
 
 export function StepGuide() {
   return (
-    <div className="mb-6 flex items-center gap-3 rounded-[20px] bg-white px-6 py-4 shadow-[0_12px_28px_-18px_rgba(60,20,50,0.25)]">
+    <div className="mb-6 flex flex-col gap-3 rounded-[20px] bg-white px-5 py-4 shadow-[0_12px_28px_-18px_rgba(60,20,50,0.25)] sm:flex-row sm:items-center sm:px-6">
       {STEPS.map((step, index) => (
-        <div key={step.number} className="flex flex-1 items-center gap-3">
+        <div key={step.number} className="flex w-full flex-1 items-center gap-3">
           <div className="flex items-center gap-2">
             <span className="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-[#fbe7ee] text-xs font-extrabold text-[#c81c5c]">
               {step.number}
             </span>
-            <span className="text-sm font-bold whitespace-nowrap text-[#5c5560]">{step.label}</span>
+            <span className="text-sm font-bold text-[#5c5560]">{step.label}</span>
           </div>
-          {index < STEPS.length - 1 && <span className="h-px flex-1 bg-[#f0e6ec]" />}
+          {index < STEPS.length - 1 && <span className="hidden h-px flex-1 bg-[#f0e6ec] sm:block" />}
         </div>
       ))}
     </div>

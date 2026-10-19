@@ -7,7 +7,7 @@ import type { StackCatalog } from "@/types/zenflow";
 const GRID_PLACEMENT: Record<string, string> = {
   discovery: "order-0",
   qa: "order-1",
-  developer: "order-2 col-span-2",
+  developer: "order-2 sm:col-span-2",
 };
 
 interface CategoryCardProps {
@@ -83,7 +83,7 @@ export function CategoryCard({
         )}
       </button>
       {!disabled && expanded && (
-        <div className="flex flex-1 items-stretch border-t-[1.5px] border-[#f0e6ec]">
+        <div className="flex flex-1 flex-col items-stretch border-t-[1.5px] border-[#f0e6ec] sm:flex-row">
           <div className="min-w-0 flex-1 px-5 pt-4 pb-5">
             <div
               className="mb-2 grid gap-2 border-b-[1.5px] border-[#f0e6ec] pb-2 text-xs font-extrabold tracking-[0.08em] text-[#5c5560] uppercase"

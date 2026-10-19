@@ -73,7 +73,7 @@ export function LanguageStackPicker({
   const frontendOptions = toLanguageOptions(catalog.frontend);
 
   return (
-    <div className="flex w-[300px] flex-none flex-col gap-3 border-l-[1.5px] border-[#cfe9dc] bg-[#f3faf6] px-5 py-4">
+    <div className="flex w-full flex-none flex-col gap-3 border-t-[1.5px] border-[#cfe9dc] bg-[#f3faf6] px-5 py-4 sm:w-[300px] sm:border-t-0 sm:border-l-[1.5px]">
       <div className="text-[11px] font-extrabold uppercase tracking-[0.1em] text-[#1c8a5c]">
         Language / stack{" "}
         <span className="font-semibold tracking-normal text-[#5c5560] normal-case">
