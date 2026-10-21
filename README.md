@@ -1,5 +1,7 @@
 # Zenflow
 
+Zenflow is deployed here: https://zenflow.zenika.com/
+
 Zenflow is an **open-source project** that showcases the most common agentic workflows for AI-driven software development. It ships as a Python CLI/API and, going forward, a companion web frontend.
 
 This is a monorepo with two projects:
