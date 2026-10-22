@@ -88,5 +88,5 @@ def init_archive(request: ArchiveRequest) -> StreamingResponse:
     return StreamingResponse(
         buffer,
         media_type="application/zip",
-        headers={"Content-Disposition": "attachment; filename=zenflow-setup.zip"},
+        headers={"Content-Disposition": "attachment; filename=wavez-setup.zip"},
     )

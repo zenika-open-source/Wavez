@@ -101,7 +101,7 @@ export default function Home() {
         <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,1fr)_auto]">
           <div>
             <div className="mb-2 text-[56px] leading-none font-extrabold tracking-[-0.01em] text-[#c81c5c]">
-              ZENFLOW
+              WAVEZ
             </div>
             <h1 className="mb-4 max-w-[40ch] text-lg leading-snug font-bold text-[#5c5560]">
               Generate agent skills for your AI assistant.

@@ -23,7 +23,7 @@ export async function downloadArchive(
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "zenflow-setup.zip";
+  link.download = "wavez-setup.zip";
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

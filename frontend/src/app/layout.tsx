@@ -10,7 +10,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Zenflow",
+  title: "Wavez",
   description: "Generate agent skills for your AI assistant.",
 };
 
