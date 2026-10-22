@@ -63,11 +63,11 @@ export function GenerateModal({ open, assistant, tools, guidelines, skillSelecti
 
   return (
     <div
-      className="fixed inset-0 z-20 grid place-items-center bg-[rgba(40,15,30,0.35)] p-6"
+      className="fixed inset-0 z-20 grid place-items-center overflow-y-auto bg-[rgba(40,15,30,0.35)] p-4 sm:p-6"
       onClick={handleClose}
     >
       <div
-        className="w-full max-w-[480px] rounded-[24px] bg-white p-7 shadow-[0_30px_60px_-20px_rgba(60,20,50,0.4)]"
+        className="max-h-[calc(100dvh-2rem)] w-full max-w-[480px] overflow-y-auto overscroll-contain rounded-[24px] bg-white p-5 shadow-[0_30px_60px_-20px_rgba(60,20,50,0.4)] sm:p-7"
         onClick={(e) => e.stopPropagation()}
       >
         {phase === "success" ? (

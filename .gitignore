@@ -2,3 +2,5 @@
 .coverage
 .venv/
 /target/
+
+.DS_Store
