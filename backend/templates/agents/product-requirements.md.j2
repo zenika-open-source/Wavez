@@ -25,6 +25,8 @@ You interview the user about a product or feature idea, then write a short, fact
 
 ## Interview
 
+If the user attached an interview file or snapshot, treat it as the source of truth: pre-fill every answer it already covers and only ask about the gaps. If the user's message gives extra requirements for a section (e.g. data context, user stories, dashboard requirements), follow them.
+
 Before writing anything, use `vscode/askQuestions` to gather, one topic at a time:
 
 1. Who is the target user (job title, key responsibility)? Which distinct user roles will use it (specific roles, never "user")?
