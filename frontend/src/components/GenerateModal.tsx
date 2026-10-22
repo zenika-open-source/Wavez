@@ -73,7 +73,7 @@ export function GenerateModal({ open, assistant, tools, guidelines, skillSelecti
         {phase === "success" ? (
           <>
             <div className="mb-2 text-xl font-extrabold text-[#161217]">Downloaded!</div>
-            <p className="mb-5 text-sm text-[#5c5560]">zenflow-setup.zip should now be in your downloads.</p>
+            <p className="mb-5 text-sm text-[#5c5560]">wavez-setup.zip should now be in your downloads.</p>
             <div className="flex justify-end">
               <Button variant="primary" onClick={handleClose}>
                 Close
