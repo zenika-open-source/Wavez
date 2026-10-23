@@ -1,20 +1,18 @@
-import { LanguageStackPicker } from "@/components/LanguageStackPicker";
-import { SkillRow, SKILL_ROW_GRID_COLUMNS } from "@/components/SkillRow";
-import { ENABLE_CUSTOM_AGENT_FILE } from "@/data/featureFlags";
+import { SkillRow } from "@/components/SkillRow";
+import { StackChips } from "@/components/StackChips";
+import { toLanguageOptions } from "@/lib/stack";
 import type { SkillCategory, SkillMode } from "@/types/skills";
 import type { StackCatalog } from "@/types/zenflow";
 
 const GRID_PLACEMENT: Record<string, string> = {
   discovery: "order-0",
-  qa: "order-1",
-  developer: "order-2 sm:col-span-2",
+  developer: "order-1 sm:row-span-2",
+  qa: "order-2",
 };
 
 interface CategoryCardProps {
   category: SkillCategory;
-  expanded: boolean;
   selections: Record<string, SkillMode>;
-  onToggleExpand: () => void;
   onSetMode: (skillId: string, mode: SkillMode) => void;
   catalog?: StackCatalog | null;
   backendArchFile?: string;
@@ -25,9 +23,7 @@ interface CategoryCardProps {
 
 export function CategoryCard({
   category,
-  expanded,
   selections,
-  onToggleExpand,
   onSetMode,
   catalog,
   backendArchFile,
@@ -39,10 +35,6 @@ export function CategoryCard({
   const selectedCount = selectableSkills.filter((skill) => (selections[skill.id] ?? "none") !== "none").length;
   const allSelected = selectableSkills.length > 0 && selectedCount === selectableSkills.length;
   const disabled = category.disabled ?? false;
-  const showStack = category.id === "developer";
-  // Collapsing leaves an unevenly-sized card next to its neighbor, so collapsing is
-  // disabled for all categories for now.
-  const collapsible = false;
 
   function handleToggleAll() {
     const nextMode: SkillMode = allSelected ? "none" : "skill";
@@ -50,82 +42,70 @@ export function CategoryCard({
   }
 
   return (
-    <div
-      className={`flex flex-col overflow-hidden rounded-2xl bg-white shadow-[0_12px_28px_-18px_rgba(60,20,50,0.25)] ${
+    <section
+      data-category={category.key}
+      className={`wz-category-${category.key} flex min-w-0 flex-col overflow-hidden rounded-panel border-2 border-border bg-surface ${
         GRID_PLACEMENT[category.id] ?? ""
       } ${disabled ? "opacity-50" : ""}`}
     >
-      <button
-        type="button"
-        onClick={collapsible ? onToggleExpand : undefined}
-        disabled={disabled}
-        className={`flex w-full items-center gap-3 px-5 py-4 text-left ${
-          disabled || !collapsible ? "cursor-default" : "cursor-pointer"
-        }`}
-      >
-        <div
-          className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[13px] font-bold"
-          style={{ background: category.tint, color: category.color }}
-        >
+      <header className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 border-b border-border px-4 py-3 sm:flex sm:gap-3 sm:px-5 sm:py-4">
+        <h3 className="col-start-1 row-start-1 inline-flex w-fit max-w-full rounded-full bg-[color-mix(in_srgb,var(--wz-category-color)_12%,var(--color-surface))] px-3 py-1.5 text-sm font-bold text-[color:var(--wz-category-color)]">
           {category.title}
-        </div>
-        <span className="text-xs font-extrabold text-[#8a8290]">
-          {disabled ? "Coming soon" : `${selectedCount} selected`}
+        </h3>
+        <span className="col-start-1 row-start-2 min-w-0 text-xs font-medium text-text-muted sm:flex-1">
+          {disabled ? "Coming soon" : `${selectedCount} of ${selectableSkills.length} selected`}
         </span>
-        <span className="flex-1" />
-        {collapsible && (
-          <span
-            className="inline-block text-[#8a8290] transition-transform duration-150"
-            style={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)" }}
+        {!disabled && (
+          <button
+            type="button"
+            onClick={handleToggleAll}
+            disabled={selectableSkills.length === 0}
+            className="col-start-2 row-start-2 min-h-10 shrink-0 cursor-pointer text-sm font-semibold text-accent underline underline-offset-4 hover:text-accent-strong disabled:cursor-not-allowed disabled:opacity-40 disabled:no-underline sm:row-auto"
           >
-            ▾
-          </span>
+            {allSelected ? "Clear all" : "Select all"}
+          </button>
         )}
-      </button>
-      {!disabled && expanded && (
-        <div className="flex flex-1 flex-col items-stretch border-t-[1.5px] border-[#f0e6ec] sm:flex-row">
-          <div className="min-w-0 flex-1 px-5 pt-4 pb-5">
-            <div
-              className="mb-2 grid gap-2 border-b-[1.5px] border-[#f0e6ec] pb-2 text-xs font-extrabold tracking-[0.08em] text-[#5c5560] uppercase"
-              style={{ gridTemplateColumns: SKILL_ROW_GRID_COLUMNS }}
-            >
-              <div>Agent Skills</div>
-              <div className="flex items-center justify-end">
-                <button
-                  type="button"
-                  onClick={handleToggleAll}
-                  disabled={selectableSkills.length === 0}
-                  className="cursor-pointer text-xs font-bold tracking-normal whitespace-nowrap normal-case hover:underline disabled:cursor-not-allowed disabled:opacity-40 disabled:no-underline"
-                  style={{ color: category.color }}
-                >
-                  {allSelected ? "Clear all" : "Select all"}
-                </button>
-              </div>
-              {ENABLE_CUSTOM_AGENT_FILE && <div className="text-center leading-tight">Custom agent file</div>}
-            </div>
-            {category.skills.map((skill) => (
+      </header>
+      {!disabled && (
+        <div className="min-w-0 flex-1 px-4 py-3">
+          {category.skills.map((skill) => {
+            const mode = selections[skill.id] ?? "none";
+            const isBackend = skill.id === "backend";
+            const isFrontend = skill.id === "frontend";
+            const stackOptions = catalog
+              ? toLanguageOptions(isBackend ? catalog.backend : catalog.frontend)
+              : [];
+            const onSelectStack = isBackend ? onSelectBackend : isFrontend ? onSelectFrontend : undefined;
+            const selectedStack = isBackend ? backendArchFile : frontendArchFile;
+            const stackLabel = isBackend ? "Language / stack" : "Framework";
+            const showStackPicker =
+              (isBackend || isFrontend) &&
+              onSelectStack &&
+              (stackOptions.length > 0 || mode !== "none");
+
+            return (
               <SkillRow
                 key={skill.id}
                 skill={skill}
-                mode={selections[skill.id] ?? "none"}
-                color={category.color}
-                onChange={(mode) => onSetMode(skill.id, mode)}
+                mode={mode}
+                categoryKey={category.key}
+                onChange={(nextMode) => onSetMode(skill.id, nextMode)}
+                stackChips={
+                  showStackPicker ? (
+                    <StackChips
+                      label={stackLabel}
+                      options={stackOptions}
+                      selected={selectedStack ?? ""}
+                      onSelect={onSelectStack}
+                      required={mode !== "none"}
+                    />
+                  ) : undefined
+                }
               />
-            ))}
-          </div>
-          {showStack && catalog && onSelectBackend && onSelectFrontend && (
-            <LanguageStackPicker
-              catalog={catalog}
-              backendArchFile={backendArchFile ?? ""}
-              frontendArchFile={frontendArchFile ?? ""}
-              onSelectBackend={onSelectBackend}
-              onSelectFrontend={onSelectFrontend}
-              backendRequired={(selections["backend"] ?? "none") !== "none"}
-              frontendRequired={(selections["frontend"] ?? "none") !== "none"}
-            />
-          )}
+            );
+          })}
         </div>
       )}
-    </div>
+    </section>
   );
 }

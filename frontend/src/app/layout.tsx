@@ -1,12 +1,24 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
+import { Bricolage_Grotesque, DM_Sans, IBM_Plex_Mono } from "next/font/google";
 import { connection } from "next/server";
 import "./globals.css";
 
-const manrope = Manrope({
-  variable: "--font-manrope",
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
   subsets: ["latin"],
-  weight: ["400", "500", "700", "800"],
+  weight: ["500", "700"],
+});
+
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+});
+
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-plex-mono",
+  subsets: ["latin"],
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
@@ -20,7 +32,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   await connection();
 
   return (
-    <html lang="en" className={`${manrope.variable} h-full antialiased`}>
+    <html lang="en" className={`${bricolage.variable} ${dmSans.variable} ${plexMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

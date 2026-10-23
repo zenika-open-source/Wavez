@@ -4,15 +4,15 @@ import { useEffect, useState } from "react";
 import { getStacks } from "@/api/stacks";
 import { AssistantPicker } from "@/components/AssistantPicker";
 import { GenerateModal } from "@/components/GenerateModal";
+import { SectionHeading } from "@/components/SectionHeading";
 import { SkillCategoryAccordion } from "@/components/SkillCategoryAccordion";
-import { StepGuide } from "@/components/StepGuide";
-import { toLanguageOptions } from "@/components/LanguageStackPicker";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SummaryPanel } from "@/components/SummaryPanel";
 import { Button } from "@/components/ui/Button";
 import { SKILL_CATEGORIES } from "@/data/skillCategories";
+import { describeStack, toLanguageOptions } from "@/lib/stack";
 import type { SkillMode } from "@/types/skills";
 import type { AssistantId, GuidelineSelection, StackCatalog, ToolSelection } from "@/types/zenflow";
-
-const ALL_CATEGORY_IDS = SKILL_CATEGORIES.map((c) => c.id);
 
 export default function Home() {
   const [catalog, setCatalog] = useState<StackCatalog | null>(null);
@@ -20,7 +20,6 @@ export default function Home() {
   const [assistant, setAssistant] = useState<AssistantId>("claude");
   const [backendArchFile, setBackendArchFile] = useState("");
   const [frontendArchFile, setFrontendArchFile] = useState("");
-  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(ALL_CATEGORY_IDS));
   const [skillSelections, setSkillSelections] = useState<Record<string, SkillMode>>({});
   const [generateModalOpen, setGenerateModalOpen] = useState(false);
 
@@ -39,7 +38,21 @@ export default function Home() {
 
   const backendStackMissing = (skillSelections["backend"] ?? "none") !== "none" && !backendArchFile;
   const frontendStackMissing = (skillSelections["frontend"] ?? "none") !== "none" && !frontendArchFile;
-  const canGenerate = !backendStackMissing && !frontendStackMissing;
+  const selectedSkillCount = SKILL_CATEGORIES.reduce(
+    (count, category) => count + category.skills.filter((skill) => skillSelections[skill.id] !== undefined && skillSelections[skill.id] !== "none").length,
+    0,
+  );
+  const canGenerate = selectedSkillCount > 0 && !backendStackMissing && !frontendStackMissing;
+  const selectedStackParts = [
+    skillSelections["backend"] !== undefined && skillSelections["backend"] !== "none"
+      ? describeStack(catalog, backendArchFile)
+      : "",
+    skillSelections["frontend"] !== undefined && skillSelections["frontend"] !== "none"
+      ? describeStack(catalog, frontendArchFile)
+      : "",
+  ].filter(Boolean);
+  const skillFileCount = selectedSkillCount;
+  const waveLevel = Math.min((selectedSkillCount + selectedStackParts.length) / 12, 1);
 
   useEffect(() => {
     getStacks()
@@ -51,20 +64,7 @@ export default function Home() {
     setAssistant("claude");
     setBackendArchFile("");
     setFrontendArchFile("");
-    setExpandedCategories(new Set(ALL_CATEGORY_IDS));
     setSkillSelections({});
-  }
-
-  function handleToggleExpand(categoryId: string) {
-    setExpandedCategories((prev) => {
-      const next = new Set(prev);
-      if (next.has(categoryId)) {
-        next.delete(categoryId);
-      } else {
-        next.add(categoryId);
-      }
-      return next;
-    });
   }
 
   function handleSetSkillMode(skillId: string, mode: SkillMode) {
@@ -96,58 +96,56 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(135deg,#fdf1f4_0%,#f6eefb_55%,#eef1fb_100%)] text-[#161217]">
-      <div className="mx-auto max-w-[1120px] px-6 pt-6 pb-4">
-        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,1fr)_auto]">
-          <div>
-            <div className="mb-2 text-[56px] leading-none font-extrabold tracking-[-0.01em] text-[#c81c5c]">
-              WAVEZ
+    <div className="min-h-screen bg-page font-sans text-text">
+      <SiteHeader />
+
+      <main className="wz-layout-gutter mx-auto grid w-full max-w-[1440px] grid-cols-1 items-start gap-6 py-5 pb-[calc(7rem+env(safe-area-inset-bottom,0px))] lg:grid-cols-[minmax(0,1fr)_clamp(320px,26.4vw,380px)] lg:gap-10 lg:pb-5">
+        <div className="flex min-w-0 flex-col gap-6">
+          <section className="grid min-w-0 grid-cols-1 items-center gap-4 lg:grid-cols-[auto_minmax(0,1fr)] lg:gap-5">
+            <SectionHeading number="01" title="Assistant" />
+            <div className="min-w-0 rounded-panel border-2 border-border bg-surface p-5">
+              <AssistantPicker selected={assistant} onSelect={setAssistant} />
             </div>
-            <h1 className="mb-4 max-w-[40ch] text-lg leading-snug font-bold text-[#5c5560]">
-              Generate agent skills for your AI assistant.
-            </h1>
-            <p className="text-base leading-relaxed text-[#5c5560] lg:whitespace-nowrap">
-              Pick an assistant, a stack, and the skills you want your agents to carry then export the
-              files it reads on day one.
-            </p>
-          </div>
+          </section>
 
-          <div className="min-w-[240px] rounded-[24px] bg-white px-6 py-5 shadow-[0_20px_40px_-20px_rgba(120,40,80,0.25)]">
-            <AssistantPicker selected={assistant} onSelect={setAssistant} />
-          </div>
+          <section className="flex min-w-0 flex-col gap-3">
+            <SectionHeading number="02" title="Skills" />
+            {!catalog && loadError && (
+              <div role="alert" className="text-sm text-text-muted">{`Couldn't load stacks: ${loadError}`}</div>
+            )}
+            <SkillCategoryAccordion
+              categories={SKILL_CATEGORIES}
+              selections={skillSelections}
+              onSetMode={handleSetSkillMode}
+              catalog={catalog}
+              backendArchFile={backendArchFile}
+              frontendArchFile={frontendArchFile}
+              onSelectBackend={handleSelectBackend}
+              onSelectFrontend={handleSelectFrontend}
+            />
+          </section>
         </div>
-      </div>
 
-      <div className="mx-auto max-w-[1120px] px-6 pt-2 pb-[calc(7rem+env(safe-area-inset-bottom,0px))] sm:pb-28">
-        <StepGuide />
-        {!catalog && loadError && (
-          <div className="mb-3 text-sm text-[#8a8290]">{`Couldn't load stacks: ${loadError}`}</div>
-        )}
-        <SkillCategoryAccordion
-          categories={SKILL_CATEGORIES}
-          expandedCategories={expandedCategories}
-          selections={skillSelections}
-          onToggleExpand={handleToggleExpand}
-          onSetMode={handleSetSkillMode}
-          catalog={catalog}
-          backendArchFile={backendArchFile}
-          frontendArchFile={frontendArchFile}
-          onSelectBackend={handleSelectBackend}
-          onSelectFrontend={handleSelectFrontend}
+        <SummaryPanel
+          assistant={assistant}
+          stackLabel={selectedStackParts.join(" + ")}
+          skillCount={selectedSkillCount}
+          skillFileCount={skillFileCount}
+          waveLevel={waveLevel}
+          canGenerate={canGenerate}
+          onGenerate={() => setGenerateModalOpen(true)}
+          onReset={handleReset}
         />
-      </div>
+      </main>
 
-      <div className="fixed inset-x-0 bottom-0">
-        <div className="pointer-events-none absolute inset-x-0 -top-4 h-4 bg-gradient-to-t from-[#eef1fb] to-transparent" />
-        <div className="bg-[#eef1fb] shadow-[0_-12px_24px_-16px_rgba(60,20,50,0.25)]">
-          <div className="mx-auto flex max-w-[1120px] items-center justify-end gap-4 px-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))] sm:px-6 sm:py-5">
-            <Button variant="secondary" onClick={handleReset}>
-              Reset
-            </Button>
-            <Button variant="primary" onClick={() => setGenerateModalOpen(true)} disabled={!canGenerate}>
-              Generate
-            </Button>
-          </div>
+      <div className="fixed inset-x-0 bottom-0 z-10 border-t border-border bg-page/95 shadow-[0_-12px_24px_-16px_rgba(0,0,0,0.6)] backdrop-blur lg:hidden">
+        <div className="wz-layout-gutter mx-auto flex max-w-[1440px] items-center justify-end gap-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
+          <Button variant="secondary" onClick={handleReset}>
+            Reset
+          </Button>
+          <Button variant="primary" onClick={() => setGenerateModalOpen(true)} disabled={!canGenerate}>
+            Generate
+          </Button>
         </div>
       </div>
 
