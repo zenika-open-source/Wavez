@@ -4,11 +4,12 @@
 
 export type SkillMode = "none" | "skill" | "custom";
 
+export type SkillCategoryKey = "product" | "development" | "qa";
+
 export interface Skill {
   id: string;
   label: string;
-  /** Optional second-level label, shown only when provided. */
-  sublabel?: string;
+  description: string;
   /** True when this skill has no corresponding backend agent yet — locked to "None". */
   disabled?: boolean;
 }
@@ -16,8 +17,7 @@ export interface Skill {
 export interface SkillCategory {
   id: string;
   title: string;
-  color: string;
-  tint: string;
+  key: SkillCategoryKey;
   skills: Skill[];
   /** True when this category isn't backed by anything deployable yet — grayed out and non-interactive. */
   disabled?: boolean;

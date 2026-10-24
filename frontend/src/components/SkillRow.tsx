@@ -1,63 +1,58 @@
-import { CheckboxDot } from "@/components/ui/CheckboxDot";
-import { ENABLE_CUSTOM_AGENT_FILE } from "@/data/featureFlags";
-import type { Skill, SkillMode } from "@/types/skills";
-
-export const SKILL_ROW_GRID_COLUMNS = ENABLE_CUSTOM_AGENT_FILE ? "1fr 56px 76px" : "1fr 56px";
+import type { ReactNode } from "react";
+import type { Skill, SkillCategoryKey, SkillMode } from "@/types/skills";
 
 interface SkillRowProps {
   skill: Skill;
   mode: SkillMode;
-  color: string;
+  categoryKey: SkillCategoryKey;
   onChange: (mode: SkillMode) => void;
+  stackChips?: ReactNode;
 }
 
-export function SkillRow({ skill, mode, color, onChange }: SkillRowProps) {
+export function SkillRow({ skill, mode, categoryKey, onChange, stackChips }: SkillRowProps) {
   const disabled = skill.disabled ?? false;
-  const effectiveMode = disabled ? "none" : mode;
-  const selected = effectiveMode !== "none";
+  const selected = !disabled && mode !== "none";
 
   return (
     <div
       data-selected={selected}
-      // Mirrors prototype-A's skill rows: rounded highlight on hover/selection,
-      // and an inset divider that hides next to a highlighted row. The px-3
-      // padding matches the header's so labels and checkboxes line up with it.
-      className={`relative mb-0.5 grid items-center gap-2 rounded-[10px] px-3 py-2 transition-colors duration-150 after:absolute after:inset-x-3 after:-bottom-[1.5px] after:h-px after:bg-[#E3E6EB] after:content-[''] data-[selected=true]:after:hidden [&:has(+[data-selected=true])]:after:hidden ${
-        disabled ? "opacity-40" : "hover:bg-[#F3F4F8] hover:after:hidden [&:has(+:hover)]:after:hidden"
-      }`}
-      style={{
-        gridTemplateColumns: SKILL_ROW_GRID_COLUMNS,
-        // 8-digit hex: the category color at ~6% opacity, a faint tint like the prototype's #FFF4F8.
-        background: selected ? `${color}0f` : undefined,
-      }}
+      className={`wz-skill-card wz-category-${categoryKey} rounded-control transition-[transform,background-color,border-color] duration-200 ease-out motion-safe:hover:-translate-y-0.5 ${disabled ? "opacity-50" : ""}`}
     >
-      <button
-        type="button"
-        onClick={() => onChange(effectiveMode === "skill" ? "none" : "skill")}
-        disabled={disabled}
-        className={`text-left ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
+      <label
+        className="flex min-h-12 cursor-pointer items-center gap-3 rounded-[10px] px-3 py-2 transition-colors [&:has(input:focus-visible)]:outline [&:has(input:focus-visible)]:outline-2 [&:has(input:focus-visible)]:outline-accent-strong"
       >
-        <div className="text-[13px] font-bold text-[#5c5560]">{skill.label}</div>
-        {skill.sublabel && <div className="mt-0.5 text-xs font-semibold text-[#8a8290]">{skill.sublabel}</div>}
-      </button>
-      <div className="flex justify-end">
-        <CheckboxDot
+        <input
+          type="checkbox"
           name={skill.id}
-          color={color}
-          checked={effectiveMode === "skill"}
-          onSelect={() => onChange(effectiveMode === "skill" ? "none" : "skill")}
+          checked={selected}
+          onChange={(event) => onChange(event.currentTarget.checked ? "skill" : "none")}
           disabled={disabled}
+          className="sr-only"
         />
-      </div>
-      {ENABLE_CUSTOM_AGENT_FILE && (
-        <CheckboxDot
-          name={skill.id}
-          color={color}
-          checked={effectiveMode === "custom"}
-          onSelect={() => onChange(effectiveMode === "custom" ? "none" : "custom")}
-          disabled={disabled}
-        />
-      )}
+        <span
+          aria-hidden="true"
+          className={`flex h-[22px] w-[22px] flex-none items-center justify-center rounded-[6px] border-2 ${
+            selected ? "border-[color:var(--wz-category-color)] bg-[color:var(--wz-category-color)]" : "border-border-control"
+          }`}
+        >
+          {selected && (
+            <svg viewBox="0 0 12 12" className="h-3 w-3" fill="none">
+              <path
+                d="M2.5 6.2L4.8 8.5L9.5 3.5"
+                stroke="var(--color-page)"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          )}
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-sm font-semibold text-text">{skill.label}</span>
+          <span className="mt-0.5 block text-xs leading-5 text-text-muted">{skill.description}</span>
+        </span>
+      </label>
+      {stackChips && <div className="px-3 pb-3">{stackChips}</div>}
     </div>
   );
 }

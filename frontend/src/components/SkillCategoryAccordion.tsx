@@ -4,9 +4,7 @@ import type { StackCatalog } from "@/types/zenflow";
 
 interface SkillCategoryAccordionProps {
   categories: SkillCategory[];
-  expandedCategories: Set<string>;
   selections: Record<string, SkillMode>;
-  onToggleExpand: (categoryId: string) => void;
   onSetMode: (skillId: string, mode: SkillMode) => void;
   catalog?: StackCatalog | null;
   backendArchFile?: string;
@@ -17,9 +15,7 @@ interface SkillCategoryAccordionProps {
 
 export function SkillCategoryAccordion({
   categories,
-  expandedCategories,
   selections,
-  onToggleExpand,
   onSetMode,
   catalog,
   backendArchFile,
@@ -33,9 +29,7 @@ export function SkillCategoryAccordion({
         <CategoryCard
           key={category.id}
           category={category}
-          expanded={expandedCategories.has(category.id)}
           selections={selections}
-          onToggleExpand={() => onToggleExpand(category.id)}
           onSetMode={onSetMode}
           catalog={category.id === "developer" ? catalog : undefined}
           backendArchFile={backendArchFile}

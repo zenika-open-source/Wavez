@@ -1,25 +1,122 @@
 @import "tailwindcss";
 
+/* Design tokens for the V2 "Deep Current" theme. Components consume these
+   (e.g. bg-surface, text-text-muted); do not hardcode palette values. */
+@theme static {
+  --color-page: #071b2e;
+  --color-header: #10395f;
+  --color-header-wave-back: #0d3050;
+  --color-header-wave-mid: #0a2742;
+
+  --color-surface: #0d2d4a;
+  --color-surface-raised: #123a5c;
+  --color-surface-muted: #0a2540;
+
+  --color-border: #1e4b72;
+  --color-border-strong: #2b5a80;
+  --color-border-control: #6e93a8;
+
+  --color-text: #e8f5fa;
+  --color-text-soft: #c6dde8;
+  --color-text-muted: #9dbbcc;
+
+  --color-accent: #3ee0cf;
+  --color-accent-strong: #bdf3ea;
+  --color-on-accent: #052a33;
+  --color-control-disabled: #1e4b72;
+  --color-overlay: rgb(3 12 22 / 0.74);
+
+  --color-cat-product: #f2d45c;
+  --color-cat-qa: #c9bcff;
+  --color-cat-dev: #6fe3a5;
+
+  --color-wave-sky-top: #1e8a91;
+  --color-wave-sky-bottom: #146470;
+  --color-wave-back: #11606b;
+  --color-wave-mid: #0c4a55;
+  --color-wave-front: #07333d;
+
+  --radius-control: 12px;
+  --radius-card: 16px;
+  --radius-panel: 24px;
+
+  --z-header: 6;
+  --z-modal: 20;
+}
+
+@theme inline static {
+  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
+  --font-display: var(--font-bricolage), sans-serif;
+  --font-mono: var(--font-plex-mono), monospace;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-manrope);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-manrope), sans-serif;
+  margin: 0;
+  background: var(--color-page);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
+
+.wz-layout-gutter {
+  padding-inline: clamp(24px, calc(35vw - 408px), 96px);
+}
+
+.wz-category-product {
+  --wz-category-color: var(--color-cat-product);
+}
+
+.wz-category-development {
+  --wz-category-color: var(--color-cat-dev);
+}
+
+.wz-category-qa {
+  --wz-category-color: var(--color-cat-qa);
+}
+
+.wz-skill-card {
+  border: 2px solid var(--color-border);
+  background: var(--color-surface-muted);
+}
+
+.wz-skill-card[data-selected="true"] {
+  border-color: var(--wz-category-color);
+  background: color-mix(in srgb, var(--wz-category-color) 14%, var(--color-surface));
+}
+
+:where(a, button):focus-visible {
+  outline: 3px solid var(--color-accent-strong);
+  outline-offset: 3px;
+}
+
+/* Header wave layers drift sideways; the SVGs are 4320px wide, so one loop is 1440px. */
+.wz-drift {
+  will-change: transform;
+}
+.wz-drift-slow {
+  animation: wz-drift 60s linear infinite;
+}
+.wz-drift-mid {
+  animation: wz-drift 42s linear infinite reverse;
+}
+.wz-drift-fast {
+  animation: wz-drift 30s linear infinite;
+}
+
+@keyframes wz-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-1440px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wz-drift {
+    animation: none;
+  }
 }

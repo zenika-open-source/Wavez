@@ -4,35 +4,36 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
   {
     id: "discovery",
     title: "Product and Design",
-    color: "#c81c5c",
-    tint: "#fbe7ee",
+    key: "product",
     skills: [
-      { id: "product-requirements", label: "Product Requirements", sublabel: "Generate/update PRD documents" }, // -> product-requirements agent
-      { id: "static-prototyping", label: "Static prototyping", sublabel: "Greyscale wireframes, low-fidelity" }, // -> static-prototyping agent
-      { id: "dynamic-prototyping", label: "Dynamic prototyping", sublabel: "Interactive, high-fidelity, html and Javascript only" }, // -> dynamic-prototyping agent
+      { id: "product-requirements", label: "Product Requirements", description: "Generate/update PRD documents" }, // -> product-requirements agent
+      { id: "static-prototyping", label: "Static prototyping", description: "Greyscale wireframes, low-fidelity" }, // -> static-prototyping agent
+      { id: "dynamic-prototyping", label: "Dynamic prototyping", description: "Interactive, high-fidelity, html and Javascript only" }, // -> dynamic-prototyping agent
     ],
   },
   {
     id: "developer",
     title: "Development",
-    color: "#1c8a5c",
-    tint: "#e6f5ee",
+    key: "development",
     skills: [
-      { id: "backend", label: "Backend" }, // -> backend agent
-      { id: "frontend", label: "Frontend" }, // -> frontend agent
-      { id: "tech-migration", label: "Tech Migration", sublabel: "Plan a bounded technology migration" }, // -> tech-migration agent
-      { id: "code-review", label: "Code review" }, // -> reviewer agent
-      { id: "architecture-documentation", label: "Architecture Documentation" }, // -> architecture-documentation agent
-      { id: "orchestrator", label: "Full-stack orchestration" }, // -> orchestrator agent
+      { id: "backend", label: "Backend", description: "Plan and build API endpoints and business logic" }, // -> backend agent
+      { id: "frontend", label: "Frontend", description: "Plan and build UI components, wire up API calls" }, // -> frontend agent
+      { id: "tech-migration", label: "Tech Migration", description: "Plan a bounded technology migration" }, // -> tech-migration agent
+      { id: "code-review", label: "Code review", description: "Security and quality review of changes" }, // -> reviewer agent
+      { id: "architecture-documentation", label: "Architecture Documentation", description: "Document the system architecture with diagrams" }, // -> architecture-documentation agent
+      { id: "orchestrator", label: "Full-stack orchestration", description: "Break a feature into tasks for specialist skills" }, // -> orchestrator agent
     ],
   },
   {
     id: "qa",
     title: "QA",
-    color: "#7c4fd6",
-    tint: "#efe9fc",
+    key: "qa",
     skills: [
-      { id: "playwright-uat", label: "UAT with Playwright" }, // -> playwright-uat agent
+      {
+        id: "playwright-uat",
+        label: "UAT with Playwright",
+        description: "Write and run browser-based acceptance tests",
+      }, // -> playwright-uat agent
     ],
   },
 ];

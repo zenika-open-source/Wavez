@@ -1,24 +1,25 @@
 interface ButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "link";
   disabled?: boolean;
 }
 
 export function Button({ children, onClick, variant = "secondary", disabled = false }: ButtonProps) {
-  const variantClasses =
-    variant === "primary"
-      ? "border-none bg-[#c81c5c] text-white"
-      : "border-[1.5px] border-[#e3c9d3] bg-white text-[#161217]";
+  const variantClasses = disabled
+    ? "border-border bg-control-disabled text-text-muted"
+    : {
+        primary: "border-2 border-transparent bg-accent text-on-accent",
+        secondary: "border-2 border-border bg-surface text-text",
+        link: "border-2 border-transparent bg-transparent px-2 text-accent underline underline-offset-4 hover:text-accent-strong",
+      }[variant];
 
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`rounded-full px-7 py-3.5 text-[15px] font-bold uppercase tracking-wide disabled:cursor-not-allowed disabled:opacity-50 ${
-        disabled ? "" : "cursor-pointer"
-      } ${variantClasses}`}
+      className={`min-h-11 rounded-control px-6 py-3 text-base font-semibold transition-colors disabled:cursor-not-allowed ${disabled ? "" : "cursor-pointer"} ${variantClasses}`}
     >
       {children}
     </button>
