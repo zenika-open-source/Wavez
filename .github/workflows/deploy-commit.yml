@@ -1,0 +1,164 @@
+# Manually deploys an earlier commit of main (e.g. to roll back). Regular
+# deploys on push to main are handled by deploy.yml.
+name: Deploy commit to Cloud Run
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: "Commit SHA on main to deploy (full or short)"
+        required: true
+
+# Same group as deploy.yml, so a rollback never races a regular deploy.
+concurrency:
+  group: deploy-main
+  cancel-in-progress: false
+
+env:
+  PROJECT_ID: zenflow-506701
+  REGION: europe-west9
+  REGISTRY: europe-west9-docker.pkg.dev/zenflow-506701/zenflow
+  WORKLOAD_IDENTITY_PROVIDER: projects/56191458396/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+  DEPLOYER_SERVICE_ACCOUNT: github-actions-deployer@zenflow-506701.iam.gserviceaccount.com
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  # Turns the `commit` input into a full SHA and refuses commits that aren't
+  # on main, so only reviewed code can be deployed.
+  resolve-commit:
+    runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.resolve.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: resolve
+        env:
+          REQUESTED: ${{ inputs.commit }}
+        run: |
+          if ! [[ "$REQUESTED" =~ ^[0-9a-fA-F]{7,40}$ ]]; then
+            echo "::error::'$REQUESTED' is not a commit SHA (7-40 hex characters)."
+            exit 1
+          fi
+          if ! sha=$(git rev-parse --verify --quiet "${REQUESTED}^{commit}"); then
+            echo "::error::Commit '$REQUESTED' was not found in the repository."
+            exit 1
+          fi
+          if ! git merge-base --is-ancestor "$sha" origin/main; then
+            echo "::error::Commit $sha is not on main; only commits on main can be deployed."
+            exit 1
+          fi
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "Deploying $(git log -1 --format='%h %s (%an, %as)' "$sha")" >> "$GITHUB_STEP_SUMMARY"
+
+  deploy-backend:
+    needs: resolve-commit
+    runs-on: ubuntu-latest
+    outputs:
+      backend_url: ${{ steps.backend_url.outputs.url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.resolve-commit.outputs.sha }}
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.DEPLOYER_SERVICE_ACCOUNT }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker "${REGION}-docker.pkg.dev" --quiet
+
+      - name: Set image name
+        run: echo "IMAGE=${REGISTRY}/backend:${{ needs.resolve-commit.outputs.sha }}" >> "$GITHUB_ENV"
+
+      # deploy.yml tags images by commit, so a commit that was deployed before
+      # reuses its image instead of being rebuilt.
+      - name: Check for an existing image
+        id: existing
+        run: |
+          if gcloud artifacts docker images describe "$IMAGE" >/dev/null 2>&1; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+            echo "Reusing existing image $IMAGE"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build and push backend image
+        if: steps.existing.outputs.found != 'true'
+        run: |
+          docker build --platform linux/amd64 -t "$IMAGE" backend
+          docker push "$IMAGE"
+
+      - name: Deploy backend to Cloud Run
+        run: |
+          gcloud run deploy zenflow-backend \
+            --image="$IMAGE" \
+            --region="${REGION}" \
+            --project="${PROJECT_ID}" \
+            --quiet
+
+      - name: Get backend URL
+        id: backend_url
+        run: |
+          url=$(gcloud run services describe zenflow-backend \
+            --region="${REGION}" --project="${PROJECT_ID}" --format='value(status.url)')
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+
+  deploy-frontend:
+    needs: [resolve-commit, deploy-backend]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.resolve-commit.outputs.sha }}
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.DEPLOYER_SERVICE_ACCOUNT }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker "${REGION}-docker.pkg.dev" --quiet
+
+      - name: Set image name
+        run: echo "IMAGE=${REGISTRY}/frontend:${{ needs.resolve-commit.outputs.sha }}" >> "$GITHUB_ENV"
+
+      # Reusing is safe because the backend URL baked into the image at build
+      # time is the Cloud Run service URL, which doesn't change between deploys.
+      - name: Check for an existing image
+        id: existing
+        run: |
+          if gcloud artifacts docker images describe "$IMAGE" >/dev/null 2>&1; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+            echo "Reusing existing image $IMAGE"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build and push frontend image
+        if: steps.existing.outputs.found != 'true'
+        run: |
+          docker build --platform linux/amd64 \
+            --build-arg NEXT_PUBLIC_API_BASE_URL="${{ needs.deploy-backend.outputs.backend_url }}" \
+            -t "$IMAGE" frontend
+          docker push "$IMAGE"
+
+      - name: Deploy frontend to Cloud Run
+        run: |
+          gcloud run deploy zenflow-frontend \
+            --image="$IMAGE" \
+            --region="${REGION}" \
+            --project="${PROJECT_ID}" \
+            --quiet
