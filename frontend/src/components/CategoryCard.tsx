@@ -4,14 +4,10 @@ import { toLanguageOptions } from "@/lib/stack";
 import type { SkillCategory, SkillMode } from "@/types/skills";
 import type { StackCatalog } from "@/types/zenflow";
 
-const GRID_PLACEMENT: Record<string, string> = {
-  discovery: "order-0",
-  developer: "order-1 sm:row-span-2",
-  qa: "order-2",
-};
-
 interface CategoryCardProps {
   category: SkillCategory;
+  /** Position in the single-column mobile list. */
+  order: number;
   selections: Record<string, SkillMode>;
   onSetMode: (skillId: string, mode: SkillMode) => void;
   catalog?: StackCatalog | null;
@@ -23,6 +19,7 @@ interface CategoryCardProps {
 
 export function CategoryCard({
   category,
+  order,
   selections,
   onSetMode,
   catalog,
@@ -44,30 +41,34 @@ export function CategoryCard({
   return (
     <section
       data-category={category.key}
-      className={`wz-category-${category.key} flex min-w-0 flex-col overflow-hidden rounded-panel border-2 border-border bg-surface ${
-        GRID_PLACEMENT[category.id] ?? ""
-      } ${disabled ? "opacity-50" : ""}`}
+      style={{ order }}
+      className={`wz-category-${category.key} flex min-w-0 flex-col rounded-card border-2 border-border bg-surface px-4 py-3 ${
+        disabled ? "opacity-50" : ""
+      }`}
     >
-      <header className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 border-b border-border px-4 py-3 sm:flex sm:gap-3 sm:px-5 sm:py-4">
-        <h3 className="col-start-1 row-start-1 inline-flex w-fit max-w-full rounded-full bg-[color-mix(in_srgb,var(--wz-category-color)_12%,var(--color-surface))] px-3 py-1.5 text-sm font-bold text-[color:var(--wz-category-color)]">
+      <header className="mb-2 flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-0.5">
+        <h3 className="inline-block rounded-full bg-[color-mix(in_srgb,var(--wz-category-color)_12%,var(--color-surface))] px-3 py-[3px] text-base leading-[1.4] font-semibold whitespace-nowrap text-[color:var(--wz-category-color)]">
           {category.title}
         </h3>
-        <span className="col-start-1 row-start-2 min-w-0 text-xs font-medium text-text-muted sm:flex-1">
-          {disabled ? "Coming soon" : `${selectedCount} of ${selectableSkills.length} selected`}
+        <span
+          aria-label={disabled ? undefined : `${selectedCount} of ${selectableSkills.length} selected`}
+          className="flex-1 text-[13px] whitespace-nowrap text-text-muted"
+        >
+          {disabled ? "Coming soon" : `${selectedCount} of ${selectableSkills.length}`}
         </span>
         {!disabled && (
           <button
             type="button"
             onClick={handleToggleAll}
             disabled={selectableSkills.length === 0}
-            className="col-start-2 row-start-2 min-h-10 shrink-0 cursor-pointer text-sm font-semibold text-accent underline underline-offset-4 hover:text-accent-strong disabled:cursor-not-allowed disabled:opacity-40 disabled:no-underline sm:row-auto"
+            className="shrink-0 cursor-pointer px-0.5 py-1.5 text-sm leading-[normal] font-semibold whitespace-nowrap text-[color:var(--wz-category-color)] underline underline-offset-[3px] hover:text-text disabled:cursor-not-allowed disabled:opacity-40 disabled:no-underline"
           >
             {allSelected ? "Clear all" : "Select all"}
           </button>
         )}
       </header>
       {!disabled && (
-        <div className="min-w-0 flex-1 px-4 py-3">
+        <div className="flex min-w-0 flex-col gap-1">
           {category.skills.map((skill) => {
             const mode = selections[skill.id] ?? "none";
             const isBackend = skill.id === "backend";

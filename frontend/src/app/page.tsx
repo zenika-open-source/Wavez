@@ -99,16 +99,14 @@ export default function Home() {
     <div className="min-h-screen bg-page font-sans text-text">
       <SiteHeader />
 
-      <main className="wz-layout-gutter mx-auto grid w-full max-w-[1440px] grid-cols-1 items-start gap-6 py-5 pb-[calc(7rem+env(safe-area-inset-bottom,0px))] lg:grid-cols-[minmax(0,1fr)_clamp(320px,26.4vw,380px)] lg:gap-10 lg:pb-5">
-        <div className="flex min-w-0 flex-col gap-6">
+      <main className="wz-layout-gutter mx-auto grid w-full max-w-[1440px] grid-cols-1 items-start gap-6 py-5 pb-[calc(7rem+env(safe-area-inset-bottom,0px))] lg:grid-cols-[minmax(0,1fr)_clamp(320px,26.4vw,380px)] lg:gap-10 lg:pb-6">
+        <div className="flex min-w-0 flex-col gap-6 lg:gap-4">
           <section className="grid min-w-0 grid-cols-1 items-center gap-4 lg:grid-cols-[auto_minmax(0,1fr)] lg:gap-5">
             <SectionHeading number="01" title="Assistant" />
-            <div className="min-w-0 rounded-panel border-2 border-border bg-surface p-5">
-              <AssistantPicker selected={assistant} onSelect={setAssistant} />
-            </div>
+            <AssistantPicker selected={assistant} onSelect={setAssistant} />
           </section>
 
-          <section className="flex min-w-0 flex-col gap-3">
+          <section className="flex min-w-0 flex-col gap-2.5">
             <SectionHeading number="02" title="Skills" />
             {!catalog && loadError && (
               <div role="alert" className="text-sm text-text-muted">{`Couldn't load stacks: ${loadError}`}</div>

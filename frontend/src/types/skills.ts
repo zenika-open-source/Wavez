@@ -10,6 +10,8 @@ export interface Skill {
   id: string;
   label: string;
   description: string;
+  /** Backend agent id when it differs from the skill id; it names the deployed skill folder. */
+  agentId?: string;
   /** True when this skill has no corresponding backend agent yet — locked to "None". */
   disabled?: boolean;
 }

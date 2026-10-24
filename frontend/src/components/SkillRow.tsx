@@ -19,7 +19,7 @@ export function SkillRow({ skill, mode, categoryKey, onChange, stackChips }: Ski
       className={`wz-skill-card wz-category-${categoryKey} rounded-control transition-[transform,background-color,border-color] duration-200 ease-out motion-safe:hover:-translate-y-0.5 ${disabled ? "opacity-50" : ""}`}
     >
       <label
-        className="flex min-h-12 cursor-pointer items-center gap-3 rounded-[10px] px-3 py-2 transition-colors [&:has(input:focus-visible)]:outline [&:has(input:focus-visible)]:outline-2 [&:has(input:focus-visible)]:outline-accent-strong"
+        className="flex cursor-pointer items-center gap-3 rounded-[10px] px-3 py-2.5 transition-colors [&:has(input:focus-visible)]:outline [&:has(input:focus-visible)]:outline-2 [&:has(input:focus-visible)]:outline-accent-strong"
       >
         <input
           type="checkbox"
@@ -36,20 +36,20 @@ export function SkillRow({ skill, mode, categoryKey, onChange, stackChips }: Ski
           }`}
         >
           {selected && (
-            <svg viewBox="0 0 12 12" className="h-3 w-3" fill="none">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
               <path
-                d="M2.5 6.2L4.8 8.5L9.5 3.5"
-                stroke="var(--color-page)"
-                strokeWidth="1.6"
+                d="M2.5 7.5l3 3 6-7"
+                stroke="var(--color-on-accent)"
+                strokeWidth="2.4"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
             </svg>
           )}
         </span>
-        <span className="min-w-0 flex-1">
-          <span className="block text-sm font-semibold text-text">{skill.label}</span>
-          <span className="mt-0.5 block text-xs leading-5 text-text-muted">{skill.description}</span>
+        <span className="flex min-w-0 flex-1 flex-col gap-px">
+          <span className="text-[15px] leading-[1.3] font-semibold text-text">{skill.label}</span>
+          <span className="text-[13px] leading-[1.35] text-text-muted">{skill.description}</span>
         </span>
       </label>
       {stackChips && <div className="px-3 pb-3">{stackChips}</div>}
