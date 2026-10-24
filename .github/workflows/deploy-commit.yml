@@ -1,12 +1,17 @@
 # Manually deploys an earlier commit of main (e.g. to roll back). Regular
 # deploys on push to main are handled by deploy.yml.
 name: Deploy commit to Cloud Run
+# Shown as the run's title in the Actions list, so the reason is visible at a glance.
+run-name: "Deploy ${{ inputs.commit }}: ${{ inputs.remarks }}"
 
 on:
   workflow_dispatch:
     inputs:
       commit:
         description: "Commit SHA on main to deploy (full or short)"
+        required: true
+      remarks:
+        description: "Why this version is being deployed (e.g. roll back broken UI from #43)"
         required: true
 
 # Same group as deploy.yml, so a rollback never races a regular deploy.
@@ -40,7 +45,12 @@ jobs:
       - id: resolve
         env:
           REQUESTED: ${{ inputs.commit }}
+          REMARKS: ${{ inputs.remarks }}
         run: |
+          if [ -z "${REMARKS//[[:space:]]/}" ]; then
+            echo "::error::Remarks are required: say why this version is being deployed."
+            exit 1
+          fi
           if ! [[ "$REQUESTED" =~ ^[0-9a-fA-F]{7,40}$ ]]; then
             echo "::error::'$REQUESTED' is not a commit SHA (7-40 hex characters)."
             exit 1
@@ -54,7 +64,13 @@ jobs:
             exit 1
           fi
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
-          echo "Deploying $(git log -1 --format='%h %s (%an, %as)' "$sha")" >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "Deploying $(git log -1 --format='%h %s (%an, %as)' "$sha")"
+            echo
+            echo "**Remarks:** $REMARKS"
+            echo
+            echo "Requested by @$GITHUB_ACTOR"
+          } >> "$GITHUB_STEP_SUMMARY"
 
   deploy-backend:
     needs: resolve-commit
