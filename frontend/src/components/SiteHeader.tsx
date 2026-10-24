@@ -40,7 +40,7 @@ export function SiteHeader() {
         />
       </svg>
 
-      <div className="wz-layout-gutter relative z-10 mx-auto flex min-h-24 max-w-[1440px] flex-col items-start justify-center gap-4 py-4 lg:h-[68px] lg:flex-row lg:flex-nowrap lg:items-center lg:justify-between lg:gap-x-6 lg:gap-y-3 lg:py-0">
+      <div className="wz-layout-gutter relative z-10 mx-auto flex min-h-24 max-w-[1440px] flex-col items-start justify-center gap-4 py-4 lg:h-[68px] lg:min-h-0 lg:flex-row lg:flex-nowrap lg:items-center lg:justify-between lg:gap-x-6 lg:gap-y-3 lg:py-0">
         <div className="flex w-full min-w-0 flex-col items-start gap-3 lg:w-auto lg:flex-1 lg:flex-row lg:items-center lg:gap-5">
           <span className="relative h-8 w-[99px] flex-none">
             <Image
@@ -64,8 +64,8 @@ export function SiteHeader() {
           </div>
         </div>
 
-        <div className="flex w-full flex-wrap items-center justify-between gap-x-5 gap-y-2 text-sm lg:w-auto lg:flex-none lg:justify-start lg:gap-6">
-          <span className="flex items-center gap-2.5 whitespace-nowrap text-text-muted">
+        <div className="flex w-full flex-wrap items-center justify-between gap-x-5 gap-y-2 text-sm lg:w-auto lg:flex-none lg:justify-start lg:gap-6 lg:text-[15px]">
+          <span className="flex items-center gap-2.5 whitespace-nowrap text-text-subtle">
             A tool developed by
             <Image
               src="/brand/zenika-logo.svg"
@@ -81,7 +81,7 @@ export function SiteHeader() {
             href="https://github.com/zenika-open-source/Zenflow"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-semibold text-accent hover:text-accent-strong"
+            className="font-semibold text-accent underline hover:text-accent-strong"
           >
             GitHub
           </a>
