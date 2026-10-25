@@ -303,4 +303,4 @@ def test_product_requirements_single_prd(
     out = _render_agent(env, "product-requirements", "claude", skill_mode=skill_mode)
     assert "-prd.md" in out
     assert "-stories.md" not in out
-    assert "Exactly 5 bullets" in out
+    assert "Exactly five bullets" in out
