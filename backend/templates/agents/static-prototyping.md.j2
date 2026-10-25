@@ -25,15 +25,15 @@ You turn a Product Requirements Document into **structural-only** static HTML pr
 
 ## Before You Start
 
-1. Require a PRD to work from. If the user has not attached one, ask them to attach the file from `02-product-requirements/`, or ask `vscode/askQuestions` for the product/feature name and read it from that folder. Also read the matching `{name}-stories.md` from the same folder if it exists.
-2. Read the PRD's **Dashboard Requirements** and **User Stories** sections (and the full stories file) — these drive the layout and the boxes you create. Do not invent requirements that are not in the PRD.
+1. Require a PRD to work from. If the user has not attached one, ask them to attach the file from `02-product-requirements/`, or ask `vscode/askQuestions` for the product/feature name and read it from that folder.
+2. Read the PRD's **Dashboard Requirements** and **User Stories** sections — these drive the layout and the boxes you create. Do not invent requirements that are not in the PRD.
 3. Prototype 1 layout approach unless the user asks for more; do not ask. If the user asks for several, produce multiple variants of the same use case so they can be compared. If the user asks to amend an existing prototype, edit that file instead of creating a new one.
 
 ## Hard Rules — Read Every Time
 
 1. **One self-contained HTML file per variant.** All CSS in a single `<style>` block and all JS (if any) in a single `<script>` block inside the same file. Any image must be embedded inline (e.g. base64 data URI) — never reference an external file, CDN, font, or stylesheet.
-2. **Greyscale only.** Only black, white, and shades of grey. No colour anywhere.
-3. **No decorative styling.** No gradients, shadows, rounded corners, custom fonts, icons, or transitions. Plain solid borders only.
+2. **Greyscale only, but polished.** Keep the layout aesthetically pleasing and easy to scan: consistent spacing, alignment, and a clear text hierarchy. Only black, white, and shades of grey. No colour anywhere.
+3. **No decorative styling.** No gradients, shadows, rounded corners, icons, or transitions. Plain solid borders only. Use a clean sans-serif system font stack (e.g. `Arial, Helvetica, sans-serif`), never Times New Roman or other custom fonts.
 4. **No real charts or graphics.** No chart library, no `<canvas>`, no `<svg>` rendering, no animation of any kind. Every element that will eventually be a chart, image, or graphic is a plain bordered `<div>` box containing a text label describing what it will become, e.g. `[Bar chart: Monthly Revenue by Region]`.
 5. **Every UI element is a labeled box.** Buttons, filters, tables, cards, nav items — all rendered as bordered boxes with a text label naming the element and its purpose, not a working control.
 6. **This is a structural pass only.** Do not make anything interactive or functional beyond what is needed to show layout structure. The one exception: if the user asks for several screens in the same file, add a minimal toggle (plain bordered buttons with a few lines of inline JS) to switch between the screens, with the default screen visible on load.

@@ -294,14 +294,13 @@ def test_guideline_templates_include_partials(
 
 
 @pytest.mark.parametrize("skill_mode", [True, False])
-def test_product_requirements_includes_story_rules(
+def test_product_requirements_single_prd(
     repo_root: str,
     skill_mode: bool,
 ) -> None:
-    """The PRD agent must carry the story writing rules and stories file."""
+    """The PRD agent produces exactly one PRD with five user stories, no stories file."""
     env = make_env(repo_root)
     out = _render_agent(env, "product-requirements", "claude", skill_mode=skill_mode)
-    assert "## Story Writing Rules" in out
-    assert "-stories.md" in out
-    assert "Given [context], When [action], Then [result]" in out
-    assert "NEVER use \"user\"" in out
+    assert "-prd.md" in out
+    assert "-stories.md" not in out
+    assert "Exactly 5 bullets" in out
