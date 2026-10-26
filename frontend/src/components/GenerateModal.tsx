@@ -8,7 +8,7 @@ import type { AssistantId, GuidelineSelection, ToolSelection } from "@/types/zen
 
 type Phase = "confirm" | "loading" | "success" | "error";
 
-const SUCCESS_AUTO_CLOSE_MS = 4000;
+const SUCCESS_AUTO_CLOSE_MS = 3000;
 
 // Where the archive puts a skill: <root>/<agent>/SKILL.md, or a Copilot custom agent file.
 function skillPath(skillsRoot: string, skill: Skill, mode: SkillMode): string {
