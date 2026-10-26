@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export function SiteHeader() {
   return (
@@ -77,14 +78,9 @@ export function SiteHeader() {
               style={{ width: "auto" }}
             />
           </span>
-          <a
-            href="https://github.com/zenika-open-source/Zenflow"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-semibold text-accent underline hover:text-accent-strong"
-          >
-            GitHub
-          </a>
+          <Link href="/documentation" className="font-semibold text-accent underline hover:text-accent-strong">
+            Documentation
+          </Link>
         </div>
       </div>
     </header>
