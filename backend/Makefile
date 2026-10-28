@@ -4,7 +4,7 @@ sync:
 	uv sync --extra api --extra dev
 
 dev: sync
-	uv run zenflow-api
+	uv run wavez-api
 
 test: sync
 	uv run pytest

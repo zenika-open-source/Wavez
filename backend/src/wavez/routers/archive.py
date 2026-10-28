@@ -17,10 +17,10 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
-from zenflow.core.deployment import resolve_agent_ids
-from zenflow.core.errors import ZenflowError
-from zenflow.core.service import init_project, repo_root
-from zenflow.routers.schemas import ErrorResponse, GuidelineSelectionRequest, ToolSelectionRequest
+from wavez.core.deployment import resolve_agent_ids
+from wavez.core.errors import WavezError
+from wavez.core.service import init_project, repo_root
+from wavez.routers.schemas import ErrorResponse, GuidelineSelectionRequest, ToolSelectionRequest
 
 router = APIRouter()
 
@@ -69,7 +69,7 @@ def init_archive(request: ArchiveRequest) -> StreamingResponse:
     """
     agent_ids = resolve_agent_ids(request.skills) if request.skills is not None else None
     custom_agent_ids = resolve_agent_ids(request.custom_skills) if request.custom_skills is not None else None
-    tmp_dir = tempfile.mkdtemp(prefix="zenflow-")
+    tmp_dir = tempfile.mkdtemp(prefix="wavez-")
     try:
         init_project(
             repo_root(),
@@ -80,7 +80,7 @@ def init_archive(request: ArchiveRequest) -> StreamingResponse:
             custom_agent_ids,
         )
         buffer = _zip_directory(tmp_dir)
-    except ZenflowError as exc:
+    except WavezError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     finally:
         shutil.rmtree(tmp_dir, ignore_errors=True)

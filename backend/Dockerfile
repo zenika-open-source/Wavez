@@ -15,4 +15,4 @@ ENV PATH="/app/.venv/bin:$PATH"
 EXPOSE 8080
 
 # Cloud Run injects $PORT; default to 8080 for local `docker run`.
-CMD ["sh", "-c", "uvicorn zenflow.routers.app:app --host 0.0.0.0 --port ${PORT:-8080}"]
+CMD ["sh", "-c", "uvicorn wavez.routers.app:app --host 0.0.0.0 --port ${PORT:-8080}"]

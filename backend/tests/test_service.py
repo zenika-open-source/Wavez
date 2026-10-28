@@ -7,9 +7,9 @@ from pathlib import Path
 
 import pytest
 
-from zenflow.core.errors import ZenflowError
-from zenflow.core.models import GuidelineSelection, ToolSelection
-from zenflow.core.service import init_project
+from wavez.core.errors import WavezError
+from wavez.core.models import GuidelineSelection, ToolSelection
+from wavez.core.service import init_project
 
 NO_GUIDELINES = GuidelineSelection(
     backend_arch_file="",
@@ -22,13 +22,13 @@ NO_GUIDELINES = GuidelineSelection(
 
 def test_no_tool_selected_raises(repo_root: str, tmp_target: Path) -> None:
     tools = ToolSelection(copilot=False, opencode=False, claude=False)
-    with pytest.raises(ZenflowError, match="at least one tool"):
+    with pytest.raises(WavezError, match="at least one tool"):
         init_project(repo_root, str(tmp_target), tools, NO_GUIDELINES)
 
 
 def test_missing_source_dir_raises(tmp_target: Path) -> None:
     tools = ToolSelection(copilot=True, opencode=False, claude=False)
-    with pytest.raises(ZenflowError, match="missing source directory"):
+    with pytest.raises(WavezError, match="missing source directory"):
         init_project(str(tmp_target), str(tmp_target / "target"), tools, NO_GUIDELINES)
 
 

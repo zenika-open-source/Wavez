@@ -11,8 +11,8 @@ export const metadata: Metadata = {
   description: "How WaveZ works: getting started, the product discovery and development flows, and how to get involved.",
 };
 
-const REPO_URL = "https://github.com/zenika-open-source/Zenflow";
-const LICENSE_URL = "https://github.com/zenika-open-source/Zenflow/blob/main/LICENSE";
+const REPO_URL = "https://github.com/zenika-open-source/Wavez";
+const LICENSE_URL = "https://github.com/zenika-open-source/Wavez/blob/main/LICENSE";
 
 const SECTIONS = [
   { id: "introduction", label: "Introduction" },

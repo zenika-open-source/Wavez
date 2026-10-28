@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "@/api/config";
-import type { GuidelineSelection, ToolSelection } from "@/types/zenflow";
+import type { GuidelineSelection, ToolSelection } from "@/types/wavez";
 
 export async function downloadArchive(
   tools: ToolSelection,

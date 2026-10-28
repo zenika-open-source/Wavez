@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { ASSISTANTS } from "@/data/assistants";
-import type { AssistantId } from "@/types/zenflow";
+import type { AssistantId } from "@/types/wavez";
 
 interface AssistantPickerProps {
   selected: AssistantId;

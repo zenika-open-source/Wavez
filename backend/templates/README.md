@@ -1,4 +1,4 @@
-# Zenflow Template Library
+# Wavez Template Library
 
 This directory contains reusable guideline templates for different agents and skills.
 
@@ -60,7 +60,7 @@ The more explicit these files are, the more consistently all tools can follow yo
 
 These are the files to be edited with the architectural guidelines your team agrees on.
 
-To configure additional languages or frameworks, similar files to the existing ones have to be added to `guidelines` folder, and the new options and paths updated in the constants in `src/zenflow/stack.py` for the initialisation tool to work.
+To configure additional languages or frameworks, similar files to the existing ones have to be added to `guidelines` folder, and the new options and paths updated in the constants in `src/wavez/stack.py` for the initialisation tool to work.
 
 3. Instructions
 

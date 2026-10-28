@@ -1,11 +1,11 @@
-"""Pydantic request/response models for the Zenflow API — kept separate from core.models
+"""Pydantic request/response models for the Wavez API — kept separate from core.models
 so the HTTP contract (validation, JSON shape) can evolve independently of the domain."""
 
 from __future__ import annotations
 
 from pydantic import BaseModel, Field
 
-from zenflow.core.models import AgentInfo, DeploymentResult, GuidelineSelection, ToolSelection
+from wavez.core.models import AgentInfo, DeploymentResult, GuidelineSelection, ToolSelection
 
 
 class ToolSelectionRequest(BaseModel):

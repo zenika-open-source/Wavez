@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from zenflow.core.guidelines import guidelines_context
+from wavez.core.guidelines import guidelines_context
 
 EXPECTED_KEYS = {
     "backend_arch",

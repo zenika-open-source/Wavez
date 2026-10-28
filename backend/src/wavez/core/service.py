@@ -1,4 +1,4 @@
-"""Front-end-agnostic orchestration for deploying a Zenflow setup to a target project."""
+"""Front-end-agnostic orchestration for deploying a Wavez setup to a target project."""
 
 from __future__ import annotations
 
@@ -7,16 +7,16 @@ import os
 import shutil
 from pathlib import Path
 
-from zenflow.core.deployment import (
+from wavez.core.deployment import (
     deploy_agents,
     deploy_guidelines_to_skills,
 )
-from zenflow.core.errors import ZenflowError
-from zenflow.core.models import DeploymentResult, GuidelineSelection, SourceDirs, ToolSelection
+from wavez.core.errors import WavezError
+from wavez.core.models import DeploymentResult, GuidelineSelection, SourceDirs, ToolSelection
 
 
 def repo_root() -> str:
-    """Return the Zenflow repository root, derived from this module's install location.
+    """Return the Wavez repository root, derived from this module's install location.
 
     Returns:
         Absolute path to the repository root (parent of src/).
@@ -47,11 +47,11 @@ def validate_dirs(*dirs: str) -> None:
         *dirs: Directory paths to validate.
 
     Raises:
-        ZenflowError: If any directory is missing.
+        WavezError: If any directory is missing.
     """
     for d in dirs:
         if not os.path.isdir(d):
-            raise ZenflowError(f"missing source directory: {d}")
+            raise WavezError(f"missing source directory: {d}")
 
 
 def _deploy_copilot(
@@ -164,7 +164,7 @@ def init_project(
     """Deploy the selected tools and guideline templates to target_path.
 
     Args:
-        repo_root: Zenflow repository root (source of templates).
+        repo_root: Wavez repository root (source of templates).
         target_path: Destination project root.
         tools: Which AI tools to deploy.
         guidelines: Selected guideline template files.
@@ -178,10 +178,10 @@ def init_project(
         DeploymentResult describing what was deployed.
 
     Raises:
-        ZenflowError: If no tool is selected, or a required source directory is missing.
+        WavezError: If no tool is selected, or a required source directory is missing.
     """
     if not tools.any_selected():
-        raise ZenflowError("at least one tool must be selected")
+        raise WavezError("at least one tool must be selected")
 
     src = get_dirs(repo_root)
     validate_dirs(src.agents, src.instructions, src.guidelines)

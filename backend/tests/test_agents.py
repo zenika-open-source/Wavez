@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import os
 
-from zenflow.core.agents import list_agents
+from wavez.core.agents import list_agents
 
 EXPECTED_AGENT_IDS = {
     "backend",

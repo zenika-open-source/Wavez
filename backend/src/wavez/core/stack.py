@@ -1,4 +1,4 @@
-"""Stack and framework constants for Zenflow CLI."""
+"""Stack and framework constants for Wavez CLI."""
 
 from __future__ import annotations
 

@@ -1,6 +1,6 @@
 import { CategoryCard } from "@/components/CategoryCard";
 import type { SkillCategory, SkillMode } from "@/types/skills";
-import type { StackCatalog } from "@/types/zenflow";
+import type { StackCatalog } from "@/types/wavez";
 
 // Categories stack in two independent columns, so a short card isn't stretched to
 // match a tall neighbour. On mobile the columns dissolve into one list in data order.

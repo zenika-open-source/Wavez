@@ -1,4 +1,4 @@
-"""Domain models shared by every Zenflow front end (CLI, API, ...)."""
+"""Domain models shared by every Wavez front end (CLI, API, ...)."""
 
 from __future__ import annotations
 

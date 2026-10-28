@@ -1,4 +1,4 @@
-"""FastAPI application entry point for the Zenflow API.
+"""FastAPI application entry point for the Wavez API.
 
 Interactive docs (Swagger UI) are served at /docs, ReDoc at /redoc, and the raw
 OpenAPI schema at /openapi.json — all provided automatically by FastAPI.
@@ -9,11 +9,11 @@ from __future__ import annotations
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
-from zenflow.routers import agents, archive, init, stacks
+from wavez.routers import agents, archive, init, stacks
 
 app = FastAPI(
-    title="Zenflow API",
-    description="Programmatic access to Zenflow project initialization.",
+    title="Wavez API",
+    description="Programmatic access to Wavez project initialization.",
     version="0.1.0",
 )
 
@@ -51,10 +51,10 @@ app.include_router(agents.router, tags=["agents"])
 
 
 def main() -> None:
-    """Run the Zenflow API locally with uvicorn (development entry point)."""
+    """Run the Wavez API locally with uvicorn (development entry point)."""
     import uvicorn
 
-    uvicorn.run("zenflow.routers.app:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("wavez.routers.app:app", host="127.0.0.1", port=8000, reload=True)
 
 
 if __name__ == "__main__":

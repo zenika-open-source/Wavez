@@ -6,8 +6,8 @@ import glob
 import os
 import shutil
 
-from zenflow.core.guidelines import guidelines_context
-from zenflow.core.rendering import assemble_agent, assemble_guideline, make_env
+from wavez.core.guidelines import guidelines_context
+from wavez.core.rendering import assemble_agent, assemble_guideline, make_env
 
 # Maps a frontend skill id to its backend agent template id, for the ids that
 # don't already match 1:1 (e.g. the "Code review" skill deploys the reviewer

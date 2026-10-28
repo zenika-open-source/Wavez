@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from fastapi import APIRouter, HTTPException
 
-from zenflow.core.deployment import resolve_agent_ids
-from zenflow.core.errors import ZenflowError
-from zenflow.core.service import init_project, repo_root
-from zenflow.routers.schemas import ErrorResponse, InitRequest, InitResponse
+from wavez.core.deployment import resolve_agent_ids
+from wavez.core.errors import WavezError
+from wavez.core.service import init_project, repo_root
+from wavez.routers.schemas import ErrorResponse, InitRequest, InitResponse
 
 router = APIRouter()
 
@@ -37,6 +37,6 @@ def init(request: InitRequest) -> InitResponse:
             agent_ids,
             custom_agent_ids,
         )
-    except ZenflowError as exc:
+    except WavezError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     return InitResponse.from_domain(result)

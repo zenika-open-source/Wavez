@@ -2,7 +2,7 @@ import { SectionHeading } from "@/components/SectionHeading";
 import { WaveVisual } from "@/components/WaveVisual";
 import { Button } from "@/components/ui/Button";
 import { ASSISTANTS } from "@/data/assistants";
-import type { AssistantId } from "@/types/zenflow";
+import type { AssistantId } from "@/types/wavez";
 
 interface SummaryPanelProps {
   assistant: AssistantId;

@@ -5,8 +5,8 @@ from __future__ import annotations
 import pytest
 from jinja2 import Environment
 
-from zenflow.core.guidelines import guidelines_context
-from zenflow.core.rendering import make_env, render_template
+from wavez.core.guidelines import guidelines_context
+from wavez.core.rendering import make_env, render_template
 
 # ---------------------------------------------------------------------------
 # Helpers

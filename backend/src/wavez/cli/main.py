@@ -1,4 +1,4 @@
-"""CLI entry point and interactive wizard for Zenflow initialization."""
+"""CLI entry point and interactive wizard for Wavez initialization."""
 
 from __future__ import annotations
 
@@ -6,11 +6,11 @@ import argparse
 import os
 import sys
 
-from zenflow.core.errors import ZenflowError
-from zenflow.core.models import DeploymentResult, GuidelineSelection, ToolSelection
-from zenflow.core.service import get_dirs, init_project, validate_dirs
-from zenflow.core.service import repo_root as get_repo_root
-from zenflow.core.stack import BACKEND, FRONTEND
+from wavez.core.errors import WavezError
+from wavez.core.models import DeploymentResult, GuidelineSelection, ToolSelection
+from wavez.core.service import get_dirs, init_project, validate_dirs
+from wavez.core.service import repo_root as get_repo_root
+from wavez.core.stack import BACKEND, FRONTEND
 
 # ---------------------------------------------------------------------------
 # Stack selection
@@ -110,7 +110,7 @@ def _print_plan(target_path: str, tools: ToolSelection) -> None:
         target_path: Resolved target directory path.
         tools: Selected AI tools.
     """
-    print("Zenflow initialization")
+    print("Wavez initialization")
     print(f"Target path: {target_path}")
     print("Tools:")
     if tools.copilot:
@@ -174,10 +174,10 @@ def _print_summary(result: DeploymentResult) -> None:
 
 
 def main() -> None:
-    """Run the Zenflow initialization wizard."""
+    """Run the Wavez initialization wizard."""
     parser = argparse.ArgumentParser(
-        prog="zenflow-init",
-        description="Initializes Zenflow scaffolding in a target directory.",
+        prog="wavez-init",
+        description="Initializes Wavez scaffolding in a target directory.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.parse_args()
@@ -187,7 +187,7 @@ def main() -> None:
     src = get_dirs(repo_root)
     try:
         validate_dirs(src.agents, src.instructions, src.guidelines)
-    except ZenflowError as exc:
+    except WavezError as exc:
         print(f"Error: {exc}", file=sys.stderr)
         sys.exit(1)
 
@@ -208,7 +208,7 @@ def main() -> None:
     print("Deploying selected tools...")
     try:
         result = init_project(repo_root, target_path, tools, guidelines)
-    except ZenflowError as exc:
+    except WavezError as exc:
         print(f"Error: {exc}", file=sys.stderr)
         sys.exit(1)
 
