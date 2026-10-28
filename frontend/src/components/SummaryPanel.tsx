@@ -28,7 +28,7 @@ export function SummaryPanel({
   const assistantLabel = ASSISTANTS.find((item) => item.id === assistant)?.label ?? assistant;
 
   return (
-    <aside className="rounded-panel border-2 border-border bg-surface p-6 lg:sticky lg:top-[120px] lg:p-7">
+    <aside className="rounded-panel border-2 border-border bg-surface p-6 lg:p-7">
       <SectionHeading number="03" title="Your wave" size="lg" />
       <p className="mt-1 text-sm text-text-muted">It grows with every choice you add.</p>
       <WaveVisual level={waveLevel} />
