@@ -1,4 +1,4 @@
-import type { AssistantId } from "@/types/zenflow";
+import type { AssistantId } from "@/types/wavez";
 
 export const ASSISTANTS: { id: AssistantId; label: string; logo: string; skillsRoot: string }[] = [
   { id: "claude", label: "Claude Code", logo: "/assistants/claude.svg", skillsRoot: ".claude/skills" },

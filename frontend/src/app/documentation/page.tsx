@@ -8,9 +8,9 @@ export const metadata: Metadata = {
   description: "Source code, license and project information for Wavez.",
 };
 
-const REPO_URL = "https://github.com/zenika-open-source/Zenflow";
+const REPO_URL = "https://github.com/zenika-open-source/Wavez";
 const LICENSE_URL =
-  "https://github.com/zenika-open-source/Zenflow/blob/main/LICENSE";
+  "https://github.com/zenika-open-source/Wavez/blob/main/LICENSE";
 
 const SECTIONS = [
   { id: "getting-started", label: "Getting started" },
@@ -208,7 +208,7 @@ export default function DocumentationPage() {
                     GitHub repository
                   </span>
                   <span className="mt-1 block font-mono text-sm break-all text-text">
-                    github.com/zenika-open-source/Zenflow
+                    github.com/zenika-open-source/Wavez
                   </span>
                 </span>
                 <span aria-hidden="true" className="text-xl text-accent">

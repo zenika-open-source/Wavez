@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { ASSISTANTS } from "@/data/assistants";
 import { SKILL_CATEGORIES } from "@/data/skillCategories";
 import type { Skill, SkillMode } from "@/types/skills";
-import type { AssistantId, GuidelineSelection, ToolSelection } from "@/types/zenflow";
+import type { AssistantId, GuidelineSelection, ToolSelection } from "@/types/wavez";
 
 type Phase = "confirm" | "loading" | "success" | "error";
 

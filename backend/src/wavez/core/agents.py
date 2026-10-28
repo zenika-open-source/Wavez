@@ -7,8 +7,8 @@ import os
 import re
 from pathlib import Path
 
-from zenflow.core.errors import ZenflowError
-from zenflow.core.models import AgentInfo
+from wavez.core.errors import WavezError
+from wavez.core.models import AgentInfo
 
 _NAME_RE = re.compile(r"^name:\s*(.+)$", re.MULTILINE)
 _DESCRIPTION_RE = re.compile(r"^description:\s*(.+)$", re.MULTILINE)
@@ -28,7 +28,7 @@ def list_agents(agents_dir: str) -> list[AgentInfo]:
         AgentInfo entries sorted by id.
 
     Raises:
-        ZenflowError: If a template is missing a name or description field.
+        WavezError: If a template is missing a name or description field.
     """
     agents: list[AgentInfo] = []
     for path in sorted(glob.glob(os.path.join(agents_dir, "*.md.j2"))):
@@ -37,7 +37,7 @@ def list_agents(agents_dir: str) -> list[AgentInfo]:
         name_match = _NAME_RE.search(text)
         description_match = _DESCRIPTION_RE.search(text)
         if not name_match or not description_match:
-            raise ZenflowError(f"agent template missing name/description frontmatter: {path}")
+            raise WavezError(f"agent template missing name/description frontmatter: {path}")
         agents.append(
             AgentInfo(
                 id=agent_id,

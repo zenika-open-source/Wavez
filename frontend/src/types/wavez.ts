@@ -1,4 +1,4 @@
-// Mirrors zenflow.routers.schemas / zenflow.core.models on the backend.
+// Mirrors wavez.routers.schemas / wavez.core.models on the backend.
 
 export interface FrameworkOption {
   label: string;

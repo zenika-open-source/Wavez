@@ -1,5 +1,5 @@
 // Skill ids here map to backend agent ids (see resolve_agent_ids in
-// zenflow.core.deployment) and are sent to POST /init/archive to select which
+// wavez.core.deployment) and are sent to POST /init/archive to select which
 // agents get deployed.
 
 export type SkillMode = "none" | "skill" | "custom";

@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 
-from zenflow.routers.app import app
+from wavez.routers.app import app
 
 
 @pytest.mark.parametrize(

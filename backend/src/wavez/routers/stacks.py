@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
-from zenflow.core.stack import BACKEND, FRONTEND
-from zenflow.routers.schemas import FrameworkOption, StackCatalog
+from wavez.core.stack import BACKEND, FRONTEND
+from wavez.routers.schemas import FrameworkOption, StackCatalog
 
 router = APIRouter()
 

@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
-from zenflow.core.agents import list_agents
-from zenflow.core.service import get_dirs, repo_root
-from zenflow.routers.schemas import AgentCatalog, AgentSummary
+from wavez.core.agents import list_agents
+from wavez.core.service import get_dirs, repo_root
+from wavez.routers.schemas import AgentCatalog, AgentSummary
 
 router = APIRouter()
 

@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "@/api/config";
-import type { StackCatalog } from "@/types/zenflow";
+import type { StackCatalog } from "@/types/wavez";
 
 export async function getStacks(): Promise<StackCatalog> {
   const response = await fetch(`${API_BASE_URL}/stacks`);

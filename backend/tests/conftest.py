@@ -1,4 +1,4 @@
-"""Shared pytest fixtures for Zenflow tests."""
+"""Shared pytest fixtures for Wavez tests."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from zenflow.core.rendering import make_env
+from wavez.core.rendering import make_env
 
 
 @pytest.fixture(scope="session")

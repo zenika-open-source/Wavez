@@ -2,7 +2,7 @@ import { SkillRow } from "@/components/SkillRow";
 import { StackChips } from "@/components/StackChips";
 import { toLanguageOptions } from "@/lib/stack";
 import type { SkillCategory, SkillMode } from "@/types/skills";
-import type { StackCatalog } from "@/types/zenflow";
+import type { StackCatalog } from "@/types/wavez";
 
 interface CategoryCardProps {
   category: SkillCategory;

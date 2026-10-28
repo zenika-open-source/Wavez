@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/Button";
 import { SKILL_CATEGORIES } from "@/data/skillCategories";
 import { describeStack, toLanguageOptions } from "@/lib/stack";
 import type { SkillMode } from "@/types/skills";
-import type { AssistantId, GuidelineSelection, StackCatalog, ToolSelection } from "@/types/zenflow";
+import type { AssistantId, GuidelineSelection, StackCatalog, ToolSelection } from "@/types/wavez";
 
 export default function Home() {
   const [catalog, setCatalog] = useState<StackCatalog | null>(null);

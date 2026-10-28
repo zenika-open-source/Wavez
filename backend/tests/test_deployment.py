@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from zenflow.core.deployment import (
+from wavez.core.deployment import (
     deploy_agents,
     deploy_guidelines_to_skills,
     resolve_agent_ids,

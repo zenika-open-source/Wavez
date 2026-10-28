@@ -1,4 +1,4 @@
-import type { FrameworkOption, StackCatalog } from "@/types/zenflow";
+import type { FrameworkOption, StackCatalog } from "@/types/wavez";
 
 export interface LanguageOption {
   key: string;

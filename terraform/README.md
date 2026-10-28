@@ -1,7 +1,7 @@
-# Zenflow — GCP deployment (Cloud Run)
+# Wavez — GCP deployment (Cloud Run)
 
 Provisions Artifact Registry + two Cloud Run services (frontend, backend) for
-Zenflow. State is local (`terraform.tfstate` in this directory) — fine for a
+Wavez. State is local (`terraform.tfstate` in this directory) — fine for a
 solo test deployment; see "Moving to remote state" below when you outgrow that.
 
 ## CI/CD
@@ -97,7 +97,7 @@ must change for `terraform apply` to roll a new revision.
 
 - Both services are public (`allUsers` / `roles/run.invoker`) — no auth in
   front of either one.
-- Backend CORS (`backend/src/zenflow/routers/app.py`) allows `allow_origins=["*"]`.
+- Backend CORS (`backend/src/wavez/routers/app.py`) allows `allow_origins=["*"]`.
 
 Before this goes in front of real users:
 

@@ -1,16 +1,16 @@
-# Zenflow
+# Wavez
 
-Zenflow is an **open-source project** that showcases the most common agentic workflows for AI-driven software development. Each workflow is implemented as a team of collaborating agents or skills, demonstrating patterns that teams can study, adapt, and build upon.
+Wavez is an **open-source project** that showcases the most common agentic workflows for AI-driven software development. Each workflow is implemented as a team of collaborating agents or skills, demonstrating patterns that teams can study, adapt, and build upon.
 
-**Zenflow supports GitHub Copilot (VS Code), OpenCode, and Claude Code.** Each tool is optional — you can install any combination.
+**Wavez supports GitHub Copilot (VS Code), OpenCode, and Claude Code.** Each tool is optional — you can install any combination.
 
 ## Quick Start
 
-To install a boilerplate version of Zenflow in an existing repository, install dependencies with [Python](https://www.python.org/) and [uv](https://docs.astral.sh/uv/) and run the init script:
+To install a boilerplate version of Wavez in an existing repository, install dependencies with [Python](https://www.python.org/) and [uv](https://docs.astral.sh/uv/) and run the init script:
 
 ```bash
 uv sync
-uv run zenflow-init
+uv run wavez-init
 ```
 
 ! WARNING ! If you have existing configurations for your tools configured locally in your project directory, files with the same name will be overloaded when running this script.
@@ -89,24 +89,24 @@ tell the planner the target stack or identify who will decide it. The planner
 reads available project instructions and guidelines but can work without
 them, recording missing evidence and decisions as owned blockers.
 
-## Extending and Customising Zenflow
+## Extending and Customising Wavez
 
-To extend Zenflow with team specific guidelines for your own use:
+To extend Wavez with team specific guidelines for your own use:
 1. Fork the repository
 2. Update the templates with additional guidelines, or include other templates
 3. Team members cloning from your repository will be able to bootstrap their tools with team specific guidelines.
 
-Zenflow includes a stack template library under `templates/`.
+Wavez includes a stack template library under `templates/`.
 
 See [templates/README.md](templates/README.md) for available templates and structure, as well as how to extend this for your own use.
 
-After customizing, you can run `uv run zenflow-init` again to install the new workflow.
+After customizing, you can run `uv run wavez-init` again to install the new workflow.
 
 ## Project Structure
 
 ```
-Zenflow/
-├── docs/             # Explanation of Zenflow orchestration
+Wavez/
+├── docs/             # Explanation of Wavez orchestration
 ├── src/              # Setup script (Jinja2-based rendering)
 ├── templates/        # Reusable templates
 ```
