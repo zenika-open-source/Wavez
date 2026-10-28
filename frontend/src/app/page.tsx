@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getStacks } from "@/api/stacks";
 import { AssistantPicker } from "@/components/AssistantPicker";
+import { DocumentationLink } from "@/components/DocumentationLink";
 import { GenerateModal } from "@/components/GenerateModal";
 import { SectionHeading } from "@/components/SectionHeading";
 import { SkillCategoryAccordion } from "@/components/SkillCategoryAccordion";
@@ -98,6 +99,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-page font-sans text-text">
       <SiteHeader />
+      <h1 className="sr-only">Generate agent skills for your AI assistant</h1>
 
       <main className="wz-layout-gutter mx-auto grid w-full max-w-[1440px] grid-cols-1 items-start gap-6 py-5 pb-[calc(7rem+env(safe-area-inset-bottom,0px))] lg:grid-cols-[minmax(0,1fr)_clamp(320px,26.4vw,380px)] lg:gap-10 lg:pb-6">
         <div className="flex min-w-0 flex-col gap-6 lg:gap-4">
@@ -124,16 +126,19 @@ export default function Home() {
           </section>
         </div>
 
-        <SummaryPanel
-          assistant={assistant}
-          stackLabel={selectedStackParts.join(" + ")}
-          skillCount={selectedSkillCount}
-          skillFileCount={skillFileCount}
-          waveLevel={waveLevel}
-          canGenerate={canGenerate}
-          onGenerate={() => setGenerateModalOpen(true)}
-          onReset={handleReset}
-        />
+        <div className="flex flex-col gap-3 lg:sticky lg:top-[100px]">
+          <DocumentationLink />
+          <SummaryPanel
+            assistant={assistant}
+            stackLabel={selectedStackParts.join(" + ")}
+            skillCount={selectedSkillCount}
+            skillFileCount={skillFileCount}
+            waveLevel={waveLevel}
+            canGenerate={canGenerate}
+            onGenerate={() => setGenerateModalOpen(true)}
+            onReset={handleReset}
+          />
+        </div>
       </main>
 
       <div className="fixed inset-x-0 bottom-0 z-10 border-t border-border bg-page/95 shadow-[0_-12px_24px_-16px_rgba(0,0,0,0.6)] backdrop-blur lg:hidden">

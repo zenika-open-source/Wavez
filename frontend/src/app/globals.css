@@ -31,6 +31,11 @@
   --color-cat-qa: #6fe3a5;
   --color-cat-dev: #6fe3a5;
 
+  /* Step colours on the documentation page flows. */
+  --color-flow-discovery: #f2d45c;
+  --color-flow-development: #6fe3a5;
+  --color-flow-testing: #c9bcff;
+
   --color-wave-sky-top: #1e8a91;
   --color-wave-sky-bottom: #146470;
   --color-wave-back: #11606b;
