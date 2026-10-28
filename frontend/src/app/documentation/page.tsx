@@ -1,130 +1,160 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { FlowDiagram, type FlowStep } from "@/components/FlowDiagram";
+import type { ReactNode } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
+import { StepCards, type Step } from "@/components/StepCards";
+import { ASSISTANTS } from "@/data/assistants";
 
 export const metadata: Metadata = {
-  title: "Documentation · Wavez",
-  description: "Source code, license and project information for Wavez.",
+  title: "Documentation · WaveZ",
+  description: "How WaveZ works: getting started, the product discovery and development flows, and how to get involved.",
 };
 
 const REPO_URL = "https://github.com/zenika-open-source/Wavez";
-const LICENSE_URL =
-  "https://github.com/zenika-open-source/Wavez/blob/main/LICENSE";
+const LICENSE_URL = "https://github.com/zenika-open-source/Wavez/blob/main/LICENSE";
 
 const SECTIONS = [
+  { id: "introduction", label: "Introduction" },
   { id: "getting-started", label: "Getting started" },
-  { id: "discovery-flow", label: "Product discovery flow" },
-  { id: "development-flow", label: "Development flow" },
-  { id: "about", label: "About Wavez" },
+  { id: "product-discovery", label: "Product discovery flow" },
+  { id: "development", label: "Development flow" },
+  { id: "get-involved", label: "Get involved" },
   { id: "source-code", label: "Source code", nested: true },
   { id: "license", label: "License", nested: true },
 ];
 
-const DISCOVERY_STEPS: FlowStep[] = [
-  {
-    title: "Build PRD and User Stories",
-    detail: "Draft mode",
-    description:
-      "Capture the problem, goals and first user stories as a working draft.",
-    swatch: "bg-cat-product",
-  },
-  {
-    title: "Build low-fidelity prototype",
-    detail: "Greyscale, black and white",
-    description:
-      "Sketch the screens and flows without colour to validate structure fast.",
-    swatch: "bg-text-muted",
-  },
-  {
-    title: "Build hi-fidelity prototype",
-    detail: "Full visual design",
-    description:
-      "Apply the real look and feel to test the experience end to end.",
-    swatch: "bg-accent",
-  },
-  {
-    title: "Finalise PRD and User Stories",
-    detail: "Final version",
-    description:
-      "Update the documents with everything learned from the prototypes.",
-    swatch: "bg-cat-dev",
-  },
-];
+const ASSISTANT_LOGOS = (
+  <span className="inline-flex gap-1.5">
+    {ASSISTANTS.map((assistant) => (
+      <span
+        key={assistant.id}
+        className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-border bg-page"
+      >
+        <Image src={assistant.logo} alt="" width={18} height={18} className="h-[18px] w-[18px] object-contain" unoptimized />
+      </span>
+    ))}
+  </span>
+);
 
-const DEVELOPMENT_STEPS: FlowStep[] = [
-  {
-    title: "Development",
-    detail: "Implement the user stories",
-    description:
-      "Build the features described in the finalised PRD and User Stories.",
-    swatch: "bg-cat-dev",
-  },
-  {
-    title: "Code review",
-    detail: "Quality and conventions",
-    description:
-      "Review the changes for correctness, readability and adherence to the project conventions.",
-    swatch: "bg-cat-qa",
-  },
-  {
-    title: "Automated testing with Playwright",
-    detail: "Checked against the user stories",
-    description:
-      "Run end-to-end tests and verify that each user story's acceptance criteria is met.",
-    swatch: "bg-accent",
-  },
-];
-
-const GETTING_STARTED_STEPS: FlowStep[] = [
+const GETTING_STARTED_STEPS: Step[] = [
   {
     title: "Select your harness and skills",
-    detail: "Claude Code, GitHub Copilot, OpenCode...",
-    description:
-      "Choose the harness you work with and the skills you wish to use in your project.",
-    swatch: "bg-cat-product",
+    detail: "Claude Code, GitHub Copilot, OpenCode",
+    description: "Choose the harness you work with and the skills you wish to use in your project.",
+    footer: ASSISTANT_LOGOS,
   },
   {
     title: "Generate and download",
     detail: "Click on Generate",
     description: "Confirm your selection and download the generated files.",
-    swatch: "bg-accent",
   },
   {
     title: "Unzip and start working",
     detail: "At the root of your project",
-    description:
-      "Unzip the archive at the root of your project and start working!",
-    swatch: "bg-cat-dev",
+    description: "Unzip the archive at the root of your project and start working!",
   },
 ];
 
-const externalLink =
-  "font-semibold text-accent underline hover:text-accent-strong";
+const DISCOVERY_STEPS: Step[] = [
+  {
+    title: "Build PRD and User Stories",
+    detail: "Draft mode",
+    description: "Capture the problem, goals and first user stories as a working draft.",
+  },
+  {
+    title: "Build low-fidelity prototype",
+    detail: "Greyscale, black and white",
+    description: "Sketch the screens and flows without colour to validate structure fast.",
+  },
+  {
+    title: "Build hi-fidelity prototype",
+    detail: "Full visual design",
+    description: "Apply the real look and feel to test the experience end to end.",
+  },
+  {
+    title: "Finalise PRD and User Stories",
+    detail: "Final version",
+    description: "Update the documents with everything learned from the prototypes.",
+  },
+];
+
+const DEVELOPMENT_STEPS: Step[] = [
+  {
+    title: "Development",
+    detail: "Implement the user stories",
+    description: "Build the features described in the finalised PRD and User Stories.",
+  },
+  {
+    title: "Code review",
+    detail: "Quality and conventions",
+    description: "Review the changes for correctness, readability and adherence to the project conventions.",
+  },
+  {
+    title: "Automated testing with Playwright",
+    detail: "Checked against the user stories",
+    description: "Run end-to-end tests and verify that each user story's acceptance criteria is met.",
+    color: "var(--color-flow-testing)",
+  },
+];
+
+function SectionIntro({ id, title, children }: { id: string; title: string; children: ReactNode }) {
+  return (
+    <div id={id} className="scroll-mt-28">
+      <h2 className="m-0 font-display text-[26px] font-bold tracking-[-0.01em] text-text">{title}</h2>
+      <p className="m-0 mt-2 max-w-[760px] text-text-soft">{children}</p>
+    </div>
+  );
+}
+
+function ExternalLink({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="-ml-2.5 inline-flex items-center gap-2 rounded-lg px-2.5 py-1 text-[15px] font-semibold text-accent transition-colors duration-150 hover:bg-accent/14"
+    >
+      {children}
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+        className="flex-none"
+      >
+        <path d="M7 17L17 7" />
+        <path d="M8 7h9v9" />
+      </svg>
+    </a>
+  );
+}
 
 export default function DocumentationPage() {
   return (
     <div className="min-h-screen bg-page font-sans text-text">
       <SiteHeader />
 
-      <main className="wz-layout-gutter mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-10 py-8 pb-16 lg:grid-cols-[200px_minmax(0,1fr)]">
-        <aside className="lg:sticky lg:top-28 lg:self-start">
-          <Link
-            href="/"
-            className="text-sm font-semibold text-accent hover:text-accent-strong"
-          >
+      <main className="wz-layout-gutter mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-10 pt-10 pb-[72px] lg:grid-cols-[200px_minmax(0,1fr)]">
+        <aside className="lg:sticky lg:top-[100px] lg:self-start">
+          <Link href="/" className="text-sm leading-5 font-semibold text-accent hover:text-accent-strong">
             ← Back to generator
           </Link>
           <nav aria-label="On this page" className="mt-6 hidden lg:block">
-            <p className="font-mono text-xs tracking-wider text-text-muted uppercase">
+            <p className="m-0 font-mono text-[13px] leading-[18px] tracking-[.14em] text-text-muted uppercase">
               On this page
             </p>
-            <ul className="mt-3 flex flex-col gap-1 border-l border-border">
+            <ul className="mt-3 flex list-none flex-col gap-1 border-l border-border p-0">
               {SECTIONS.map((section) => (
                 <li key={section.id}>
                   <a
                     href={`#${section.id}`}
-                    className={`-ml-px block border-l border-transparent py-1.5 ${section.nested ? "pl-7" : "pl-4"} text-sm text-text-soft hover:border-accent hover:text-accent`}
+                    className={`-ml-px block border-l border-transparent py-1.5 ${section.nested ? "pl-7" : "pl-4"} text-[15px] leading-[22px] text-text-soft hover:border-accent hover:text-accent`}
                   >
                     {section.label}
                   </a>
@@ -134,116 +164,81 @@ export default function DocumentationPage() {
           </nav>
         </aside>
 
-        <article className="max-w-3xl min-w-0">
-          <p className="font-mono text-sm text-accent">Documentation</p>
-          <h1 className="mt-2 font-display text-4xl leading-tight font-bold tracking-tight text-text">
-            Wavez documentation
-          </h1>
-          <p className="mt-4 text-lg leading-relaxed text-text-soft">
-            Wavez generates agent skills for your AI assistant. This page
-            describes the product discovery and development flows, and gives you
-            the source code and license information.
-          </p>
-
-          <section id="getting-started" className="mt-12 scroll-mt-28">
-            <h2 className="font-display text-2xl font-bold tracking-tight text-text">
-              Getting started
-            </h2>
-            <p className="mt-3 leading-relaxed text-text-soft">
-              Using Wavez takes three steps.
+        <article className="flex min-w-0 flex-col gap-14">
+          <div id="introduction" className="flex scroll-mt-28 flex-col gap-2.5">
+            <span className="font-mono text-[13px] tracking-[.14em] text-accent uppercase">Documentation</span>
+            <h1 className="m-0 font-display text-[40px] leading-[1.15] font-bold tracking-[-0.01em] text-text">
+              Introduction
+            </h1>
+            <p className="m-0 max-w-[760px] text-lg text-text-soft">
+              WaveZ is an open source tool from Zenika that sets your AI assistant up to work the way a good team
+              does. Pick your assistant and the skills you need, and WaveZ gives you the files that teach it how to
+              write requirements, build prototypes, review code and run tests. Learn how the product discovery and
+              development flows work, and learn how it applies to your workflow.
             </p>
-            <FlowDiagram steps={GETTING_STARTED_STEPS} />
+          </div>
+
+          <section className="flex flex-col gap-6">
+            <SectionIntro id="getting-started" title="Getting started">
+              Using WaveZ takes three steps.
+            </SectionIntro>
+            <StepCards steps={GETTING_STARTED_STEPS} color="var(--color-accent)" />
           </section>
 
-          <section id="discovery-flow" className="mt-12 scroll-mt-28">
-            <h2 className="font-display text-2xl font-bold tracking-tight text-text">
-              Product discovery flow
-            </h2>
-            <p className="mt-3 leading-relaxed text-text-soft">
-              Product discovery moves from a draft PRD through two prototype
-              stages, then back to the PRD to finalise it.
-            </p>
-            <FlowDiagram steps={DISCOVERY_STEPS} />
+          <section className="flex flex-col gap-6">
+            <SectionIntro id="product-discovery" title="Product discovery flow">
+              Product discovery moves from a draft PRD through two prototype stages, then back to the PRD to finalise
+              it.
+            </SectionIntro>
+            <StepCards steps={DISCOVERY_STEPS} color="var(--color-flow-discovery)" />
           </section>
 
-          <section id="development-flow" className="mt-12 scroll-mt-28">
-            <h2 className="font-display text-2xl font-bold tracking-tight text-text">
-              Development flow
-            </h2>
-            <p className="mt-3 leading-relaxed text-text-soft">
-              Once the product is defined, development goes through
-              implementation, code review and automated testing. Tests are
-              validated against the user stories to confirm that what was built
-              is what was asked for.
-            </p>
-            <FlowDiagram steps={DEVELOPMENT_STEPS} />
+          <section className="flex flex-col gap-6">
+            <SectionIntro id="development" title="Development flow">
+              Once the product is defined, development goes through implementation, code review and automated
+              testing. Tests are validated against the user stories to confirm that what was built is what was asked
+              for.
+            </SectionIntro>
+            <StepCards steps={DEVELOPMENT_STEPS} color="var(--color-flow-development)" />
           </section>
 
-          <section id="about" className="mt-12 scroll-mt-28">
-            <h2 className="font-display text-2xl font-bold tracking-tight text-text">
-              About Wavez
-            </h2>
-            <p className="mt-3 leading-relaxed text-text-soft">
-              Wavez is an open source tool developed by Zenika. It lets you pick
-              an AI assistant and the skills you need, then exports the files
-              that assistant reads on day one.
-            </p>
-
-            <section id="source-code" className="mt-8 scroll-mt-28">
-              <h3 className="font-display text-xl font-bold tracking-tight text-text">
-                Source code
-              </h3>
-              <p className="mt-3 leading-relaxed text-text-soft">
-                Wavez is developed in the open. Browse the code, report an issue
-                or contribute on GitHub.
-              </p>
-              <a
-                href={REPO_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-5 flex items-center justify-between gap-4 rounded-card border border-border bg-surface p-5 transition-colors hover:border-accent"
+          <section className="flex flex-col gap-6">
+            <SectionIntro id="get-involved" title="Get involved">
+              WaveZ is an open source tool developed by Zenika.
+            </SectionIntro>
+            <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:gap-x-4 lg:gap-y-0">
+              <div
+                id="source-code"
+                className="flex min-w-0 scroll-mt-28 flex-col content-start gap-1.5 rounded-[14px] border border-border bg-surface p-[18px] transition-colors duration-150 hover:border-border-strong lg:row-span-3 lg:grid lg:grid-rows-subgrid"
               >
-                <span className="min-w-0">
-                  <span className="block text-sm text-text-muted">
-                    GitHub repository
-                  </span>
-                  <span className="mt-1 block font-mono text-sm break-all text-text">
-                    github.com/zenika-open-source/Wavez
-                  </span>
-                </span>
-                <span aria-hidden="true" className="text-xl text-accent">
-                  ↗
-                </span>
-              </a>
-            </section>
-
-            <section id="license" className="mt-8 scroll-mt-28">
-              <h3 className="font-display text-xl font-bold tracking-tight text-text">
-                License
-              </h3>
-              <div className="mt-4 rounded-card border border-border bg-surface p-6">
-                <span className="inline-block rounded-full border border-accent px-3 py-1 font-mono text-xs text-accent">
-                  Apache 2.0
-                </span>
-                <p className="mt-4 leading-relaxed text-text-soft">
-                  Wavez is open source and released under the Apache 2.0
-                  license. You are free to use, modify and distribute it,
-                  provided you comply with the terms of the license.
+                <div className="flex min-h-[22px] items-center gap-3">
+                  <h3 className="m-0 text-[17px] leading-[1.3] font-bold text-text">Source code</h3>
+                </div>
+                <p className="m-0 text-[15px] text-text-soft">
+                  Browse the code, report an issue or contribute on GitHub.
                 </p>
-                <p className="mt-4 leading-relaxed text-text-soft">
-                  For more details, read the{" "}
-                  <a
-                    href={LICENSE_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={externalLink}
-                  >
-                    full license text
-                  </a>
-                  .
-                </p>
+                <div className="self-end pt-1.5">
+                  <ExternalLink href={REPO_URL}>View on GitHub</ExternalLink>
+                </div>
               </div>
-            </section>
+              <div
+                id="license"
+                className="flex min-w-0 scroll-mt-28 flex-col content-start gap-1.5 rounded-[14px] border border-border bg-surface p-[18px] transition-colors duration-150 hover:border-border-strong lg:row-span-3 lg:grid lg:grid-rows-subgrid"
+              >
+                <div className="flex min-h-[22px] items-center gap-3">
+                  <h3 className="m-0 text-[17px] leading-[1.3] font-bold text-text">License</h3>
+                  <span className="rounded-full border border-accent px-2.5 font-mono text-xs leading-[18px] text-accent">
+                    Apache 2.0
+                  </span>
+                </div>
+                <p className="m-0 text-[15px] text-text-soft">
+                  WaveZ is free to use, modify and distribute under the terms of the license.
+                </p>
+                <div className="self-end pt-1.5">
+                  <ExternalLink href={LICENSE_URL}>Read the full license</ExternalLink>
+                </div>
+              </div>
+            </div>
           </section>
         </article>
       </main>
