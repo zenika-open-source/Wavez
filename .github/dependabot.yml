@@ -4,6 +4,10 @@ updates:
     directory: /frontend
     schedule:
       interval: weekly
+    ignore:
+      # Keep in line with the Node runtime in the Dockerfile (24 LTS).
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
     groups:
       minor-and-patch:
         update-types: [minor, patch]
