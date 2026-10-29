@@ -15,7 +15,7 @@ EXPECTED_AGENT_IDS = {
     "product-requirements",
     "static-prototyping",
     "dynamic-prototyping",
-    "architecture-documentation",
+    "architecture-diagram",
     "tech-migration",
     "playwright-uat",
 }

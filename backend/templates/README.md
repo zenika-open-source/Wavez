@@ -28,7 +28,7 @@ can use an installed Tech Migration agent/skill for migration requests and
 stops after plan review. Select Tech Migration separately when exporting only
 selected workflows.
 
-`agents/architecture-documentation.md.j2` adapts the architecture documentation workflow
+`agents/architecture-diagram.md.j2` adapts the architecture diagram workflow
 for both custom agents and skills. It produces a single evidence-backed
 architecture model rendered as HTML, draw.io, and Mermaid alongside a
 structured architecture document. If gortex is missing, it asks the user to install it

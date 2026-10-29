@@ -21,7 +21,7 @@ ALL_AGENTS = [
     "product-requirements",
     "static-prototyping",
     "dynamic-prototyping",
-    "architecture-documentation",
+    "architecture-diagram",
     "tech-migration",
     "playwright-uat",
 ]
@@ -190,10 +190,10 @@ def test_documentation_agent_project_context(repo_root: str, tool: str, expected
 
 @pytest.mark.parametrize("tool", ALL_TOOLS)
 @pytest.mark.parametrize("skill_mode", [True, False])
-def test_architecture_documentation_prompts_for_gortex_and_uses_architect_outputs(
+def test_architecture_diagram_prompts_for_gortex_and_uses_architect_outputs(
     repo_root: str, tool: str, skill_mode: bool
 ) -> None:
-    result = _render_agent(make_env(repo_root), "architecture-documentation", tool, skill_mode=skill_mode)
+    result = _render_agent(make_env(repo_root), "architecture-diagram", tool, skill_mode=skill_mode)
     normalized = " ".join(result.split())
 
     assert "Install gortex (recommended)" in result
