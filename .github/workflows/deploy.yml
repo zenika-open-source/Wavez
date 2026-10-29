@@ -26,7 +26,7 @@ jobs:
     outputs:
       backend_url: ${{ steps.backend_url.outputs.url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - id: auth
         uses: google-github-actions/auth@v3
@@ -64,7 +64,7 @@ jobs:
     needs: deploy-backend
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - id: auth
         uses: google-github-actions/auth@v3
