@@ -27,7 +27,7 @@ ALL_AGENT_NAMES = {
     "product-requirements",
     "static-prototyping",
     "dynamic-prototyping",
-    "architecture-documentation",
+    "architecture-diagram",
     "tech-migration",
     "playwright-uat",
 }

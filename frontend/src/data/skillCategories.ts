@@ -20,7 +20,7 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
       { id: "frontend", label: "Frontend", description: "Plan and build UI components, wire up API calls" }, // -> frontend agent
       { id: "tech-migration", label: "Tech Migration", description: "Plan a bounded technology migration" }, // -> tech-migration agent
       { id: "code-review", label: "Code review", description: "Security and quality review of changes", agentId: "reviewer" }, // -> reviewer agent
-      { id: "architecture-documentation", label: "Architecture Documentation", description: "Document the system architecture with diagrams" }, // -> architecture-documentation agent
+      { id: "architecture-diagram", label: "Architecture Diagram", description: "Document the system architecture with diagrams" }, // -> architecture-diagram agent
       { id: "orchestrator", label: "Full-stack orchestration", description: "Break a feature into tasks for specialist skills" }, // -> orchestrator agent
     ],
   },

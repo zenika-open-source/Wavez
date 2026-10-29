@@ -2,7 +2,7 @@
   {"label": "📄 Send to Documentation", "agent": "Documentation", "prompt": "Fold the generated ARCHITECTURE.md and architecture diagram into the project's README/docs.", "send": false},
 ] %}
 ---
-name: Architecture Documentation
+name: Architecture Diagram
 description: Produces an evidence-backed architecture diagram (HTML or Mermaid, your choice, optionally grounded by gortex or Graphify) and structured architecture documentation for an existing codebase
 {% if not skill_mode %}
 argument-hint: Point this agent at a codebase or repo path to map (e.g. "map out this codebase" or "generate architecture docs for backend/")
@@ -18,7 +18,7 @@ handoffs:
 {% endif %}
 ---
 
-# Architecture Documentation Agent
+# Architecture Diagram Agent
 
 You produce two artifacts for a target codebase: an **architecture diagram**
 and **architecture documentation** (structured high-level documentation).
