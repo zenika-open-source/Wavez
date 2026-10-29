@@ -20,6 +20,11 @@ updates:
     directory: /frontend
     schedule:
       interval: weekly
+    ignore:
+      # Node 25+ no longer ships corepack, which the Dockerfile relies on.
+      # Bump the Node major manually (LTS only).
+      - dependency-name: node
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: docker
     directory: /backend
