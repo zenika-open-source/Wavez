@@ -12,3 +12,8 @@ output "frontend_url" {
   description = "Public URL of the deployed frontend Cloud Run service."
   value       = google_cloud_run_v2_service.frontend.uri
 }
+
+output "frontend_lb_ip" {
+  description = "Static IP of the load balancer; use it for the DNS A records of every served domain (e.g. wavez.org, www.wavez.org at GoDaddy)."
+  value       = google_compute_global_address.frontend.address
+}
