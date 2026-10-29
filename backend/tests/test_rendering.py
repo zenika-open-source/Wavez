@@ -250,6 +250,20 @@ def test_tech_migration_preserves_planning_contract(
         assert "agent: Tech Migration" in result
 
 
+@pytest.mark.parametrize("tool", ALL_TOOLS)
+@pytest.mark.parametrize("skill_mode", [True, False])
+def test_dynamic_prototyping_uses_static_prototype_only_if_present(
+    repo_root: str, tool: str, skill_mode: bool
+) -> None:
+    result = _render_agent(make_env(repo_root), "dynamic-prototyping", tool, skill_mode=skill_mode)
+
+    assert "## Static Prototype Input (Only If One Exists)" in result
+    assert "`03-static-prototyping` folder" in result
+    assert "If one exists, use it as the layout and structure baseline" in result
+    assert "do not stop and do not ask for one" in result
+    assert "Never create or edit files in `03-static-prototyping`" in result
+
+
 @pytest.mark.parametrize("skill_mode", [True, False])
 def test_orchestrator_routes_migrations_without_implementing(repo_root: str, skill_mode: bool) -> None:
     result = _render_agent(make_env(repo_root), "orchestrator", "copilot", skill_mode=skill_mode)
