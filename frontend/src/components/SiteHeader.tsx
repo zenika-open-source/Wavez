@@ -45,7 +45,7 @@ export function SiteHeader() {
           <span className="relative h-8 w-[116px] flex-none">
             <Image
               src="/brand/wavez-logo.svg"
-              alt="WaveZ"
+              alt="Wavez"
               fill
               sizes="116px"
               priority
