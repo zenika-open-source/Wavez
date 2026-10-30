@@ -9,20 +9,19 @@ export interface LanguageOption {
 
 const PLAIN_PREFIX = "None";
 
-// Each language maps to one option backed by its most specific (last) framework,
-// since the guideline selection stores exactly one backend and one frontend arch file.
+// Each framework of a language becomes its own option, since the guideline selection
+// stores exactly one backend and one frontend arch file. The "None (plain ...)" entry is
+// only used for a language that has no framework to pick.
 export function toLanguageOptions(stacks: Record<string, FrameworkOption[]>): LanguageOption[] {
   return Object.entries(stacks).flatMap(([language, frameworks]) => {
-    const framework = frameworks[frameworks.length - 1];
-    if (!framework) return [];
-    return [
-      {
-        key: language,
-        language,
-        frameworkLabel: framework.label.startsWith(PLAIN_PREFIX) ? "" : framework.label,
-        archFile: framework.arch_file,
-      },
-    ];
+    const withFramework = frameworks.filter((framework) => !framework.label.startsWith(PLAIN_PREFIX));
+    const candidates = withFramework.length > 0 ? withFramework : frameworks.slice(0, 1);
+    return candidates.map((framework) => ({
+      key: framework.arch_file,
+      language,
+      frameworkLabel: framework.label.startsWith(PLAIN_PREFIX) ? "" : framework.label,
+      archFile: framework.arch_file,
+    }));
   });
 }
 
