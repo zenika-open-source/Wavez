@@ -21,10 +21,10 @@ const SECTIONS = [
   { id: "getting-started", label: "Getting started" },
   { id: "product-discovery", label: "Product discovery flow" },
   { id: "development", label: "Development flow" },
-  { id: "feedback", label: "Feedback" },
   { id: "get-involved", label: "Get involved" },
   { id: "source-code", label: "Source code", nested: true },
   { id: "license", label: "License", nested: true },
+  { id: "feedback", label: "Feedback", nested: true },
 ];
 
 const ASSISTANT_LOGOS = (
@@ -218,20 +218,10 @@ export default function DocumentationPage() {
           </section>
 
           <section className="flex flex-col gap-6">
-            <SectionIntro id="feedback" title="Feedback">
-              Feedback is welcome! Whether you found a bug, have an idea for a new skill or want to share how you use
-              WaveZ, we would love to hear from you.
-            </SectionIntro>
-            <div>
-              <ExternalLink href={ISSUES_URL}>Open an issue on GitHub</ExternalLink>
-            </div>
-          </section>
-
-          <section className="flex flex-col gap-6">
             <SectionIntro id="get-involved" title="Get involved">
               WaveZ is an open source tool developed by Zenika.
             </SectionIntro>
-            <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:gap-x-4 lg:gap-y-0">
+            <div className="flex flex-col gap-4 lg:grid lg:grid-cols-3 lg:gap-x-4 lg:gap-y-0">
               <div
                 id="source-code"
                 className="flex min-w-0 scroll-mt-28 flex-col content-start gap-1.5 rounded-[14px] border border-border bg-surface p-[18px] transition-colors duration-150 hover:border-border-strong lg:row-span-3 lg:grid lg:grid-rows-subgrid"
@@ -261,6 +251,20 @@ export default function DocumentationPage() {
                 </p>
                 <div className="self-end pt-1.5">
                   <ExternalLink href={LICENSE_URL}>Read the full license</ExternalLink>
+                </div>
+              </div>
+              <div
+                id="feedback"
+                className="flex min-w-0 scroll-mt-28 flex-col content-start gap-1.5 rounded-[14px] border border-border bg-surface p-[18px] transition-colors duration-150 hover:border-border-strong lg:row-span-3 lg:grid lg:grid-rows-subgrid"
+              >
+                <div className="flex min-h-[22px] items-center gap-3">
+                  <h3 className="m-0 text-[17px] leading-[1.3] font-bold text-text">Feedback</h3>
+                </div>
+                <p className="m-0 text-[15px] text-text-soft">
+                  Feedback is welcome! Report a bug, suggest an idea or share how you use WaveZ.
+                </p>
+                <div className="self-end pt-1.5">
+                  <ExternalLink href={ISSUES_URL}>Open an issue</ExternalLink>
                 </div>
               </div>
             </div>
