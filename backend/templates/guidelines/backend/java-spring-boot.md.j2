@@ -45,3 +45,11 @@ Entity-first does not conflict with DTO usage: entities model persistence, while
 - Add controller tests only when explicitly requested by the user or required by the approved plan.
 
 **Planning constraint:** When generating a feature plan, do not include repository tests or controller tests in the testing plan unless the user explicitly requested them. The "required by the approved plan" clause applies only during implementation — it does not allow the planner to self-approve excluded test types.
+
+## Backend Implementation Checklist (Spring Boot)
+
+- [ ] Entity: create/update JPA entities when data model changes are required
+- [ ] Repository: create/update Spring Data JPA repository interfaces (no `@Repository` needed for interfaces)
+- [ ] Service: implement business logic with `@Service` and `@Transactional` where needed
+- [ ] Controller: expose endpoints via `@RestController`; keep controllers thin
+- [ ] Tests: do not add controller tests by default
