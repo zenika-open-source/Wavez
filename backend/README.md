@@ -18,7 +18,7 @@ uv run wavez-init
 Follow the prompts to:
 1. Enter the target project directory.
 2. Choose which tools to set up (GitHub Copilot, OpenCode, Claude Code).
-3. Choose backend stack (Java/Spring Boot, Go/Gin, Python/FastAPI).
+3. Choose backend stack (Java/Spring Boot, Go/Gin, Python/FastAPI, Node.js/Next.js).
 4. Choose frontend stack (React, Next.js App Router).
 5. Optionally include git conventions.
 

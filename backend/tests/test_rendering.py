@@ -293,6 +293,7 @@ def test_orchestrator_routes_migrations_without_implementing(repo_root: str, ski
         ("guidelines/backend/python.md.j2", "Backend Implementation Checklist"),
         ("guidelines/backend/java.md.j2", "Backend Implementation Checklist"),
         ("guidelines/backend/golang.md.j2", "Backend Implementation Checklist"),
+        ("guidelines/backend/nodejs-nextjs.md.j2", "Backend Implementation Checklist"),
         ("guidelines/frontend/react-typescript.md.j2", "Frontend Implementation Checklist"),
         ("guidelines/frontend/nextjs-app-router.md.j2", "Frontend Implementation Checklist"),
     ],

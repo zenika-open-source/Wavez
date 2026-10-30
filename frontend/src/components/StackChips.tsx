@@ -10,6 +10,8 @@ interface StackChipsProps {
 
 export function StackChips({ label, options, selected, onSelect, required = false }: StackChipsProps) {
   const missing = required && !selected;
+  // Up to three chips fit on one row of a skill card; beyond that, wrap into a 2-column grid.
+  const columns = options.length > 3 ? 2 : options.length;
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -18,7 +20,7 @@ export function StackChips({ label, options, selected, onSelect, required = fals
           <span className="text-xs uppercase tracking-[0.08em] text-text-muted">{label}</span>
           <div
             className="grid gap-1.5"
-            style={{ gridTemplateColumns: `repeat(${options.length}, minmax(0, 1fr))` }}
+            style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
           >
             {options.map((option) => {
               const isSelected = option.archFile === selected;
