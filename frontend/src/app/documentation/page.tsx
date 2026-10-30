@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { StepCards, type Step } from "@/components/StepCards";
+import { VideoEmbed } from "@/components/VideoEmbed";
 import { ASSISTANTS } from "@/data/assistants";
 
 export const metadata: Metadata = {
@@ -190,6 +191,12 @@ export default function DocumentationPage() {
               Product discovery moves from a draft PRD through two prototype stages, then back to the PRD to finalise
               it.
             </SectionIntro>
+            <VideoEmbed
+              videoId="2USUlosIVqo"
+              label="Video · Product management"
+              title="Using Wavez for Product and Discovery"
+              color="var(--color-flow-discovery)"
+            />
             <StepCards steps={DISCOVERY_STEPS} color="var(--color-flow-discovery)" />
           </section>
 
@@ -199,6 +206,12 @@ export default function DocumentationPage() {
               testing. Tests are validated against the user stories to confirm that what was built is what was asked
               for.
             </SectionIntro>
+            <VideoEmbed
+              videoId="3Si5vDBTjkc"
+              label="Video · Application development"
+              title="Using Wavez for Application Development"
+              color="var(--color-flow-development)"
+            />
             <StepCards steps={DEVELOPMENT_STEPS} color="var(--color-flow-development)" />
           </section>
 
