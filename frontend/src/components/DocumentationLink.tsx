@@ -22,7 +22,7 @@ export function DocumentationLink() {
         <path d="M4 21.5V5.5" />
         <path d="M9 8h7" />
       </svg>
-      <span>New to WaveZ? Read the documentation</span>
+      <span>New to Wavez? Read the documentation</span>
       <svg
         width="16"
         height="16"
