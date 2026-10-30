@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import re
+
 import pytest
 from jinja2 import Environment
 
@@ -102,6 +104,23 @@ def test_skill_has_next_steps(repo_root: str, agent: str, tool: str) -> None:
     env = make_env(repo_root)
     result = _render_agent(env, agent, tool, skill_mode=True)
     assert "## Next Steps" in result
+
+
+@pytest.mark.parametrize("agent", ALL_AGENTS)
+def test_skill_name_matches_folder(repo_root: str, agent: str) -> None:
+    """Skill names must be the lowercase, hyphenated skill folder name."""
+    env = make_env(repo_root)
+    result = _render_agent(env, agent, "claude", skill_mode=True)
+    assert f"\nname: {agent}\n" in result
+
+
+@pytest.mark.parametrize("agent", ALL_AGENTS)
+def test_skill_next_steps_use_skill_names(repo_root: str, agent: str) -> None:
+    """Next Steps slash commands must use skill names, not display names."""
+    env = make_env(repo_root)
+    result = _render_agent(env, agent, "claude", skill_mode=True)
+    next_steps = result.split("## Next Steps", 1)[1]
+    assert not re.search(r"\*\*/[A-Z]", next_steps)
 
 
 @pytest.mark.parametrize("agent", ALL_AGENTS)
@@ -233,7 +252,7 @@ def test_tech_migration_preserves_planning_contract(
 ) -> None:
     result = _render_agent(make_env(repo_root), "tech-migration", tool, skill_mode=skill_mode)
 
-    assert "name: Tech Migration" in result
+    assert ("name: tech-migration" if skill_mode else "name: Tech Migration") in result
     assert "docs/plans/[migration-slug].md" in result
     assert f"Read `{expected_context}` if present" in result
     assert "do not require either to exist" in result

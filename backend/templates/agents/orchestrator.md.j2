@@ -2,7 +2,7 @@
   {"label": "🔁 Retry with Plan only", "agent": "Orchestrator", "prompt": "Re-plan the feature from scratch.", "send": false},
 ] %}
 ---
-name: Orchestrator
+name: {{ "orchestrator" if skill_mode else "Orchestrator" }}
 description: Orchestrates full-stack feature delivery and routes migration planning to Tech Migration.
 {% if not skill_mode %}
 argument-hint: Describe the feature to build (e.g. "Build a user feedback form with POST /api/feedback endpoint")
@@ -278,6 +278,6 @@ After the handover block, always propose the following:
 
 **Suggested Next Commands:**
 {% for h in handoffs %}
-- **/{{ h.agent }}**: {{ h.prompt }}
+- **/{{ h.agent | lower | replace(' ', '-') }}**: {{ h.prompt }}
 {% endfor %}
 {% endif %}

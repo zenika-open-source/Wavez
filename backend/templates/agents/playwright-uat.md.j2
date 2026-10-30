@@ -5,7 +5,7 @@
 ] %}
 {% set assets_dir = "templates" if skill_mode else ".github/agents/playwright-uat/templates" %}
 ---
-name: Playwright UAT
+name: {{ "playwright-uat" if skill_mode else "Playwright UAT" }}
 description: Plans and executes UAT end to end - designs automation-ready test plans (exact selectors, pre-conditions, expected results), runs them with Playwright browser automation, verifies backend data persistence, and compiles a formatted Word (DOCX) execution report
 {% if not skill_mode %}
 argument-hint: Point this agent at a feature, spec, or approved test plan (e.g. "plan UAT for the token settings page" or "run UAT for docs/uat/TOKENS_MANUAL_TEST_PLAN.md")
@@ -290,6 +290,6 @@ After delivering the plan (Phase 1) or the execution summary (Phase 2), propose 
 
 **Suggested Next Commands:**
 {% for h in handoffs %}
-- **/{{ h.agent }}**: {{ h.prompt }}
+- **/{{ h.agent | lower | replace(' ', '-') }}**: {{ h.prompt }}
 {% endfor %}
 {% endif %}

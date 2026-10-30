@@ -3,7 +3,7 @@
   {"label": "🔍 Send to Reviewer", "agent": "Reviewer", "prompt": "Review all backend changes listed in the Backend Handover for security, SOLID principles, and backend best practices.", "send": true},
 ] %}
 ---
-name: Backend
+name: {{ "backend" if skill_mode else "Backend" }}
 description: Backend expert — implements APIs, services, repositories, and DB migrations for a feature
 {% if not skill_mode %}
 argument-hint: Describe what to build, optionally pass --existing to analyse before coding (e.g. "implement POST /api/feedback" or "implement user profile update --existing")
@@ -66,6 +66,6 @@ After the handover block, always propose the following:
 
 **Suggested Next Commands:**
 {% for h in handoffs %}
-- **/{{ h.agent }}**: {{ h.prompt }}
+- **/{{ h.agent | lower | replace(' ', '-') }}**: {{ h.prompt }}
 {% endfor %}
 {% endif %}

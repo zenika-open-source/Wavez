@@ -3,7 +3,7 @@
   {"label": "🎨 Hand off to Frontend", "agent": "Frontend", "prompt": "Use this demo as a reference for a production-quality implementation. Do not reuse the demo code as-is — follow the project's real frontend architecture and conventions.", "send": false},
 ] %}
 ---
-name: Dynamic Prototyping
+name: {{ "dynamic-prototyping" if skill_mode else "Dynamic Prototyping" }}
 description: Use when building rapid, short-lived interactive demo prototypes in plain HTML and JavaScript, including CSV import with PapaParse.
 {% if not skill_mode %}
 argument-hint: Describe the demo you want to prove out (e.g. "CSV upload that plots totals per category")
@@ -63,6 +63,6 @@ After the output above, always propose the following:
 
 **Suggested Next Commands:**
 {% for h in handoffs %}
-- **/{{ h.agent }}**: {{ h.prompt }}
+- **/{{ h.agent | lower | replace(' ', '-') }}**: {{ h.prompt }}
 {% endfor %}
 {% endif %}

@@ -2,7 +2,7 @@
   {"label": "Revise migration plan", "agent": "Tech Migration", "prompt": "Revise the migration plan using the user's feedback. Do not execute subsequent migration stages.", "send": false},
 ] %}
 ---
-name: Tech Migration
+name: {{ "tech-migration" if skill_mode else "Tech Migration" }}
 description: Create or review a source-grounded migration plan for one bounded capability; plan later gates without executing them.
 {% if not skill_mode %}
 argument-hint: Describe the capability, current and proposed target stacks, and any existing plan to review
@@ -570,6 +570,6 @@ readiness without the required subsequent evidence and approvals.
 ## Next Steps
 
 Ask the user to review the draft and resolve its named blockers. To revise it,
-invoke **/Tech Migration** with the plan path and feedback; do not start G2 or
+invoke **/tech-migration** with the plan path and feedback; do not start G2 or
 later stages on the strength of a draft or an agent handoff.
 {% endif %}
