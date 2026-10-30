@@ -107,6 +107,7 @@ def test_choose_stack_invalid_exits(choice: str, capsys: pytest.CaptureFixture) 
         ("2", "2", "java-spring-boot.md.j2", "java-spring-boot.md.j2"),
         ("3", "1", "golang.md.j2", ""),
         ("3", "2", "golang-gin.md.j2", ""),
+        ("4", "1", "nodejs-nextjs.md.j2", ""),
     ],
 )
 def test_choose_backend(

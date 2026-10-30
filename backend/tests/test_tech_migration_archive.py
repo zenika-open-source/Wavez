@@ -26,6 +26,7 @@ from wavez.routers.app import app
     [
         ("", ""),
         ("golang-gin.md.j2", "nextjs-app-router.md.j2"),
+        ("nodejs-nextjs.md.j2", "nextjs-app-router.md.j2"),
         ("java-spring-boot.md.j2", "react-typescript.md.j2"),
     ],
 )

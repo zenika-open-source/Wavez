@@ -18,6 +18,9 @@ BACKEND: dict[str, list[tuple[str, str, str]]] = {
         ("None (plain Go)", "golang.md.j2", ""),
         ("Gin", "golang-gin.md.j2", ""),
     ],
+    "Node.js": [
+        ("Next.js (App Router)", "nodejs-nextjs.md.j2", ""),
+    ],
 }
 
 FRONTEND: dict[str, list[tuple[str, str, str]]] = {
