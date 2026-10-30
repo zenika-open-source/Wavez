@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 };
 
 const REPO_URL = "https://github.com/zenika-open-source/Wavez";
+const ISSUES_URL = "https://github.com/zenika-open-source/Wavez/issues";
 const LICENSE_URL = "https://github.com/zenika-open-source/Wavez/blob/main/LICENSE";
 
 const SECTIONS = [
@@ -20,6 +21,7 @@ const SECTIONS = [
   { id: "getting-started", label: "Getting started" },
   { id: "product-discovery", label: "Product discovery flow" },
   { id: "development", label: "Development flow" },
+  { id: "feedback", label: "Feedback" },
   { id: "get-involved", label: "Get involved" },
   { id: "source-code", label: "Source code", nested: true },
   { id: "license", label: "License", nested: true },
@@ -213,6 +215,16 @@ export default function DocumentationPage() {
               color="var(--color-flow-development)"
             />
             <StepCards steps={DEVELOPMENT_STEPS} color="var(--color-flow-development)" />
+          </section>
+
+          <section className="flex flex-col gap-6">
+            <SectionIntro id="feedback" title="Feedback">
+              Feedback is welcome! Whether you found a bug, have an idea for a new skill or want to share how you use
+              WaveZ, we would love to hear from you.
+            </SectionIntro>
+            <div>
+              <ExternalLink href={ISSUES_URL}>Open an issue on GitHub</ExternalLink>
+            </div>
           </section>
 
           <section className="flex flex-col gap-6">
