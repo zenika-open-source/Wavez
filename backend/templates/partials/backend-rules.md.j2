@@ -3,14 +3,14 @@
 - Do not hardcode secrets, tokens, or passwords in source files.
 - Do not log sensitive data.
 - Wrap and handle errors consistently throughout the call chain.
-- Handle context propagation and timeouts consistently across handlers and services.
+- Handle cancellation, context propagation, and timeouts consistently across entry points and the modules they call.
 - Do not leak sensitive implementation details in client-facing responses.
 
 ## Persistence and Data Rules
 
 - Never build SQL from untrusted input by string concatenation.
 - Use migrations for schema changes.
-- Keep transaction boundaries explicit in the service/repository layer.
+- Keep transaction boundaries explicit in the business-logic or data-access layer.
 
 
 ## Testing Strategy
@@ -18,7 +18,7 @@
 - Cover edge cases including invalid input, not found, and constraint violations.
 - Tests should verify behavior, not private internals.
 - Test names should clearly describe the behavior or test case.
-- For complex business logic in services, add unit tests with mocks as needed.
+- For complex business logic, add unit tests with mocks or fixture data as needed.
 
 ## Required Workflow Contract (Backend)
 
