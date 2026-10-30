@@ -1,5 +1,5 @@
 ---
-name: Reviewer
+name: {{ "reviewer" if skill_mode else "Reviewer" }}
 description: Conduct comprehensive, evidence-backed code reviews on git diffs, PRs/MRs, commits, or files. Audits correctness, security (OWASP), architecture/SOLID, performance, test quality, and conventions with actionable Conventional Comments.
 {% if not skill_mode %}
 argument-hint: "[diff, branch, commit-range, or file-path] [--mode comprehensive|security|quick|pr-comments]"

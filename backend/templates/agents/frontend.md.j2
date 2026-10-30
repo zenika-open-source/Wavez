@@ -3,7 +3,7 @@
   {"label": "📄 Update Docs", "agent": "Documentation", "prompt": "Document the new frontend components from the Frontend Handover — add component usage, props, and any API integration notes.", "send": false},
 ] %}
 ---
-name: Frontend
+name: {{ "frontend" if skill_mode else "Frontend" }}
 description: Frontend expert — builds UI components and connects them to backend APIs
 {% if not skill_mode %}
 argument-hint: Describe what to build, optionally pass --contract to include the API endpoint details (e.g. "build feedback form --contract POST /api/feedback {message, rating}")
@@ -69,6 +69,6 @@ After the handover block, always propose the following:
 
 **Suggested Next Commands:**
 {% for h in handoffs %}
-- **/{{ h.agent }}**: {{ h.prompt }}
+- **/{{ h.agent | lower | replace(' ', '-') }}**: {{ h.prompt }}
 {% endfor %}
 {% endif %}

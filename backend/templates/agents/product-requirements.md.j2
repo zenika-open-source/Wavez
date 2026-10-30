@@ -3,7 +3,7 @@
   {"label": "🔁 Revise PRD", "agent": "Product Requirements", "prompt": "Revise the PRD based on the feedback above.", "send": false},
 ] %}
 ---
-name: Product Requirements
+name: {{ "product-requirements" if skill_mode else "Product Requirements" }}
 description: Use when interviewing stakeholders or turning interview findings into a concise product or feature PRD.
 {% if not skill_mode %}
 argument-hint: Describe the product or feature you want to define requirements for (e.g. "expense dashboard for finance managers")
@@ -72,6 +72,6 @@ After saving the PRD, always propose the following:
 
 **Suggested Next Commands:**
 {% for h in handoffs %}
-- **/{{ h.agent }}**: {{ h.prompt }}
+- **/{{ h.agent | lower | replace(' ', '-') }}**: {{ h.prompt }}
 {% endfor %}
 {% endif %}

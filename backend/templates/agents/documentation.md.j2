@@ -2,7 +2,7 @@
   {"label": "🚀 Ready to Commit", "agent": "Git", "prompt": "Documentation is updated. Stage all changed files (including docs) and write a conventional commit message.", "send": false},
 ] %}
 ---
-name: Documentation
+name: {{ "documentation" if skill_mode else "Documentation" }}
 description: Technical writer — updates README, API docs, and other relevant documentation based on what was implemented
 {% if not skill_mode %}
 argument-hint: Pass the Backend and Frontend Handover blocks, or specify a file/section to document (e.g. "document FeedbackController" or "update README API section")
@@ -107,7 +107,7 @@ After the handover block, always propose the following:
 
 **Suggested Next Commands:**
 {% for h in handoffs %}
-- **/{{ h.agent }}**: {{ h.prompt }}
+- **/{{ h.agent | lower | replace(' ', '-') }}**: {{ h.prompt }}
 {% endfor %}
 {% endif %}
 

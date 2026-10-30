@@ -3,7 +3,7 @@
   {"label": "📄 Revise PRD first", "agent": "Product Requirements", "prompt": "Revise the PRD based on feedback from the prototype review.", "send": false},
 ] %}
 ---
-name: Static Prototyping
+name: {{ "static-prototyping" if skill_mode else "Static Prototyping" }}
 description: Creates greyscale, structural-only HTML prototypes from a PRD
 {% if not skill_mode %}
 argument-hint: Attach a PRD file and describe how many layout approaches to prototype (e.g. "prototype 2 layout options from the attached PRD")
@@ -38,6 +38,6 @@ After saving the prototype(s), always propose the following:
 
 **Suggested Next Commands:**
 {% for h in handoffs %}
-- **/{{ h.agent }}**: {{ h.prompt }}
+- **/{{ h.agent | lower | replace(' ', '-') }}**: {{ h.prompt }}
 {% endfor %}
 {% endif %}
