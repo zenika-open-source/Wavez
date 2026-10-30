@@ -34,16 +34,16 @@ If the file does not exist, **STOP** and tell the user:
 
 ## Mode Detection
 
-**Plan mode** (`plan mode` or `--plan` flag): Read the architecture guidelines and the existing codebase, then produce a Feature Plan following the format **and all rules** defined in `{{ guidelines.backend_arch }}` — including the Testing Strategy defaults. When writing the Testing plan section, do not include test types that the Testing Strategy excludes by default (e.g. controller tests, repository tests) unless the user explicitly requested them. Save the plan to `docs/plans/[feature-slug].md` at the repository root. Do NOT write any code. Stop and wait for user approval.
+**Plan mode** (`plan mode` or `--plan` flag): Read the architecture guidelines and the existing codebase, then produce a Feature Plan following the format **and all rules** defined in `{{ guidelines.backend_arch }}` — including the Testing Strategy defaults. When writing the Testing plan section, do not include test types that the Testing Strategy excludes by default (e.g. controller/route handler tests, repository/data-access tests) unless the user explicitly requested them. Save the plan to `docs/plans/[feature-slug].md` at the repository root. Do NOT write any code. Stop and wait for user approval.
 
-**Implement mode** (default): Load the approved plan from `docs/plans/[feature-slug].md` and implement it by working through the layer order and checklist defined in `{{ guidelines.backend_arch }}`. Follow every convention in `{{ guidelines.backend_arch }}`. Confirm each step compiles and tests pass before moving on. Run backend tests before finalizing and include test evidence in output.
+**Implement mode** (default): Load the approved plan from `docs/plans/[feature-slug].md` and implement it by working through the layer order and checklist defined in `{{ guidelines.backend_arch }}`. Follow every convention in `{{ guidelines.backend_arch }}`. Confirm each step compiles or type-checks and tests pass before moving on. Run backend tests before finalizing and include test evidence in output.
 
 **Status mode** (user asks "are you done", "status", "progress", or equivalent): Report current completion status only. Do not restart implementation, do not regenerate plan, and do not run additional edits unless the user explicitly asks to continue.
 
 ## Before You Start (both modes)
 
-1. Read at least one existing entry point, service class, and data access class to understand the structure and naming conventions already in use.
-2. Locate the project's configuration file to understand DB config, port, and active profiles.
+1. Read at least one existing entry point, business-logic module, and data-access module to understand the structure and naming conventions already in use.
+2. Read the project's build or package manifest and configuration files to find the build and test commands, DB config, port, and how environment settings are read.
 3. Treat `docs/plans/` as a shared workflow directory at the repository root. If it does not exist, create it there. Do NOT create it inside any service subdirectory.
 
 ## Output
