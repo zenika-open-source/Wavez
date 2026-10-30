@@ -8,8 +8,8 @@ import { VideoEmbed } from "@/components/VideoEmbed";
 import { ASSISTANTS } from "@/data/assistants";
 
 export const metadata: Metadata = {
-  title: "Documentation · WaveZ",
-  description: "How WaveZ works: getting started, the product discovery and development flows, and how to get involved.",
+  title: "Documentation · Wavez",
+  description: "How Wavez works: getting started, the product discovery and development flows, and how to get involved.",
 };
 
 const REPO_URL = "https://github.com/zenika-open-source/Wavez";
@@ -174,8 +174,8 @@ export default function DocumentationPage() {
               Introduction
             </h1>
             <p className="m-0 max-w-[760px] text-lg text-text-soft">
-              WaveZ is an open source tool from Zenika that sets your AI assistant up to work the way a good team
-              does. Pick your assistant and the skills you need, and WaveZ gives you the files that teach it how to
+              Wavez is an open source tool from Zenika that sets your AI assistant up to work the way a good team
+              does. Pick your assistant and the skills you need, and Wavez gives you the files that teach it how to
               write requirements, build prototypes, review code and run tests. Learn how the product discovery and
               development flows work, and learn how it applies to your workflow.
             </p>
@@ -183,7 +183,7 @@ export default function DocumentationPage() {
 
           <section className="flex flex-col gap-6">
             <SectionIntro id="getting-started" title="Getting started">
-              Using WaveZ takes three steps.
+              Using Wavez takes three steps.
             </SectionIntro>
             <StepCards steps={GETTING_STARTED_STEPS} color="var(--color-accent)" />
           </section>
@@ -219,7 +219,7 @@ export default function DocumentationPage() {
 
           <section className="flex flex-col gap-6">
             <SectionIntro id="get-involved" title="Get involved">
-              WaveZ is an open source tool developed by Zenika.
+              Wavez is an open source tool developed by Zenika.
             </SectionIntro>
             <div className="flex flex-col gap-4 lg:grid lg:grid-cols-3 lg:gap-x-4 lg:gap-y-0">
               <div
@@ -247,7 +247,7 @@ export default function DocumentationPage() {
                   </span>
                 </div>
                 <p className="m-0 text-[15px] text-text-soft">
-                  WaveZ is free to use, modify and distribute under the terms of the license.
+                  Wavez is free to use, modify and distribute under the terms of the license.
                 </p>
                 <div className="self-end pt-1.5">
                   <ExternalLink href={LICENSE_URL}>Read the full license</ExternalLink>
@@ -261,7 +261,7 @@ export default function DocumentationPage() {
                   <h3 className="m-0 text-[17px] leading-[1.3] font-bold text-text">Feedback</h3>
                 </div>
                 <p className="m-0 text-[15px] text-text-soft">
-                  Feedback is welcome! Report a bug, suggest an idea or share how you use WaveZ.
+                  Feedback is welcome! Report a bug, suggest an idea or share how you use Wavez.
                 </p>
                 <div className="self-end pt-1.5">
                   <ExternalLink href={ISSUES_URL}>Open an issue</ExternalLink>
