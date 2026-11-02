@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { FeedbackLink } from "./FeedbackLink";
 
 export function SiteHeader() {
   return (
@@ -72,6 +73,7 @@ export function SiteHeader() {
               style={{ width: "auto" }}
             />
           </span>
+          <FeedbackLink />
         </div>
       </div>
     </header>
