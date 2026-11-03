@@ -61,7 +61,7 @@ export function CategoryCard({
             type="button"
             onClick={handleToggleAll}
             disabled={selectableSkills.length === 0}
-            className="shrink-0 cursor-pointer px-0.5 py-1.5 text-sm leading-[normal] font-semibold whitespace-nowrap text-[color:var(--wz-category-color)] underline underline-offset-[3px] hover:text-text disabled:cursor-not-allowed disabled:opacity-40 disabled:no-underline"
+            className="shrink-0 cursor-pointer px-0.5 py-1.5 text-sm leading-[normal] font-semibold whitespace-nowrap text-[color:var(--wz-category-color)] underline underline-offset-[3px] hover:text-[color:color-mix(in_srgb,var(--wz-category-color)_40%,white)] disabled:cursor-not-allowed disabled:opacity-40 disabled:no-underline"
           >
             {allSelected ? "Clear all" : "Select all"}
           </button>

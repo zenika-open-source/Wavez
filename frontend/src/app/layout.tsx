@@ -32,7 +32,11 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   await connection();
 
   return (
-    <html lang="en" className={`${bricolage.variable} ${dmSans.variable} ${plexMono.variable} h-full`}>
+    <html
+      lang="en"
+      data-scroll-behavior="smooth"
+      className={`${bricolage.variable} ${dmSans.variable} ${plexMono.variable} h-full`}
+    >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

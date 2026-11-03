@@ -18,9 +18,9 @@ export function DocumentationLink() {
         aria-hidden="true"
         className="flex-none"
       >
-        <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5z" />
-        <path d="M4 21.5V5.5" />
-        <path d="M9 8h7" />
+        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" />
+        <path d="M8 11h8" />
+        <path d="M8 7h6" />
       </svg>
       <span>New to Wavez? Read the documentation</span>
       <svg
