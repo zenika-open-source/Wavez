@@ -76,9 +76,9 @@ export default function Home() {
     } else if (skillId === "backend" && catalog && !backendArchFile) {
       const backendOptions = toLanguageOptions(catalog.backend);
       if (backendOptions.length > 0) setBackendArchFile(backendOptions[0].archFile);
-    } else if (skillId === "frontend" && catalog) {
+    } else if (skillId === "frontend" && catalog && !frontendArchFile) {
       const frontendOptions = toLanguageOptions(catalog.frontend);
-      if (frontendOptions.length === 1) setFrontendArchFile(frontendOptions[0].archFile);
+      if (frontendOptions.length > 0) setFrontendArchFile(frontendOptions[0].archFile);
     }
   }
 
