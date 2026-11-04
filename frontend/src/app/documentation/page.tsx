@@ -43,7 +43,7 @@ const ASSISTANT_LOGOS = (
 const GETTING_STARTED_STEPS: Step[] = [
   {
     title: "Select your harness and skills",
-    detail: "Claude Code, GitHub Copilot, OpenCode",
+    detail: "Claude Code, GitHub Copilot, OpenCode, Google Antigravity",
     description: "Choose the harness you work with and the skills you wish to use in your project.",
     footer: ASSISTANT_LOGOS,
   },

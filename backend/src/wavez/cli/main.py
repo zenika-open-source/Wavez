@@ -72,6 +72,7 @@ def _prompt_tool_selection() -> ToolSelection:
         copilot=input("Set up GitHub Copilot (VS Code)? [Y/N]: ").strip().lower() == "y",
         opencode=input("Set up OpenCode? [Y/N]: ").strip().lower() == "y",
         claude=input("Set up Claude Code? [Y/N]: ").strip().lower() == "y",
+        antigravity=input("Set up Google Antigravity? [Y/N]: ").strip().lower() == "y",
     )
 
 
@@ -119,6 +120,8 @@ def _print_plan(target_path: str, tools: ToolSelection) -> None:
         print("  ✓ OpenCode")
     if tools.claude:
         print("  ✓ Claude Code")
+    if tools.antigravity:
+        print("  ✓ Google Antigravity")
     print()
     print("The following will be generated:")
     if tools.copilot:
@@ -128,6 +131,8 @@ def _print_plan(target_path: str, tools: ToolSelection) -> None:
         print("  - .opencode/skills/      (OpenCode skill definitions + references/)")
     if tools.claude:
         print("  - .claude/skills/        (Claude Code skill definitions + references/)")
+    if tools.antigravity:
+        print("  - .agents/skills/        (Antigravity skill definitions + references/)")
     print()
     input("Press any key to continue...")
     print()
@@ -161,6 +166,8 @@ def _print_summary(result: DeploymentResult) -> None:
         print("✓ OpenCode: .opencode/skills/ (with references/)")
     if "claude" in result.deployed:
         print("✓ Claude Code: .claude/skills/ (with references/)")
+    if "antigravity" in result.deployed:
+        print("✓ Google Antigravity: .agents/skills/ (with references/)")
     if backend_doc_msg:
         print(f"- {backend_doc_msg}")
     if frontend_doc_msg:

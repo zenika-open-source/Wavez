@@ -11,12 +11,13 @@ export interface StackCatalog {
   frontend: Record<string, FrameworkOption[]>;
 }
 
-export type AssistantId = "claude" | "copilot" | "opencode";
+export type AssistantId = "claude" | "copilot" | "opencode" | "antigravity";
 
 export interface ToolSelection {
   copilot: boolean;
   opencode: boolean;
   claude: boolean;
+  antigravity: boolean;
 }
 
 export interface GuidelineSelection {

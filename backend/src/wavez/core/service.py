@@ -65,7 +65,7 @@ def _deploy_copilot(
     """Deploy GitHub Copilot (VS Code) setup to target_path.
 
     Agents in agent_ids are deployed as Skills (.github/skills/<name>/SKILL.md),
-    same as OpenCode and Claude Code, since that's the format Copilot loads
+    same as OpenCode, Claude Code and Antigravity, since that's the format Copilot loads
     on-demand. Agents in custom_agent_ids are deployed as standalone Custom
     Agent files (.github/agents/<name>.agent.md) instead.
 
@@ -119,9 +119,9 @@ def _deploy_skills_tool(
     guidelines: GuidelineSelection,
     agent_ids: frozenset[str] | None,
 ) -> str:
-    """Deploy a skills-based tool (OpenCode or Claude Code) to target_path.
+    """Deploy a skills-based tool (OpenCode, Claude Code or Antigravity) to target_path.
 
-    Neither tool has a Custom Agent file format, so callers should merge any
+    None of these tools has a Custom Agent file format, so callers should merge any
     custom-mode agent ids into agent_ids before calling this — they still get
     deployed as Skills here.
 
@@ -171,7 +171,7 @@ def init_project(
         agent_ids: Agent ids to deploy as Skills, or None to deploy every agent
             (e.g. the CLI, which has no skill selection).
         custom_agent_ids: Agent ids to deploy as Custom Agent files (Copilot
-            only; deployed as Skills for OpenCode/Claude, which have no Custom
+            only; deployed as Skills for the other tools, which have no Custom
             Agent format). None or empty deploys none in this format.
 
     Returns:
@@ -198,6 +198,10 @@ def init_project(
     if tools.claude:
         deployed["claude"] = _deploy_skills_tool(
             target_path, ".claude/skills", "claude", src, repo_root, guidelines, skills_and_custom_ids
+        )
+    if tools.antigravity:
+        deployed["antigravity"] = _deploy_skills_tool(
+            target_path, ".agents/skills", "antigravity", src, repo_root, guidelines, skills_and_custom_ids
         )
 
     return DeploymentResult(target_path=target_path, tools=tools, guidelines=guidelines, deployed=deployed)

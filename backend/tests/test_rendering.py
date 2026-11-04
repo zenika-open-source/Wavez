@@ -28,7 +28,7 @@ ALL_AGENTS = [
     "playwright-uat",
 ]
 
-ALL_TOOLS = ["copilot", "opencode", "claude"]
+ALL_TOOLS = ["copilot", "opencode", "claude", "antigravity"]
 
 
 def _render_agent(
@@ -147,7 +147,7 @@ def test_copilot_agent_has_tools_and_user_invocable(repo_root: str, agent: str) 
 
 
 @pytest.mark.parametrize("agent", ALL_AGENTS)
-@pytest.mark.parametrize("tool", ["opencode", "claude"])
+@pytest.mark.parametrize("tool", ["opencode", "claude", "antigravity"])
 def test_skill_agent_has_no_tools_or_user_invocable(repo_root: str, agent: str, tool: str) -> None:
     """Skill agent output must not include argument-hint, tools: or user-invocable: frontmatter."""
     env = make_env(repo_root)
@@ -168,6 +168,7 @@ def test_skill_agent_has_no_tools_or_user_invocable(repo_root: str, agent: str, 
         ("copilot", ".github/skills/backend/references/architecture.md"),
         ("opencode", ".opencode/skills/backend/references/architecture.md"),
         ("claude", ".claude/skills/backend/references/architecture.md"),
+        ("antigravity", ".agents/skills/backend/references/architecture.md"),
     ],
 )
 def test_backend_agent_arch_path(repo_root: str, tool: str, expected_arch: str) -> None:
@@ -183,6 +184,7 @@ def test_backend_agent_arch_path(repo_root: str, tool: str, expected_arch: str) 
         ("copilot", ".github/skills/frontend/references/architecture.md"),
         ("opencode", ".opencode/skills/frontend/references/architecture.md"),
         ("claude", ".claude/skills/frontend/references/architecture.md"),
+        ("antigravity", ".agents/skills/frontend/references/architecture.md"),
     ],
 )
 def test_frontend_agent_arch_path(repo_root: str, tool: str, expected_arch: str) -> None:
@@ -198,6 +200,7 @@ def test_frontend_agent_arch_path(repo_root: str, tool: str, expected_arch: str)
         ("copilot", ".github/copilot-instructions.md"),
         ("opencode", "AGENTS.md"),
         ("claude", "CLAUDE.md"),
+        ("antigravity", "AGENTS.md"),
     ],
 )
 def test_documentation_agent_project_context(repo_root: str, tool: str, expected_ctx: str) -> None:
@@ -244,6 +247,7 @@ def test_architecture_diagram_prompts_for_gortex_and_uses_architect_outputs(
         ("copilot", ".github/copilot-instructions.md"),
         ("opencode", "AGENTS.md"),
         ("claude", "CLAUDE.md"),
+        ("antigravity", "AGENTS.md"),
     ],
 )
 @pytest.mark.parametrize("skill_mode", [True, False])

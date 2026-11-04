@@ -34,16 +34,21 @@ def test_tool_selection_any_selected_false() -> None:
 
 
 @pytest.mark.parametrize(
-    "copilot, opencode, claude",
+    "copilot, opencode, claude, antigravity",
     [
-        (True, False, False),
-        (False, True, False),
-        (False, False, True),
-        (True, True, True),
+        (True, False, False, False),
+        (False, True, False, False),
+        (False, False, True, False),
+        (False, False, False, True),
+        (True, True, True, True),
     ],
 )
-def test_tool_selection_any_selected_combinations(copilot: bool, opencode: bool, claude: bool) -> None:
-    assert ToolSelection(copilot=copilot, opencode=opencode, claude=claude).any_selected()
+def test_tool_selection_any_selected_combinations(
+    copilot: bool, opencode: bool, claude: bool, antigravity: bool
+) -> None:
+    assert ToolSelection(
+        copilot=copilot, opencode=opencode, claude=claude, antigravity=antigravity
+    ).any_selected()
 
 
 # ---------------------------------------------------------------------------

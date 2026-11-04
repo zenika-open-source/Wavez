@@ -19,7 +19,7 @@ In general there is no need to change these files, as they determine primarily t
 It is self-contained: project instructions and installed stack guidelines are
 optional context, not required companion files. Copilot can render it as either
 `.github/agents/tech-migration.agent.md` or
-`.github/skills/tech-migration/SKILL.md`; OpenCode and Claude Code render it as
+`.github/skills/tech-migration/SKILL.md`; OpenCode, Claude Code and Antigravity render it as
 `skills/tech-migration/SKILL.md` in their own tool directories. The selected
 setup stack is the current-project context, not an automatic target stack.
 Migration plans default to `docs/plans/[migration-slug].md`; G0-G7 describe
@@ -95,10 +95,10 @@ Partial templates are shared across different stacks and involve formatting of o
 
 For agent source files, each tool gets its own `guidelines` context so file references resolve to the correct location:
 
-| Variable | Copilot | OpenCode | Claude Code |
-|---|---|---|---|
-| `{{ guidelines.backend_arch }}` | `.github/guidelines/architecture-backend.md` | `.opencode/skills/backend/references/architecture.md` | `.claude/skills/backend/references/architecture.md` |
-| `{{ guidelines.conventions }}` | `.github/guidelines/conventions.md` | `.opencode/skills/git/references/conventions.md` | `.claude/skills/git/references/conventions.md` |
+| Variable | Copilot | OpenCode | Claude Code | Antigravity |
+|---|---|---|---|---|
+| `{{ guidelines.backend_arch }}` | `.github/guidelines/architecture-backend.md` | `.opencode/skills/backend/references/architecture.md` | `.claude/skills/backend/references/architecture.md` | `.agents/skills/backend/references/architecture.md` |
+| `{{ guidelines.conventions }}` | `.github/guidelines/conventions.md` | `.opencode/skills/git/references/conventions.md` | `.claude/skills/git/references/conventions.md` | `.agents/skills/git/references/conventions.md` |
 
 **Partials** will be included in source files using standard Jinja2 syntax:
 

@@ -14,10 +14,16 @@ class ToolSelectionRequest(BaseModel):
     copilot: bool = False
     opencode: bool = False
     claude: bool = False
+    antigravity: bool = False
 
     def to_domain(self) -> ToolSelection:
         """Convert to the core ToolSelection dataclass."""
-        return ToolSelection(copilot=self.copilot, opencode=self.opencode, claude=self.claude)
+        return ToolSelection(
+            copilot=self.copilot,
+            opencode=self.opencode,
+            claude=self.claude,
+            antigravity=self.antigravity,
+        )
 
 
 class GuidelineSelectionRequest(BaseModel):

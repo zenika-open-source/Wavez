@@ -92,3 +92,22 @@ def test_custom_agent_ids_deploy_as_skill_for_opencode(repo_root: str, tmp_targe
     )
 
     assert (tmp_target / ".opencode" / "skills" / "backend" / "SKILL.md").exists()
+
+
+def test_deploys_antigravity_skills_under_agents_dir(repo_root: str, tmp_target: Path) -> None:
+    """Antigravity deploys Skills (with references/) under .agents/skills."""
+    guidelines = GuidelineSelection(
+        backend_arch_file="python-fastapi.md.j2",
+        backend_doc_file="",
+        frontend_arch_file="",
+        frontend_doc_file="",
+        include_conventions=False,
+    )
+    tools = ToolSelection(copilot=False, opencode=False, claude=False, antigravity=True)
+    result = init_project(repo_root, str(tmp_target), tools, guidelines)
+
+    assert set(result.deployed) == {"antigravity"}
+    assert (tmp_target / ".agents" / "skills" / "backend" / "SKILL.md").exists()
+    assert (tmp_target / ".agents" / "skills" / "tech-migration" / "SKILL.md").exists()
+    assert (tmp_target / ".agents" / "skills" / "backend" / "references" / "architecture.md").exists()
+    assert not (tmp_target / ".claude").exists()
