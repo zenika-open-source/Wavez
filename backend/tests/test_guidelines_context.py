@@ -16,7 +16,7 @@ EXPECTED_KEYS = {
 }
 
 
-@pytest.mark.parametrize("tool", ["copilot", "opencode", "claude"])
+@pytest.mark.parametrize("tool", ["copilot", "opencode", "claude", "antigravity"])
 def test_guidelines_context_returns_all_keys(tool: str) -> None:
     """All tools must return the full set of expected guideline keys."""
     ctx = guidelines_context(tool)

@@ -11,15 +11,18 @@ class Tool(StrEnum):
     COPILOT = "copilot"
     OPENCODE = "opencode"
     CLAUDE = "claude"
+    ANTIGRAVITY = "antigravity"
 
 
-# (skills base directory, project-instructions file) per tool. All three tools
+# (skills base directory, project-instructions file) per tool. All four tools
 # deploy agents as Skills (SKILL.md under a skills/ folder), so their guideline
 # reference paths follow the same shape.
 _SKILLS_BASE: dict[Tool, tuple[str, str]] = {
     Tool.COPILOT: (".github/skills", ".github/copilot-instructions.md"),
     Tool.OPENCODE: (".opencode/skills", "AGENTS.md"),
     Tool.CLAUDE: (".claude/skills", "CLAUDE.md"),
+    # Antigravity reads AGENTS.md (or GEMINI.md) at the project root.
+    Tool.ANTIGRAVITY: (".agents/skills", "AGENTS.md"),
 }
 
 
@@ -27,7 +30,7 @@ def guidelines_context(tool: str) -> dict[str, str]:
     """Return the guidelines file paths for a given tool.
 
     Args:
-        tool: One of 'copilot', 'opencode', 'claude'.
+        tool: One of 'copilot', 'opencode', 'claude', 'antigravity'.
 
     Returns:
         A dict mapping guideline keys to their file paths for that tool.

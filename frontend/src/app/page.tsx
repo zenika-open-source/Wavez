@@ -28,6 +28,7 @@ export default function Home() {
     claude: assistant === "claude",
     copilot: assistant === "copilot",
     opencode: assistant === "opencode",
+    antigravity: assistant === "antigravity",
   };
   const guidelines: GuidelineSelection = {
     backend_arch_file: backendArchFile,

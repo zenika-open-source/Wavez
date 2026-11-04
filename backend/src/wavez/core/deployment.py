@@ -64,7 +64,7 @@ def deploy_agents(
         agents_src_dir: Directory containing *.agent.md.j2 source files.
         target_agents_dir: Destination directory.
         repo_root: Repository root path.
-        tool: Tool name for guidelines context ('copilot', 'opencode', 'claude').
+        tool: Tool name for guidelines context ('copilot', 'opencode', 'claude', 'antigravity').
         skill_mode: If True, strips handoffs and appends Next Steps block.
         agent_ids: Agent ids to deploy. If None, every agent template is
             deployed (used when no selection applies, e.g. the CLI).
@@ -104,7 +104,7 @@ def deploy_guidelines_to_skills(
     *,
     agent_ids: frozenset[str] | None = None,
 ) -> None:
-    """Deploy guideline files into skill references/ subdirs (Copilot / OpenCode / Claude Code).
+    """Deploy guideline files into skill references/ subdirs (Copilot / OpenCode / Claude Code / Antigravity).
 
     Mapping:
       backend/<arch>.md.j2          -> backend/references/architecture.md
@@ -121,7 +121,7 @@ def deploy_guidelines_to_skills(
         backend_doc_file: Selected backend documentation template filename (may be empty).
         frontend_doc_file: Selected frontend documentation template filename (may be empty).
         include_conventions: Whether to include git conventions.
-        tool: Tool name ('opencode' or 'claude') for guidelines context.
+        tool: Tool name (e.g. 'opencode', 'claude', 'antigravity') for guidelines context.
         agent_ids: Skill ids that were actually deployed. If given, reference
             files are only written into skill folders that are in this set
             (skipping ones that don't exist because the skill wasn't selected).

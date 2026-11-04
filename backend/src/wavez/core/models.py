@@ -28,15 +28,17 @@ class ToolSelection:
         copilot: Whether to deploy GitHub Copilot (VS Code) setup.
         opencode: Whether to deploy OpenCode setup.
         claude: Whether to deploy Claude Code setup.
+        antigravity: Whether to deploy Google Antigravity setup.
     """
 
     copilot: bool
     opencode: bool
     claude: bool
+    antigravity: bool = False
 
     def any_selected(self) -> bool:
         """Return True if at least one tool is selected."""
-        return any((self.copilot, self.opencode, self.claude))
+        return any((self.copilot, self.opencode, self.claude, self.antigravity))
 
 
 @dataclass(frozen=True)

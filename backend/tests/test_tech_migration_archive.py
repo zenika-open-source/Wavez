@@ -18,6 +18,7 @@ from wavez.routers.app import app
         ("copilot", ".github"),
         ("opencode", ".opencode"),
         ("claude", ".claude"),
+        ("antigravity", ".agents"),
     ],
 )
 @pytest.mark.parametrize("mode", ["skill", "custom"])
@@ -34,7 +35,7 @@ def test_archive_exports_selected_migration_only(
     tool: str, base: str, mode: str, backend_arch: str, frontend_arch: str
 ) -> None:
     request = {
-        "tools": {"copilot": tool == "copilot", "opencode": tool == "opencode", "claude": tool == "claude"},
+        "tools": {"copilot": tool == "copilot", "opencode": tool == "opencode", "claude": tool == "claude", "antigravity": tool == "antigravity"},
         "guidelines": {
             "backend_arch_file": backend_arch,
             "frontend_arch_file": frontend_arch,

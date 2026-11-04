@@ -211,6 +211,7 @@ def test_resolve_agent_ids_maps_playwright_scripts_to_uat() -> None:
         ("copilot", ".github/skills"),
         ("opencode", ".opencode/skills"),
         ("claude", ".claude/skills"),
+        ("antigravity", ".agents/skills"),
     ],
 )
 def test_deploy_guidelines_to_skills_creates_references(repo_root: str, tmp_target: Path, tool: str, base: str) -> None:
@@ -239,10 +240,10 @@ def test_deploy_guidelines_to_skills_creates_references(repo_root: str, tmp_targ
         assert path.exists(), f"Missing: {path.relative_to(tmp_target)}"
 
 
-@pytest.mark.parametrize("tool", ["copilot", "opencode", "claude"])
+@pytest.mark.parametrize("tool", ["copilot", "opencode", "claude", "antigravity"])
 def test_deploy_guidelines_to_skills_no_github_paths(repo_root: str, tmp_target: Path, tool: str) -> None:
     """Skill reference files must not contain any .github/guidelines paths."""
-    base = {"copilot": ".github/skills", "opencode": ".opencode/skills", "claude": ".claude/skills"}[tool]
+    base = {"copilot": ".github/skills", "opencode": ".opencode/skills", "claude": ".claude/skills", "antigravity": ".agents/skills"}[tool]
     skills_dir = tmp_target / base.lstrip("./").replace("/", os.sep)
 
     deploy_guidelines_to_skills(
@@ -261,10 +262,10 @@ def test_deploy_guidelines_to_skills_no_github_paths(repo_root: str, tmp_target:
         assert ".github/guidelines" not in content, f".github/guidelines found in {ref_file.relative_to(tmp_target)}"
 
 
-@pytest.mark.parametrize("tool", ["copilot", "opencode", "claude"])
+@pytest.mark.parametrize("tool", ["copilot", "opencode", "claude", "antigravity"])
 def test_deploy_guidelines_to_skills_no_jinja_tags(repo_root: str, tmp_target: Path, tool: str) -> None:
     """Skill reference files must contain no raw Jinja tags."""
-    base = {"copilot": ".github/skills", "opencode": ".opencode/skills", "claude": ".claude/skills"}[tool]
+    base = {"copilot": ".github/skills", "opencode": ".opencode/skills", "claude": ".claude/skills", "antigravity": ".agents/skills"}[tool]
     skills_dir = tmp_target / base.lstrip("./").replace("/", os.sep)
 
     deploy_guidelines_to_skills(
@@ -290,6 +291,7 @@ def test_deploy_guidelines_to_skills_no_jinja_tags(repo_root: str, tmp_target: P
         ("copilot", ".github/skills"),
         ("opencode", ".opencode/skills"),
         ("claude", ".claude/skills"),
+        ("antigravity", ".agents/skills"),
     ],
 )
 def test_deploy_guidelines_to_skills_omits_backend_when_skipped(
@@ -319,6 +321,7 @@ def test_deploy_guidelines_to_skills_omits_backend_when_skipped(
         ("copilot", ".github/skills"),
         ("opencode", ".opencode/skills"),
         ("claude", ".claude/skills"),
+        ("antigravity", ".agents/skills"),
     ],
 )
 def test_deploy_guidelines_to_skills_omits_frontend_when_skipped(
@@ -373,7 +376,7 @@ def test_deploy_guidelines_to_skills_respects_agent_ids(repo_root: str, tmp_targ
 UAT_ASSETS = ("test-plan-template.md", "uat-runner-template.js", "report-generator-template.js")
 
 
-@pytest.mark.parametrize("tool", ["copilot", "opencode", "claude"])
+@pytest.mark.parametrize("tool", ["copilot", "opencode", "claude", "antigravity"])
 def test_playwright_uat_skill_ships_plan_runner_and_report_templates(repo_root: str, tmp_target: Path, tool: str) -> None:
     """The playwright-uat skill folder holds SKILL.md + the plan, runner and report templates."""
     agents_src = os.path.join(repo_root, "templates", "agents")
@@ -421,7 +424,7 @@ REVIEWER_ASSETS = (
 )
 
 
-@pytest.mark.parametrize("tool", ["copilot", "opencode", "claude"])
+@pytest.mark.parametrize("tool", ["copilot", "opencode", "claude", "antigravity"])
 def test_reviewer_skill_ships_checklists_and_helper_script(repo_root: str, tmp_target: Path, tool: str) -> None:
     """The reviewer skill folder ships its reference checklists and pre-scan script."""
     agents_src = os.path.join(repo_root, "templates", "agents")
