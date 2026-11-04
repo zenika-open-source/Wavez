@@ -1,0 +1,91 @@
+# Backend Architecture Guidelines (Node.js)
+
+Purpose: backend single source of truth for architecture, implementation order, testing, and backend handover format.
+
+## Stack Profile
+
+- Runtime: Node.js 20+ LTS
+- Language: TypeScript 5+ in `strict` mode
+- Package manager: npm, pnpm, or yarn — use the one the lockfile in the repository already commits to
+- Modules: ES modules with the project's configured path alias (for example `@/lib/...`); do not mix `require` into TypeScript sources
+
+## Project Structure Expectations
+
+- Keep entry points (route handlers, controllers, CLI scripts) thin: parse input, delegate, shape the response.
+- Keep business logic in plain TypeScript modules that take data in and return data out.
+- Keep persistence logic in dedicated data-access modules; nothing else opens a database connection or issues SQL.
+- Keep shared request, response, and domain types in one types module per domain, and import them everywhere instead of re-declaring shapes inline.
+- Do not perform I/O (database, filesystem, network, `Date.now()`, `process.env`) inside business-logic modules. Pass what they need as arguments — that is what makes them testable without a server.
+- Follow the repository's existing folder layout and file naming; do not introduce a parallel structure.
+- Choose the HTTP layer from what the repository already uses (for example Express, Fastify, Hono, or Node's built-in `http`); do not introduce a second one.
+- Put each endpoint in a router/route module, and keep route registration in one place.
+- Read configuration from environment variables at startup, validate it once, and pass the resulting config object around instead of reading `process.env` throughout the code.
+
+## Code Quality
+
+### Typing
+- Keep `strict` enabled. Do not add `any`, `as unknown as`, or `@ts-expect-error` to silence a real type error.
+- Give exported functions explicit parameter and return types.
+- Model optional data as `T | null` or `T | undefined` deliberately, and handle both branches.
+- Use named exports for shared modules; reserve default exports for framework-mandated files.
+
+### Correctness
+- Do not mutate function arguments. Build and return new objects.
+- Never swallow an error with an empty `catch {}`. Handle it, convert it to a typed failure, or let it propagate.
+- Await every promise, or explicitly handle its rejection — no floating promises.
+- Validate and coerce external input (query strings, request bodies, environment variables) at the boundary before it reaches business logic. Treat `parseInt` results as possibly `NaN`.
+- Keep behaviour deterministic: inject the current time as a parameter rather than calling `new Date()` deep inside logic.
+
+### Tooling
+- Run the project's type-check or build command and the linter before considering a change complete; both must pass with no errors.
+- Use the formatter and lint configuration already committed to the repository; do not add a competing one.
+
+
+{% include 'partials/backend-rules.md.j2' %}
+
+{% include 'partials/backend-plan-format.md.j2' %}
+
+{% include 'partials/backend-checklist.md.j2' %}
+
+{% include 'partials/backend-handover.md.j2' %}
+
+## API and Validation Conventions
+
+- Parse every query parameter explicitly: provide a default, coerce the type, and reject or clamp out-of-range values. Guard `parseInt` against `NaN` and negative values before using them for `limit`/`offset`.
+- Validate request bodies before any business logic runs, and return `400` with a stable error shape on failure. Use a schema validator (Zod or project standard) when the project already has one.
+- Return a consistent success envelope across endpoints (for example `{ total, items }` for collections) and a consistent error envelope (for example `{ error: { code, message } }`).
+- Set status codes explicitly: `201` on create, `400` on validation failure, `404` when the resource does not exist, `500` for unexpected failures.
+- Never return a raw exception message or stack trace to the client. Log the detail server-side, return a safe message.
+- Handle errors in one central error-handling layer instead of repeating `try/catch` in every handler.
+
+## Persistence and Data Rules
+
+- Use prepared statements with bound parameters for every query. Never build SQL by concatenating request values.
+- Filter, sort, and paginate in the query when the dataset can grow; do not load the whole table and slice it in JavaScript.
+- Keep schema changes in versioned migration files. A development seed script is not a migration.
+- Open and close connections consistently with the pattern already used in the data-access module, and wrap multi-statement writes in a transaction.
+- Read the database location from an environment variable with a sane default; do not hardcode an absolute path.
+
+## Implementation Order (Mandatory)
+
+Implement backend changes in this order unless the approved plan explicitly says otherwise:
+
+1. Types (shared request/response/domain types)
+2. Data access (schema, migration, queries)
+3. Domain logic (pure modules)
+4. Route handler / controller
+5. Tests
+
+## Testing Strategy
+
+- Test runner: Vitest, Jest, or the Node test runner — use whichever is already configured in the project; do not introduce a second runner.
+- Prefer direct unit tests of the domain modules: call the exported function with fixture data and an injected `now`, and assert on the returned data. This is the default verification layer.
+- Pass a fixed reference time into every test that depends on dates.
+- Do not create route handler tests or data-access tests by default. Add them only when the handler holds meaningful logic, custom SQL exists, or the user explicitly requested them or the approved plan requires them.
+
+## Backend Implementation Checklist (Node.js)
+
+- [ ] Types: create/update the request, response, and domain types in the shared types module
+- [ ] Domain logic: implement the rules in a plain module with no I/O, taking the current time as a parameter
+- [ ] Route handler: parse and validate input, delegate to the domain module, return the project's standard response shape
+- [ ] Type-check: the project type-check/build command must pass with no TypeScript errors

@@ -8,7 +8,6 @@ interface SummaryPanelProps {
   assistant: AssistantId;
   stackLabel: string;
   skillCount: number;
-  skillFileCount: number;
   waveLevel: number;
   canGenerate: boolean;
   onGenerate: () => void;
@@ -19,7 +18,6 @@ export function SummaryPanel({
   assistant,
   stackLabel,
   skillCount,
-  skillFileCount,
   waveLevel,
   canGenerate,
   onGenerate,
@@ -45,10 +43,6 @@ export function SummaryPanel({
         <div className="flex items-start justify-between gap-4">
           <dt className="text-[15px] text-text-muted">Skills</dt>
           <dd className="m-0 text-right font-semibold text-text">{skillCount} selected</dd>
-        </div>
-        <div className="flex items-start justify-between gap-4">
-          <dt className="text-[15px] text-text-muted">Files to export</dt>
-          <dd className="m-0 text-right font-semibold text-text">{skillFileCount}</dd>
         </div>
       </dl>
 
