@@ -53,7 +53,6 @@ export default function Home() {
       ? describeStack(catalog, frontendArchFile)
       : "",
   ].filter(Boolean);
-  const skillFileCount = selectedSkillCount;
   const waveLevel = Math.min((selectedSkillCount + selectedStackParts.length) / 12, 1);
 
   useEffect(() => {
@@ -133,7 +132,6 @@ export default function Home() {
             assistant={assistant}
             stackLabel={selectedStackParts.join(" + ")}
             skillCount={selectedSkillCount}
-            skillFileCount={skillFileCount}
             waveLevel={waveLevel}
             canGenerate={canGenerate}
             onGenerate={() => setGenerateModalOpen(true)}

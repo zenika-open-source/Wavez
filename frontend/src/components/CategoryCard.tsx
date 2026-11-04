@@ -1,6 +1,6 @@
 import { SkillRow } from "@/components/SkillRow";
 import { StackChips } from "@/components/StackChips";
-import { toLanguageOptions } from "@/lib/stack";
+import { PRIMARY_BACKEND_LANGUAGES, toLanguageOptions } from "@/lib/stack";
 import type { SkillCategory, SkillMode } from "@/types/skills";
 import type { StackCatalog } from "@/types/wavez";
 
@@ -96,6 +96,7 @@ export function CategoryCard({
                     <StackChips
                       label={stackLabel}
                       options={stackOptions}
+                      primaryLanguages={isBackend ? PRIMARY_BACKEND_LANGUAGES : undefined}
                       selected={selectedStack ?? ""}
                       onSelect={onSelectStack}
                       required={mode !== "none"}
