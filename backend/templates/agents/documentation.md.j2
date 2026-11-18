@@ -3,7 +3,7 @@
 ] %}
 ---
 name: {{ "documentation" if skill_mode else "Documentation" }}
-description: Use when README, API docs, or other documentation must be written or updated after a feature is implemented.
+description: Technical writer — updates README, API docs, and other relevant documentation based on what was implemented
 {% if not skill_mode %}
 argument-hint: Pass the Backend and Frontend Handover blocks, or specify a file/section to document (e.g. "document FeedbackController" or "update README API section")
 tools: [execute, read/readFile, agent, edit, search/textSearch, vscode/askQuestions]

@@ -3,7 +3,7 @@
 ] %}
 ---
 name: {{ "architecture-diagram" if skill_mode else "Architecture Diagram" }}
-description: Use when you need to map, diagram, or document the architecture of an existing codebase. Produces an evidence-backed architecture diagram (HTML or Mermaid, optionally grounded by gortex or Graphify) and structured architecture documentation.
+description: Produces an evidence-backed architecture diagram (HTML or Mermaid, your choice, optionally grounded by gortex or Graphify) and structured architecture documentation for an existing codebase
 {% if not skill_mode %}
 argument-hint: Point this agent at a codebase or repo path to map (e.g. "map out this codebase" or "generate architecture docs for backend/")
 tools: [execute/runInTerminal, read/readFile, search/textSearch, search/fileSearch, search/listDirectory, edit/createFile, vscode/askQuestions]

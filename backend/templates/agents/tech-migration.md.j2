@@ -3,7 +3,7 @@
 ] %}
 ---
 name: {{ "tech-migration" if skill_mode else "Tech Migration" }}
-description: Use when planning or reviewing a technology migration for one bounded capability. Creates a source-grounded migration plan and plans later gates without executing them.
+description: Create or review a source-grounded migration plan for one bounded capability; plan later gates without executing them.
 {% if not skill_mode %}
 argument-hint: Describe the capability, current and proposed target stacks, and any existing plan to review
 tools: [execute/runInTerminal, read/readFile, search/textSearch, search/fileSearch, search/listDirectory, edit/createFile, edit/editFiles, vscode/askQuestions]
