@@ -225,7 +225,7 @@ def test_architecture_diagram_prompts_for_gortex_and_uses_architect_outputs(
     assert "If they choose to skip, go to **Step 6**" in result
     assert "**Hard cap: 30 components.**" in result
     assert "single source of truth" in result
-    assert "Same outputs via `Glob`/`Grep`/`Read`" in result
+    assert "Same outputs via plain file search, text search, and file reads" in result
     assert "scale. Load" not in result
     for artifact in ("architecture.json", "architecture.html", "architecture.mmd", "ARCHITECTURE.md"):
         assert artifact in result
