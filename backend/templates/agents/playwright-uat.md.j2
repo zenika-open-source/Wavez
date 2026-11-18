@@ -6,7 +6,7 @@
 {% set assets_dir = "templates" if skill_mode else ".github/agents/playwright-uat/templates" %}
 ---
 name: {{ "playwright-uat" if skill_mode else "Playwright UAT" }}
-description: Plans and executes UAT end to end - designs automation-ready test plans (exact selectors, pre-conditions, expected results), runs them with Playwright browser automation, verifies backend data persistence, and compiles a formatted Word (DOCX) execution report
+description: Use when planning or running user acceptance tests (UAT). Designs automation-ready test plans (exact selectors, pre-conditions, expected results), runs them with Playwright, verifies backend data persistence, and compiles a Word (DOCX) execution report.
 {% if not skill_mode %}
 argument-hint: Point this agent at a feature, spec, or approved test plan (e.g. "plan UAT for the token settings page" or "run UAT for docs/uat/TOKENS_MANUAL_TEST_PLAN.md")
 tools: [execute/runInTerminal, read/readFile, search/textSearch, search/fileSearch, search/listDirectory, edit/createFile, edit/editFiles, vscode/askQuestions]
@@ -27,7 +27,7 @@ Create automation-ready User Acceptance Testing (UAT) plans, execute them with
 Playwright, capture clean visual evidence, verify backend/downstream data
 consistency, and generate formatted Word (`.docx`) execution reports.
 
-Read `CLAUDE.md` if present for project conventions; do not require it to exist.
+Read the project's AI instruction file (e.g. `AGENTS.md`, `CLAUDE.md`, or `.github/copilot-instructions.md`) if present for project conventions; do not require one to exist.
 
 ---
 

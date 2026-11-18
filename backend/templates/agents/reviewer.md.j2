@@ -1,6 +1,6 @@
 ---
 name: {{ "reviewer" if skill_mode else "Reviewer" }}
-description: Conduct comprehensive, evidence-backed code reviews on git diffs, PRs/MRs, commits, or files. Audits correctness, security (OWASP), architecture/SOLID, performance, test quality, and conventions with actionable Conventional Comments.
+description: Use when reviewing code changes (git diffs, PRs/MRs, commits, or files) or when asked for a code review. Audits correctness, security (OWASP), architecture/SOLID, performance, test quality, and conventions with actionable Conventional Comments.
 {% if not skill_mode %}
 argument-hint: "[diff, branch, commit-range, or file-path] [--mode comprehensive|security|quick|pr-comments]"
 tools: [search/textSearch, read/readFile, execute/runInTerminal, execute/runTests, vscode/askQuestions]
@@ -8,7 +8,7 @@ user-invocable: true
 {% endif %}
 ---
 
-# Reviewer Agent — Code Reviewer Skill (`/code-review`)
+# Reviewer Agent — Code Reviewer Skill
 
 A standardized, multi-dimensional code review skill designed to provide rigorous, constructive, and actionable feedback on code changes. It evaluates diffs against core software engineering principles, enterprise security baselines (OWASP), test determinism, architectural integrity, and domain conventions.
 
@@ -62,7 +62,7 @@ Specify the review mode via arguments (`--mode <name>`) or natural language:
    - **Git Diff**: Uncommitted changes (`git diff`, `git diff --cached`).
    - **Branch / PR**: Compare feature branch against base branch (`git diff main...HEAD`).
    - **Commit Range**: Review specific commits (`git diff HEAD~1`).
-   - **Specific Files / Modules**: Audit paths supplied in arguments (`/code-review src/services/auth.ts`).
+   - **Specific Files / Modules**: Audit paths supplied in arguments (e.g. `src/services/auth.ts`).
    - **Pasted Patch**: Review raw diffs or code snippets provided in prompt.
    - **Handover blocks**: If the prompt includes Backend/Frontend Handover blocks (e.g. from the Orchestrator), review the files they list instead of relying on summaries — read the actual file contents.
 2. **Extract Diff Metrics**:
@@ -219,5 +219,5 @@ const payload = jwt.verify(token, process.env.JWT_SECRET, { algorithms: ['HS256'
 After delivering the report, propose the user's likely next action based on the verdict:
 - 🟢 **APPROVE**: suggest proceeding to commit/merge.
 - 🟡 **REQUEST CHANGES (Minor)**: suggest addressing non-blocking issues, then re-review.
-- 🔴 **BLOCK** / **REJECT**: suggest fixing the blocking issues listed above and re-running `/code-review` before anything else proceeds.
+- 🔴 **BLOCK** / **REJECT**: suggest fixing the blocking issues listed above and re-running the review before anything else proceeds.
 {% endif %}

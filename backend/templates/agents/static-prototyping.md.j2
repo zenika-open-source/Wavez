@@ -4,7 +4,7 @@
 ] %}
 ---
 name: {{ "static-prototyping" if skill_mode else "Static Prototyping" }}
-description: Creates greyscale, structural-only HTML prototypes from a PRD
+description: Use when you have a PRD and need greyscale, structural-only static HTML prototypes to compare layout approaches.
 {% if not skill_mode %}
 argument-hint: Attach a PRD file and describe how many layout approaches to prototype (e.g. "prototype 2 layout options from the attached PRD")
 tools: [read/readFile, search/fileSearch, edit/createFile, vscode/askQuestions]

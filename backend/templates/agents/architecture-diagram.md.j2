@@ -3,7 +3,7 @@
 ] %}
 ---
 name: {{ "architecture-diagram" if skill_mode else "Architecture Diagram" }}
-description: Produces an evidence-backed architecture diagram (HTML or Mermaid, your choice, optionally grounded by gortex or Graphify) and structured architecture documentation for an existing codebase
+description: Use when you need to map, diagram, or document the architecture of an existing codebase. Produces an evidence-backed architecture diagram (HTML or Mermaid, optionally grounded by gortex or Graphify) and structured architecture documentation.
 {% if not skill_mode %}
 argument-hint: Point this agent at a codebase or repo path to map (e.g. "map out this codebase" or "generate architecture docs for backend/")
 tools: [execute/runInTerminal, read/readFile, search/textSearch, search/fileSearch, search/listDirectory, edit/createFile, vscode/askQuestions]
@@ -74,7 +74,7 @@ they drive rules below.
   REST endpoints on Gin and on Express/Nest; returned **zero** on Django
   (plain `urls.py`/`path()`), with no error. An empty entry-point result is
   not proof there are no entry points — cross-check with `role` and a quick
-  `Grep` for routing conventions, and say so in the documentation if you suspect
+  text search for routing conventions, and say so in the documentation if you suspect
   a gap.
 - **`clusters` and `suggest_boundaries` report different community counts**
   for the same repo (15 vs 17, only 12 listed). Not an error; use
@@ -215,7 +215,7 @@ Communities from `--cluster-only` stand in for gortex's `suggest_boundaries`/
 `clusters`; god-node rankings (`--exclude-hubs`) stand in for `pagerank`/
 `hotspots`; `graphify explain`'s degree/connections stand in for `role`.
 There is no Graphify equivalent for `cycles` — if import cycles matter to the
-risk notes, cross-check with a quick `Grep`/`Read` pass or state the gap.
+risk notes, cross-check with a quick text-search and file-read pass or state the gap.
 
 Save `graph.json` and `GRAPH_REPORT.md` to the output dir either way.
 
@@ -345,7 +345,7 @@ must match `architecture.json` exactly, with no dangling edge endpoints.
 
 ## Step 6 — Fallback without a code graph
 
-Same outputs via `Glob`/`Grep`/`Read`: entry points from routing/main files,
+Same outputs via plain file search, text search, and file reads: entry points from routing/main files,
 components from top-level structure, dependencies from imports. State at the
 top of the documentation that the run is ungrounded and lower-confidence.
 

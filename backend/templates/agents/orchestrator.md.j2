@@ -3,7 +3,7 @@
 ] %}
 ---
 name: {{ "orchestrator" if skill_mode else "Orchestrator" }}
-description: Orchestrates full-stack feature delivery and routes migration planning to Tech Migration.
+description: Use when delivering a full-stack feature end to end (plan, backend, frontend, review, docs) or when a migration needs planning, which it routes to Tech Migration.
 {% if not skill_mode %}
 argument-hint: Describe the feature to build (e.g. "Build a user feedback form with POST /api/feedback endpoint")
 tools: [agent, read/readFile, agent/runSubagent, agent, vscode/askQuestions]
